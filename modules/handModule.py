@@ -21,7 +21,6 @@ class Hand:
 
     def __init__(self, name='hand', axis='X', flipAxis=False,
                  fingers=None, **kwargs):
-        print 'hand', fingers
         self.fingers = fingers
         if not fingers:
             fingers = [('Thumb', 1), ('Index', 2), ('Middle', 2), ('Ring', 2), ('Pink', 2)]
@@ -121,9 +120,7 @@ class Hand:
             jsonDict = self.guideMoveall.handDict.get()
             dictRestored = json.loads(jsonDict)
             self.handDict.update(**dictRestored)
-
-            self.handDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
-            self.handDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='world'))
+            self.handDict['guideDict']['moveall'] = rigFunctions.getObjTransforms(self.guideMoveall, 'world')
 
             for finger in self.handDict['fingers']:
                 instance = self.fingerInstances[finger]

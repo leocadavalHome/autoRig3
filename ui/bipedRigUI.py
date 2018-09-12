@@ -1,4 +1,5 @@
 import pymel.core as pm
+import autoRig3.composites.bipedLongNeck as bipedLongNeck
 import autoRig3.composites.bipedRig as biped
 import autoRig3.tools.interface as interface
 import os.path
@@ -38,6 +39,8 @@ class BipedAutoRigUI:
                                                         cw=[[1, 130], [2, 60]], cat=[(1, 'left', 5), (2, 'left', 0)])
 
         pm.separator(hr=True, h=30, st='single')
+        self.longNeckCheckbox = pm.checkBox (v=1, en=1, label='Long Neck (spine neck)')
+        pm.separator (hr=True, h=30, st='single')
 
         self.fingerNames = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
 
@@ -118,7 +121,12 @@ class BipedAutoRigUI:
         handFingers = [(x[1], x[2]) for x in handAllFingers if x[0]]
         footFingers = [(x[1], x[2]) for x in footAllFingers if x[0]]
 
-        self.bipedInstance = biped.Biped(rigName=rigName, handFingers=handFingers, footFingers=footFingers)
+        longNeck = pm.checkBox(self.longNeckCheckbox, q=True, v=True)
+
+        if longNeck:
+            self.bipedInstance = bipedLongNeck.BipedLongNeck(rigName=rigName, handFingers=handFingers, footFingers=footFingers)
+        else:
+            self.bipedInstance = biped.Biped(rigName=rigName, handFingers=handFingers, footFingers=footFingers)
 
         if fromScene:
             self.bipedInstance.getDictsFromScene()

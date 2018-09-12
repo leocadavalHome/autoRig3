@@ -206,7 +206,6 @@ import pymel.core.nodetypes as nt
 def loadSkinning(path):
     with open(path, 'rb') as handle:
         fileData = pickle.load(handle)
-    print fileData
 
     for msh, dataDict in fileData.iteritems():
 
@@ -232,7 +231,6 @@ def loadSkinning(path):
 def saveCntrlsShape(objs, path):
     sel = [x for x in objs if '_ctrl' in x.name()]
     filename = path
-    print path
     cntrlShapeDict = {}
     for obj in sel:
         tempDict={}

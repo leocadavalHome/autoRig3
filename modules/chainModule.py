@@ -121,17 +121,13 @@ class Chain:
             dictRestored = json.loads(jsonDict)
             self.chainDict.update(**dictRestored)
 
-            self.chainDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
-            self.chainDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='world'))
+            self.chainDict['guideDict']['moveall'] = rigFunctions.getObjTransforms(self.guideMoveall, 'world')
 
             for i in range(len(self.chainGuideDict.keys()) - 1):
                 guideName = self.chainDict['guideSetup']['nameTempl'] + str(i+1) + self.guideSulfix
-                print guideName
                 guide = pm.PyNode(guideName)
-                print self.chainDict['guideSetup']['nameTempl'] + str(i + 1)
-                print self.chainDict['guideDict']
-                self.chainDict['guideDict']['guide' + str(i + 1)][0] = guide.getTranslation(space='object').get()
-                self.chainDict['guideDict']['guide' + str(i + 1)][1] = tuple(guide.getRotation(space='object'))
+                self.chainDict['guideDict']['guide' + str(i + 1)] = rigFunctions.getObjTransforms (guide, 'object')
+
         except:
             print 'algum nao funcionou'
 

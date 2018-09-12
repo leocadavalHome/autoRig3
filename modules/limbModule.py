@@ -149,30 +149,28 @@ class Limb:
             limbDictRestored = json.loads(jsonDict)
 
             self.limbDict.update(**limbDictRestored)
+            self.limbDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
 
-            self.limbDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
-            self.limbDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='world'))
+            print 'guideMoveall'
+            print (tuple(self.guideMoveall.getRotation(space='world')))
 
             guideName = self.limbDict['startGuideSetup']['nameTempl'] + self.guideSulfix
             self.startGuide = pm.PyNode(guideName)
-            self.limbDict['guideDict']['start'][0] = self.startGuide.getTranslation(space='object').get()
-            self.limbDict['guideDict']['start'][1] = tuple(self.startGuide.getRotation(space='object'))
+            self.limbDict['guideDict']['start'] = rigFunctions.getObjTransforms (self.startGuide, 'object')
+
 
             guideName = self.limbDict['midGuideSetup']['nameTempl'] + self.guideSulfix
             self.midGuide = pm.PyNode(guideName)
-            self.limbDict['guideDict']['mid'][0] = self.midGuide.getTranslation(space='object').get()
-            self.limbDict['guideDict']['mid'][1] = tuple(self.midGuide.getRotation(space='object'))
+            self.limbDict['guideDict']['mid'] = rigFunctions.getObjTransforms (self.midGuide, 'object')
 
             guideName = self.limbDict['endGuideSetup']['nameTempl'] + self.guideSulfix
             self.endGuide = pm.PyNode(guideName)
-            self.limbDict['guideDict']['end'][0] = self.endGuide.getTranslation(space='object').get()
-            self.limbDict['guideDict']['end'][1] = tuple(self.endGuide.getRotation(space='object'))
+            self.limbDict['guideDict']['end'] = rigFunctions.getObjTransforms (self.endGuide, 'object')
 
             if self.lastJoint:
                 guideName = self.limbDict['lastGuideSetup']['nameTempl'] + self.guideSulfix
                 self.lastGuide = pm.PyNode(guideName)
-                self.limbDict['guideDict']['last'][0] = self.lastGuide.getTranslation(space='object').get()
-                self.limbDict['guideDict']['last'][1] = tuple(self.lastGuide.getRotation(space='object'))
+                self.limbDict['guideDict']['last'] = rigFunctions.getObjTransforms (self.lastGuide, 'object')
 
             return self.limbDict
         except:

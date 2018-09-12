@@ -275,53 +275,41 @@ class Foot:
             dictRestored = json.loads(jsonDict)
             self.footDict.update(**dictRestored)
 
-            self.footDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
-            self.footDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='world'))
+            self.footDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
 
             guideName = self.footDict['centerGuideSetup']['nameTempl'] + self.guideSulfix
             self.centerGuide = pm.PyNode(guideName)
-            self.footDict['guideDict']['center'][0] = self.centerGuide.getTranslation(space='object').get()
-            self.footDict['guideDict']['center'][1] = tuple(self.centerGuide.getRotation(space='object'))
-
+            self.footDict['guideDict']['center'] = rigFunctions.getObjTransforms (self.centerGuide, 'object')
 
             guideName = self.footDict['centerGuideSetup']['nameTempl'] + self.grpSulfix
             self.centerGuideGrp = pm.PyNode(guideName)
 
             guideName = self.footDict['tipGuideSetup']['nameTempl'] + self.guideSulfix
             self.tipGuide = pm.PyNode(guideName)
-            self.footDict['guideDict']['tip'][0] = self.tipGuide.getTranslation(space='object').get()
-            self.footDict['guideDict']['tip'][1] = tuple(self.tipGuide.getRotation(space='object'))
-
+            self.footDict['guideDict']['tip'] = rigFunctions.getObjTransforms (self.tipGuide, 'object')
 
             guideName = self.footDict['heelGuideSetup']['nameTempl'] + self.guideSulfix
             self.heelGuide = pm.PyNode(guideName)
-            self.footDict['guideDict']['heel'][0] = self.heelGuide.getTranslation(space='object').get()
-            self.footDict['guideDict']['heel'][1] = tuple(self.heelGuide.getRotation(space='object'))
-
+            self.footDict['guideDict']['heel'] = rigFunctions.getObjTransforms (self.heelGuide, 'object')
 
             guideName = self.footDict['ankleGuideSetup']['nameTempl'] + self.guideSulfix
             self.ankleGuide = pm.PyNode(guideName)
-            self.footDict['guideDict']['ankle'][0] = self.ankleGuide.getTranslation(space='object').get()
-            self.footDict['guideDict']['ankle'][1] = tuple(self.ankleGuide.getRotation(space='object'))
+            self.footDict['guideDict']['ankle'] = rigFunctions.getObjTransforms (self.ankleGuide, 'object')
 
             guideName = self.footDict['ballGuideSetup']['nameTempl'] + self.guideSulfix
             self.ballGuide = pm.PyNode(guideName)
-            self.footDict['guideDict']['ball'][0] = self.ballGuide.getTranslation(space='object').get()
-            self.footDict['guideDict']['ball'][1] = tuple(self.ballGuide.getRotation(space='object'))
+            self.footDict['guideDict']['ball'] = rigFunctions.getObjTransforms (self.ballGuide, 'object')
 
             guideName = self.footDict['inGuideSetup']['nameTempl'] + self.guideSulfix
             self.inGuide = pm.PyNode(guideName)
-            self.footDict['guideDict']['in'][0] = self.inGuide.getTranslation(space='object').get()
-            self.footDict['guideDict']['in'][1] = tuple(self.inGuide.getRotation(space='object'))
+            self.footDict['guideDict']['in'] = rigFunctions.getObjTransforms (self.inGuide, 'object')
 
             guideName = self.footDict['outGuideSetup']['nameTempl'] + self.guideSulfix
             self.outGuide = pm.PyNode(guideName)
-            self.footDict['guideDict']['out'][0] = self.outGuide.getTranslation(space='object').get()
-            self.footDict['guideDict']['out'][1] = tuple(self.outGuide.getRotation(space='object'))
+            self.footDict['guideDict']['out'] = rigFunctions.getObjTransforms (self.outGuide, 'object')
 
             for finger in self.footDict['fingers']:
                 fingerDict = self.fingerInstances[finger].getDict()
-                print fingerDict
                 self.footDict['fingers'][finger].update(fingerDict)
 
         except:

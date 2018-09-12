@@ -172,34 +172,28 @@ class Spine:
             jsonDict = self.guideMoveall.spineDict.get()
             dictRestored = json.loads(jsonDict)
             self.spineDict.update(**dictRestored)
-
-            self.spineDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
-            self.spineDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='world'))
+            self.spineDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
 
             guideName = self.spineDict['startGuideSetup']['nameTempl'] + self.guideSulfix
             self.startGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['start'][0] = self.startGuide.getTranslation(space='object').get()
-            self.spineDict['guideDict']['start'][1] = tuple(self.startGuide.getRotation(space='object'))
+            self.spineDict['guideDict']['start'] = rigFunctions.getObjTransforms (self.startGuide, 'object')
 
             guideName = self.spineDict['midGuideSetup']['nameTempl'] + self.guideSulfix
             self.midGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['mid'][0] = self.midGuide.getTranslation(space='object').get()
-            self.spineDict['guideDict']['mid'][1] = tuple(self.midGuide.getRotation(space='object'))
+            self.spineDict['guideDict']['mid'] = rigFunctions.getObjTransforms (self.midGuide, 'object')
 
             guideName = self.spineDict['endGuideSetup']['nameTempl'] + self.guideSulfix
             self.endGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['end'][0] = self.endGuide.getTranslation(space='object').get()
-            self.spineDict['guideDict']['end'][1] = tuple(self.endGuide.getRotation(space='object'))
+            self.spineDict['guideDict']['end'] = rigFunctions.getObjTransforms (self.endGuide, 'object')
 
             guideName = self.spineDict['endTipGuideSetup']['nameTempl'] + self.guideSulfix
             self.endTipGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['endTip'][0] = self.endTipGuide.getTranslation(space='object').get()
-            self.spineDict['guideDict']['endTip'][1] = tuple(self.endTipGuide.getRotation(space='object'))
+            self.spineDict['guideDict']['endTip'] = rigFunctions.getObjTransforms (self.endTipGuide, 'object')
 
             guideName = self.spineDict['startTipGuideSetup']['nameTempl'] + self.guideSulfix
             self.startTipGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['startTip'][0] = self.startTipGuide.getTranslation(space='object').get()
-            self.spineDict['guideDict']['startTip'][1] = tuple(self.startTipGuide.getRotation(space='object'))
+            self.spineDict['guideDict']['startTip'] = rigFunctions.getObjTransforms (self.startTipGuide, 'object')
+
         except:
             print 'algum nao funcionou'
 

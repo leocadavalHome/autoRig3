@@ -108,19 +108,15 @@ class Neck:
             jsonDict = self.guideMoveall.neckDict.get()
             dictRestored = json.loads(jsonDict)
             self.neckDict.update(**dictRestored)
-
-            self.neckDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
-            self.neckDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='world'))
+            self.neckDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
 
             cntrlName = self.neckDict['startGuideSetup']['nameTempl'] + self.guideSulfix
             self.startGuide = pm.PyNode(cntrlName)
-            self.neckDict['guideDict']['start'][0] = self.startGuide.getTranslation(space='object').get()
-            self.neckDict['guideDict']['start'][1] = tuple(self.startGuide.getRotation(space='object'))
+            self.neckDict['guideDict']['start'] = rigFunctions.getObjTransforms (self.startGuide, 'object')
 
             cntrlName = self.neckDict['endGuideSetup']['nameTempl'] + self.guideSulfix
             self.endGuide = pm.PyNode(cntrlName)
-            self.neckDict['guideDict']['end'][0] = self.endGuide.getTranslation(space='object').get()
-            self.neckDict['guideDict']['end'][1] = tuple(self.endGuide.getRotation(space='object'))
+            self.neckDict['guideDict']['end'] = rigFunctions.getObjTransforms (self.endGuide, 'object')
         except:
             print 'algum nao funcionou'
 

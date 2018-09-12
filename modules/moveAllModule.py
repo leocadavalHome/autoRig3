@@ -60,9 +60,8 @@ class Moveall:
             jsonDict = self.guideMoveall.moveallDict.get()
             dictRestored = json.loads(jsonDict)
             self.moveallDict.update(**dictRestored)
+            self.movelallDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
 
-            self.movelallDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
-            self.moveallDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='world'))
         except:
             print 'algum nao funcionou'
 

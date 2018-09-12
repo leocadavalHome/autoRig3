@@ -256,34 +256,33 @@ class Finger:
             dictRestored = json.loads(jsonDict)
             self.fingerDict.update(**dictRestored)
 
-            self.fingerDict['guideDict']['moveall'][0] = self.guideMoveall.getTranslation(space='object').get()
-            self.fingerDict['guideDict']['moveall'][1] = tuple(self.guideMoveall.getRotation(space='object'))
+            self.fingerDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'object')
 
             guideName = self.fingerDict['palmGuideSetup']['nameTempl'] + self.guideSulfix
             self.palmGuide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['palm'][0] = self.palmGuide.getTranslation(space='object').get()
-            self.fingerDict['guideDict']['palm'][1] = tuple(self.palmGuide.getRotation(space='object'))
+            self.fingerDict['guideDict']['palm'] = rigFunctions.getObjTransforms (self.palmGuide, 'object')
+
 
             guideName = self.fingerDict['baseGuideSetup']['nameTempl'] + self.guideSulfix
             self.baseGuide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['base'][0] = self.baseGuide.getTranslation(space='object').get()
-            self.fingerDict['guideDict']['base'][1] = tuple(self.baseGuide.getRotation(space='object'))
+            self.fingerDict['guideDict']['base'] = rigFunctions.getObjTransforms(self.baseGuide, 'object')
+
 
             guideName = self.fingerDict['tipGuideSetup']['nameTempl'] + self.guideSulfix
             self.tipGuide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['tip'][0] = self.tipGuide.getTranslation(space='object').get()
-            self.fingerDict['guideDict']['tip'][1] = tuple(self.tipGuide.getRotation(space='object'))
+            self.fingerDict['guideDict']['tip'] = rigFunctions.getObjTransforms (self.tipGuide, 'object')
+
 
             guideName = self.fingerDict['fold1GuideSetup']['nameTempl'] + self.guideSulfix
             self.fold1Guide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['fold1'][0] = self.fold1Guide.getTranslation(space='object').get()
-            self.fingerDict['guideDict']['fold1'][1] = tuple(self.fold1Guide.getRotation(space='object'))
+            self.fingerDict['guideDict']['fold1'] = rigFunctions.getObjTransforms (self.fold1Guide, 'object')
+
 
             if self.folds == 2:
                 guideName = self.fingerDict['fold2GuideSetup']['nameTempl'] + self.guideSulfix
                 self.fold2Guide = pm.PyNode(guideName)
-                self.fingerDict['guideDict']['fold2'][0] = self.fold2Guide.getTranslation(space='object').get()
-                self.fingerDict['guideDict']['fold2'][1] = tuple(self.fold2Guide.getRotation(space='object'))
+                self.fingerDict['guideDict']['fold2'] = rigFunctions.getObjTransforms (self.fold2Guide, 'object')
+
         except:
             print 'algum nao funcionou'
 

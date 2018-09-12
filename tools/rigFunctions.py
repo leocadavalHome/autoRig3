@@ -633,3 +633,14 @@ def makeJoint(name='joint', matrix=None, obj=None, connectToLast=False):
     pm.makeIdentity(jnt, apply=True, r=1, t=0, s=0, n=0, pn=0)
     return jnt
 
+def getObjTransforms(obj,space):
+
+    if space == 'object':
+        t = pm.xform(obj, q=True, t=True, wd=True)
+        ro = pm.xform(obj, q=True, ro=True, wd=True)
+    else:
+        t = pm.xform (obj, q=True, t=True, ws=True)
+        ro = pm.xform (obj, q=True, ro=True, ws=True)
+    print obj.name()
+    print [t,ro]
+    return [t,ro]
