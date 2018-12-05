@@ -1232,6 +1232,9 @@ class Biped:
             os.mkdir(dirName)
         path = os.path.join(dirName, self.name + '.skin')
 
+        if not self.skinJoints:
+            self.skinJoints = pm.ls ('*_jnt', type='joint')
+
         modelList = []
         for jnt in self.skinJoints:
             skinCls = list(set(jnt.listConnections(type='skinCluster')))
@@ -1249,8 +1252,13 @@ class Biped:
         if not os.path.exists(path):
             print 'file not found!!'
             return
+
         all = self.modelList+self.skinJoints
-        pm.skinCluster(all)
+        print 'all', all
+        for obj in self.modelList:
+            pm.skinCluster(obj, self.skinJoints, tsb=True, omi=False)
+
+        print 'load'
         interface.loadSkinning(path)
 
     def generateRig(self, armRibbons=True, legRibbons=True, parentModules=True):

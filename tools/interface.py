@@ -208,17 +208,25 @@ def loadSkinning(path):
         fileData = pickle.load(handle)
 
     for msh, dataDict in fileData.iteritems():
-
+        print msh
         skincluster = findSkinCluster(msh)
         skincluster.setNormalizeWeights(0)
         pm.skinPercent(skincluster, msh, nrm=False, prw=100)
-        
+
+        print 'jointDict'
         jointDict = {}
         for storedJoint in dataDict:
+            print storedJoint
+        for storedJoint in dataDict:
+            print storedJoint
             jointDict[storedJoint] = skincluster.indexForInfluenceObject(storedJoint)
+
+        print 'dataDict'
         for infl in dataDict:
             for vtx in dataDict[infl]:
                 pm.setAttr(skincluster.name()+'.weightList['+str(vtx[0])+'].weights['+str (jointDict[infl]) +']', vtx[1])
+
+        print 'normalise'
         skincluster.setNormalizeWeights(1)
         print 'skin loading ok!'    
              
