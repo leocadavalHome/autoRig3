@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac436fbc-b638-4b91-9d6e-9755a5c142ef" name="Default" comment="getDict funcionando">
-      <change afterPath="$PROJECT_DIR$/composites/facial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/eyeBrows.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/jaw.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/mouthCorners.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/mouthTweaks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/autoRig3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/autoRig3.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ac436fbc-b638-4b91-9d6e-9755a5c142ef" name="Default" comment="facial">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composites/bipedRig.py" beforeDir="false" afterPath="$PROJECT_DIR$/composites/bipedRig.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/lcRig2Facial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composites/facial.py" beforeDir="false" afterPath="$PROJECT_DIR$/composites/facial.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,43 +23,65 @@
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.2" value="2" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="2" />
+          <entry key="project.open.time.7" value="3" />
           <entry key="project.open.time.8" value="4" />
-          <entry key="project.opened" value="15" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="56" />
+          <entry key="py" value="59" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="56" />
+          <entry key="Python" value="59" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="22" />
-          <entry key="py" value="3823" />
-          <entry key="txt" value="24" />
+          <entry key="py" value="3883" />
+          <entry key="txt" value="30" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="46" />
-          <entry key="Python" value="3823" />
+          <entry key="PLAIN_TEXT" value="52" />
+          <entry key="Python" value="3883" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/composites/facial.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="18" column="18" lean-forward="true" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+            <state relative-caret-position="200">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/rigFunctions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2776">
+              <caret line="646" selection-start-line="646" selection-end-line="646" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../mayaScripts/lcRigToolbox.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="553">
+              <caret line="157" column="27" selection-start-line="157" selection-start-column="4" selection-end-line="157" selection-end-column="27" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -79,8 +92,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/eyeBrows.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="4" selection-start-line="4" selection-end-line="12" selection-end-column="11" />
+            <state relative-caret-position="175">
+              <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -88,7 +101,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/mouthTweaks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
+            <state relative-caret-position="375">
               <caret line="16" column="31" lean-forward="true" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -100,8 +113,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/jaw.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="3" selection-start-line="3" selection-end-line="6" selection-end-column="11" />
+            <state relative-caret-position="539">
+              <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -109,14 +122,20 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modules/limbModule.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1071">
+              <caret line="172" column="109" selection-start-line="172" selection-start-column="109" selection-end-line="172" selection-end-column="109" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/mouthCorners.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="12" selection-start-line="12" selection-end-line="17" selection-end-column="11" />
-              <folding>
-                <element signature="e#324#347#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="1575">
+              <caret line="65" column="92" lean-forward="true" selection-start-line="65" selection-start-column="12" selection-end-line="65" selection-end-column="92" />
             </state>
           </provider>
         </entry>
@@ -138,6 +157,7 @@
       <find>cube</find>
       <find>pm.joint</find>
       <find>print</find>
+      <find>l</find>
     </findStrings>
     <replaceStrings>
       <replace>L_</replace>
@@ -197,18 +217,18 @@
         <option value="$PROJECT_DIR$/tools/split.py" />
         <option value="$PROJECT_DIR$/modules/mouthCorners.py" />
         <option value="$PROJECT_DIR$/modules/mouthTweaks.py" />
-        <option value="$PROJECT_DIR$/modules/jaw.py" />
         <option value="$PROJECT_DIR$/modules/lcRig2Facial.py" />
         <option value="$PROJECT_DIR$/modules/eyeBrows.py" />
         <option value="$PROJECT_DIR$/composites/facial.py" />
+        <option value="$PROJECT_DIR$/modules/jaw.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="14" />
-    <option name="y" value="44" />
-    <option name="width" value="2088" />
-    <option name="height" value="1009" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="715" />
+    <option name="y" value="48" />
+    <option name="width" value="1624" />
+    <option name="height" value="1240" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -216,7 +236,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -248,11 +267,12 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="ToolWindowInspection Results.ShowToolbar" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../mayaScripts/lcRigToolbox.py" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -302,14 +322,21 @@
       <option name="project" value="LOCAL" />
       <updated>1536790604098</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="facial">
+      <created>1543977463264</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1543977463264</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-5" y="-5" width="2570" height="1404" extended-state="6" />
+    <frame x="715" y="48" width="1624" height="1240" extended-state="1" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1319417" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.118644066" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -335,10 +362,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="getDict funcionando" />
-    <option name="LAST_COMMIT_MESSAGE" value="getDict funcionando" />
+    <MESSAGE value="facial" />
+    <option name="LAST_COMMIT_MESSAGE" value="facial" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/limbModule.py" />
     <entry file="file://$PROJECT_DIR$/moveAllModule.py" />
     <entry file="file://$PROJECT_DIR$/lcRig2interface.py" />
     <entry file="file://$PROJECT_DIR$/ribwire.py" />
@@ -486,19 +513,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3350">
           <caret line="137" column="36" selection-start-line="137" selection-start-column="36" selection-end-line="137" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/limbModule.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4225">
-          <caret line="172" column="109" selection-start-line="172" selection-start-column="109" selection-end-line="172" selection-end-column="109" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -516,67 +530,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rigFunctions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16125">
-          <caret line="646" selection-start-line="646" selection-end-line="646" />
-          <folding>
-            <marker date="1536790473841" expanded="true" signature="29756:29757" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ui/bipedRigUI.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3450">
           <caret line="142" column="15" selection-start-line="142" selection-start-column="15" selection-end-line="142" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/search.py">
+    <entry file="file://$PROJECT_DIR$/modules/search.py" />
+    <entry file="file://$PROJECT_DIR$/tools/split.py" />
+    <entry file="file://$PROJECT_DIR$/modules/eyeBrows.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/split.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6000">
-          <caret line="240" column="55" lean-forward="true" selection-start-line="240" selection-start-column="55" selection-end-line="240" selection-end-column="55" />
-          <folding>
-            <element signature="e#324#347#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="175">
+          <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/mouthTweaks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
+        <state relative-caret-position="375">
           <caret line="16" column="31" lean-forward="true" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/eyeBrows.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="4" selection-start-line="4" selection-end-line="12" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/jaw.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="3" selection-start-line="3" selection-end-line="6" selection-end-column="11" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -585,21 +558,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/mouthCorners.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="12" selection-start-line="12" selection-end-line="17" selection-end-column="11" />
+        <state relative-caret-position="1575">
+          <caret line="65" column="92" lean-forward="true" selection-start-line="65" selection-start-column="12" selection-end-line="65" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rigFunctions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2776">
+          <caret line="646" selection-start-line="646" selection-end-line="646" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../mayaScripts/lcRigToolbox.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="553">
+          <caret line="157" column="27" selection-start-line="157" selection-start-column="4" selection-end-line="157" selection-end-column="27" />
           <folding>
-            <element signature="e#324#347#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/composites/facial.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="18" column="18" lean-forward="true" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+        <state relative-caret-position="200">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/jaw.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/limbModule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1071">
+          <caret line="172" column="109" selection-start-line="172" selection-start-column="109" selection-end-line="172" selection-end-column="109" />
         </state>
       </provider>
     </entry>
