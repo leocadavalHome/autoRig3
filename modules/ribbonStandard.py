@@ -1,5 +1,8 @@
 import pymel.core as pm
 import maya.api.OpenMaya as om
+import logging
+
+logger = logging.getLogger('autoRig')
 
 class RibbonStandard:
     """
@@ -208,7 +211,7 @@ class RibbonStandard:
         pm.pointConstraint(topUpLoc, lwrUpLoc, midUpLoc)
 
         # skin setup
-        # print nurbs, topToSkin, midToSkin, lwrToSkin
+
         skin = pm.skinCluster(topToSkin, midToSkin, lwrToSkin, nurbs, tsb=1)
         if self.sections == 3:
             pm.skinPercent(skin, nurbs + '.cv[0:1][5]', tv=(topToSkin, 1))

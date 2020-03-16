@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="skin">
+    <file>icon/mirror.png</file>
+    <file>icon/transfer.png</file>
+    <file>icon/copy.png</file>
+  </qresource>
+</RCC>

@@ -1,9 +1,11 @@
 import pymel.core as pm
 import maya.api.OpenMaya as om
-import autoRig3.tools.rigFunctions as rigFunctions
+import autoRig3.tools.controlTools as controlTools
 from autoRig3.modules import aimTwistDivider
 import json
+import logging
 
+logger = logging.getLogger('autoRig')
 
 class Neck:
     """
@@ -26,39 +28,53 @@ class Neck:
         self.jxtSulfix = '_jxt'
         self.tipJxtSulfix = 'Tip_jxt'
         self.zeroJxtSulfix = 'Zero_jxt'
-        grpSulfix = '_grp'
+        self.grpSulfix = '_grp'
 
-        # parametros de aparencia dos controles
-        self.neckDict = {'name': name, 'axis': axis, 'flipAxis': flipAxis}
-        self.neckDict['moveallCntrlSetup'] = {'nameTempl': name + 'Moveall', 'icone': 'circuloX', 'size': 1,
+        self.toExport = {'moveallCntrlSetup', 'startCntrlSetup', 'endCntrlSetup', 'moveallGuideSetup',
+                         'startGuideSetup',  'endGuideSetup', 'midGuideSetup', 'guideDict', 'name', 'axis', 'flipAxis'}
+
+        self.moveallCntrlSetup = {'nameTempl': name + 'Moveall', 'icone': 'circuloX', 'size': 1,
                                               'color': (0, 1, 0)}
-        self.neckDict['startCntrlSetup'] = {'nameTempl': 'Neck', 'icone': 'circuloY', 'size': 3, 'color': (0, 1, 0)}
-        self.neckDict['endCntrlSetup'] = {'nameTempl': 'Head', 'icone': 'circuloZ', 'size': 2, 'color': (0, 1, 0)}
+        self.startCntrlSetup = {'nameTempl': 'Neck', 'icone': 'circuloY', 'size': 3, 'color': (0, 1, 0)}
+        self.endCntrlSetup = {'nameTempl': 'Head', 'icone': 'circuloZ', 'size': 2, 'color': (0, 1, 0)}
 
-        self.neckDict['moveallGuideSetup'] = {'nameTempl': name + 'Moveall', 'icone': 'quadradoY', 'size': 2.5,
+        self.moveallGuideSetup = {'nameTempl': name + 'Moveall', 'icone': 'quadradoY', 'size': 2.5,
                                               'color': (1, 0, 0)}
-        self.neckDict['startGuideSetup'] = {'nameTempl': 'neck', 'icone': 'circuloY', 'size': 2, 'color': (0, 0, 1)}
-        self.neckDict['endGuideSetup'] = {'nameTempl': 'head', 'icone': 'circuloZ', 'size': 4, 'color': (0, 0, 1)}
-        self.neckDict['midGuideSetup'] = {'nameTempl': 'midNeck', 'size': 1, 'color': (0, 1, 0)}
+        self.startGuideSetup = {'nameTempl': 'neck', 'icone': 'circuloY', 'size': 2, 'color': (0, 0, 1)}
+        self.endGuideSetup = {'nameTempl': 'head', 'icone': 'circuloZ', 'size': 4, 'color': (0, 0, 1)}
+        self.midGuideSetup = {'nameTempl': 'midNeck', 'size': 1, 'color': (0, 1, 0)}
 
-        self.neckDict['guideDict'] = {}
-        self.neckDict.update(kwargs)
-        self.neckGuideDict = {'moveall': [(0, 0, 0), (0, 0, 0)], 'start': [(0, 0, 0), (0, 0, 0)],
-                              'end': [(0, 2, 0), (0, 0, 0)]}
-        self.neckGuideDict.update(self.neckDict['guideDict'])
-        self.neckDict['guideDict'] = self.neckGuideDict.copy()
+        self.guideDict = {'moveall': [(0, 0, 0), (0, 0, 0), (1, 1, 1)], 'start': [(0, 0, 0), (0, 0, 0)],
+                          'end': [(0, 2, 0), (0, 0, 0)]}
+
+
+    def exportDict(self):
+        expDict = {}
+        for key in self.toExport:
+                expDict[key] = self.__dict__[key]
+        return expDict
+
+    def setCntrl (self, cntrl, posRot, space='object'):
+        cntrl.setTranslation(self.guideDict[posRot][0], space=space)
+        cntrl.setRotation(self.guideDict[posRot][1], space=space)
+        # Felipe --> add valores de escala
+        try:
+            cntrl.setScale(self.guideDict[posRot][2])
+
+        except:
+            pass
 
     def doGuide(self, **kwargs):
-        self.neckDict.update(kwargs)
+        self.__dict__.update(kwargs)
 
         # apaga se existir
-        displaySetup = self.neckDict['moveallGuideSetup'].copy()
+        displaySetup = self.moveallGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
 
         if pm.objExists(cntrlName):
             pm.delete(cntrlName)
 
-        self.guideMoveall = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+        self.guideMoveall = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                   **displaySetup)
 
         if not pm.objExists('GUIDES'):
@@ -66,61 +82,49 @@ class Neck:
         else:
             pm.parent(self.guideMoveall, 'GUIDES')
 
-        displaySetup = self.neckDict['startGuideSetup'].copy()
+        displaySetup = self.startGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-        self.startGuide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+        self.startGuide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                 **displaySetup)
 
-        displaySetup = self.neckDict['endGuideSetup'].copy()
+        displaySetup = self.endGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-        self.endGuide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+        self.endGuide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                               **displaySetup)
 
         pm.parent(self.startGuide, self.endGuide, self.guideMoveall)
-
-        pm.xform(self.endGuide, t=self.neckDict['guideDict']['end'][0], ro=self.neckDict['guideDict']['end'][1], os=True)
-        pm.xform(self.startGuide, t=self.neckDict['guideDict']['start'][0], ro=self.neckDict['guideDict']['start'][1], os=True)
-
-        self.guideMoveall.translate.set(self.neckDict['guideDict']['moveall'][0])
-        self.guideMoveall.rotate.set(self.neckDict['guideDict']['moveall'][1])
+        self.setCntrl(self.endGuide, 'end', space='object')
+        self.setCntrl(self.startGuide, 'start', space='object')
+        self.setCntrl(self.guideMoveall, 'moveall', space='world')
 
         pm.addAttr(self.guideMoveall, ln='neckDict', dt='string')
-        self.guideMoveall.neckDict.set(json.dumps(self.neckDict))
-
-    def getGuideFromScene(self):
-        try:
-            cntrlName = self.neckDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
-            self.guideMoveall = pm.PyNode(cntrlName)
-
-            cntrlName = self.neckDict['startGuideSetup']['nameTempl'] + self.guideSulfix
-            self.startGuide = pm.PyNode(cntrlName)
-
-            cntrlName = self.neckDict['endGuideSetup']['nameTempl'] + self.guideSulfix
-            self.endGuide = pm.PyNode(cntrlName)
-        except:
-            print 'algum nao funcionou'
+        self.guideMoveall.neckDict.set(json.dumps(self.exportDict()))
 
     def getDict(self):
         try:
-            cntrlName = self.neckDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
+            cntrlName = self.moveallGuideSetup['nameTempl'] + self.guideSulfix
             self.guideMoveall = pm.PyNode(cntrlName)
 
             jsonDict = self.guideMoveall.neckDict.get()
             dictRestored = json.loads(jsonDict)
-            self.neckDict.update(**dictRestored)
-            self.neckDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
+            self.__dict__.update(**dictRestored)
 
-            cntrlName = self.neckDict['startGuideSetup']['nameTempl'] + self.guideSulfix
+            self.guideDict['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
+            self.guideDict['moveall'][1] = tuple(self.guideMoveall.getRotation(space='object'))
+            self.guideDict['moveall'][2] = tuple(pm.xform(self.guideMoveall, q=True, s=True, ws=True))
+
+            cntrlName = self.startGuideSetup['nameTempl'] + self.guideSulfix
             self.startGuide = pm.PyNode(cntrlName)
-            self.neckDict['guideDict']['start'] = rigFunctions.getObjTransforms (self.startGuide, 'object')
+            self.guideDict['start'][0] = self.startGuide.getTranslation(space='object').get()
+            self.guideDict['start'][1] = tuple(self.startGuide.getRotation(space='object'))
 
-            cntrlName = self.neckDict['endGuideSetup']['nameTempl'] + self.guideSulfix
+            cntrlName = self.endGuideSetup['nameTempl'] + self.guideSulfix
             self.endGuide = pm.PyNode(cntrlName)
-            self.neckDict['guideDict']['end'] = rigFunctions.getObjTransforms (self.endGuide, 'object')
+            self.guideDict['end'][0] = self.endGuide.getTranslation(space='object').get()
+            self.guideDict['end'][1] = tuple(self.endGuide.getRotation(space='object'))
         except:
-            print 'algum nao funcionou'
+            pass
 
-        return self.neckDict
 
     def doRig(self):
         # se nao tiver guide faz um padrao
@@ -128,12 +132,15 @@ class Neck:
             self.doGuide()
 
         # apagar se ja houver um grupo moveall
-        cntrlName = self.neckDict['moveallCntrlSetup']['nameTempl']
+        cntrlName = self.moveallCntrlSetup['nameTempl']
+
         if pm.objExists(cntrlName):
             pm.delete(cntrlName)
+
         self.moveall = pm.group(empty=True, n=cntrlName)
         pos = pm.xform(self.guideMoveall, q=True, ws=True, t=True)
         pm.xform(self.moveall, ws=True, t=pos)
+
         if not pm.objExists('MOVEALL'):
             pm.group(self.moveall, n='MOVEALL')
         else:
@@ -152,16 +159,16 @@ class Neck:
             Z = om.MVector(0, -1, 0)
 
         n = AB ^ Z
-        m = rigFunctions.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
+        m = controlTools.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
         pm.select(cl=True)
 
-        jntName = self.neckDict['startGuideSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.startGuideSetup['nameTempl'] + self.jntSulfix
         self.startJnt = pm.joint(n=jntName)
         self.skinJoints.append(self.startJnt)
         pm.xform(self.startJnt, m=m, ws=True)
         pm.makeIdentity(self.startJnt, apply=True, r=1, t=0, s=1, n=0, pn=0)
 
-        jntName = self.neckDict['endGuideSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.endGuideSetup['nameTempl'] + self.jntSulfix
         self.endJnt = pm.joint(n=jntName)
         self.skinJoints.append(self.endJnt)
         pm.xform(self.endJnt, m=m, ws=True)
@@ -169,14 +176,14 @@ class Neck:
         pm.makeIdentity(self.endJnt, apply=True, r=1, t=0, s=1, n=0, pn=0)
         pm.select(cl=True)
 
-        jntName = self.neckDict['midGuideSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.midGuideSetup['nameTempl'] + self.jntSulfix
         self.midJnt = pm.joint(n=jntName)
         self.skinJoints.append(self.midJnt)
         pm.xform(self.midJnt, m=m, ws=True)
         pm.xform(self.midJnt, t=(0, 0, 0), ws=True)
         pm.makeIdentity(self.midJnt, apply=True, r=1, t=0, s=1, n=0, pn=0)
 
-        aimTwist = aimTwistDivider.AimTwistDivider()
+        aimTwist = aimTwistDivider.AimTwistDivider(name=self.name + 'TwistDiv')
         aimTwist.start.setParent(self.startJnt, r=True)
         aimTwist.end.setParent(self.endJnt, r=True)
         aimTwist.mid.setParent(self.moveall)
@@ -184,15 +191,18 @@ class Neck:
         self.midJnt.translate.set(0, 0, 0)
         self.midJnt.rotate.set(0, 0, 0)
 
-        displaySetup = self.neckDict['startCntrlSetup'].copy()
+        displaySetup = self.startCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.startCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
+        self.startCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
         pm.parentConstraint(self.startCntrl, self.startJnt, mo=True)
-        displaySetup = self.neckDict['endCntrlSetup'].copy()
+
+        displaySetup = self.endCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.endCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.endGuide, **displaySetup)
+        self.endCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.endGuide, **displaySetup)
         pm.parentConstraint(self.endCntrl, self.endJnt, mo=True)
+        self.endCntrl.scale >> self.endJnt.scale
         self.endCntrl.getParent().setParent(self.startCntrl)
+
         pm.parent(self.startJnt, self.startCntrl.getParent(), self.moveall)
 
         # IMPLEMENTAR: guardar as posicoes dos guides ao final

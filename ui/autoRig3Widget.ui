@@ -1,0 +1,4512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>autoRig</class>
+ <widget class="QWidget" name="autoRig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>252</width>
+    <height>3187</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>AUTORIG</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMinimumSize</enum>
+       </property>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="menu_btn">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="icons.qrc">
+           <normaloff>:/icons/icon/bars.png</normaloff>:/icons/icon/bars.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QLabel" name="rigName_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="sizeIncrement">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>DejaVu Sans</family>
+           <pointsize>10</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+           <kerning>false</kerning>
+          </font>
+         </property>
+         <property name="text">
+          <string> Name </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="rigName_txt">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>DejaVu Sans</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>character</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>DejaVu Sans</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="bodyRig_tab">
+        <attribute name="title">
+         <string>BODY RIG</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QWidget" name="widget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>90</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>90</height>
+            </size>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="connect_label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>0</width>
+                <height>100</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>DejaVu Sans</family>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <kerning>false</kerning>
+               </font>
+              </property>
+              <property name="text">
+               <string>Modules Connection</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="widget_2" native="true">
+              <layout class="QVBoxLayout" name="verticalLayout_2">
+               <item>
+                <widget class="QRadioButton" name="hierarchy_rdBtn">
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Hierarchy</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="constraint_rdBtn">
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Constraints</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+           <zorder>connect_label</zorder>
+           <zorder>widget_2</zorder>
+           <zorder>horizontalSpacer</zorder>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="template_label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>DejaVu Sans</family>
+             <pointsize>8</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <kerning>false</kerning>
+            </font>
+           </property>
+           <property name="text">
+            <string>Template</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="template_comboBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>DejaVu Sans</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <item>
+            <property name="text">
+             <string>Biped</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Quadruped</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Bird</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>BipedNoSpine</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>BipedLongNeck</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>QuadrupedLongNeck</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="template_placeHolder">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="getGuide_chk">
+           <property name="font">
+            <font>
+             <family>DejaVu Sans</family>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Get guide position from scene</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="createGuide_btn">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>DejaVu Sans</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>CREATE GUIDES</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="reapplySkin_chk">
+           <property name="font">
+            <font>
+             <family>DejaVu Sans</family>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Reaply Skin when rebuildng rig</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="createRig_btn">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>DejaVu Sans</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>CREATE RIG</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar">
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="textVisible">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="facialRig_tab">
+        <attribute name="title">
+         <string>FACIAL RIG</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QScrollArea" name="scrollArea_2">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents_2">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>-1145</y>
+              <width>207</width>
+              <height>4328</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <widget class="QPushButton" name="lookatCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="lookat_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>lookat</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="lookatFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>300</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_10">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>280</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_13">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lookat_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source01</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lookat_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lookat_headJntPick_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>120</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lookat_headJnt_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>120</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>head_jnt</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_14">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>100</y>
+                  <width>51</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>head joint</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lookat_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>250</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lookat_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>190</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="lookat_reapplySkin_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>230</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when rebuildng rig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="lookat_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>170</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lookat_eyeballSelectPick_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>70</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lookat_eyeball_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>70</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_32">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>50</y>
+                  <width>61</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>eyeball</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_13">
+               <item>
+                <widget class="QPushButton" name="eyelidCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="eyelid_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>eyeLid</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="eyelidFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>480</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_9">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>450</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_10">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyelid_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source01</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_edgeSelectPick_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>80</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>&lt;</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyelid_edgeSelect_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>80</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_11">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>60</y>
+                  <width>71</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>edge loop</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_eyeballSelectPick_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>130</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyelid_eyeball_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>130</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_12">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>110</y>
+                  <width>61</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>eyeball</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="eyelid_linkToLookAt_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>160</y>
+                  <width>101</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">indicator:checked  {image:url(:/icon/checkbox.png); }            </string>
+                </property>
+                <property name="text">
+                 <string>link to lookat</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>230</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>280</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="eyelid_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>210</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QSpinBox" name="eyelid_paralelEdges_spin">
+                <property name="geometry">
+                 <rect>
+                  <x>140</x>
+                  <y>380</y>
+                  <width>41</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="value">
+                 <number>5</number>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_34">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>380</y>
+                  <width>81</width>
+                  <height>19</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>paralel Edges</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_autoSkin_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>420</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>autoSkin</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyelid_holdJnt_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>350</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>hold_jxt</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_holdJntlSelectPick_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>350</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_37">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>330</y>
+                  <width>61</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>hold joint</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_18">
+               <item>
+                <widget class="QPushButton" name="socketCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="socket_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>socket</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="socketFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>270</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_13">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>240</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="socket_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>recept</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_25">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="socket_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="socket_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>150</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="socket_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>130</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="socket_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>210</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="socket_reapplySkin_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>190</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when rebuildng rig</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_27">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>60</y>
+                  <width>61</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>eyeball</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="socket_eyeballBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>80</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="socket_eyeball_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>80</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="QPushButton" name="jawCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="jaw_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>jaw</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="jawFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>260</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_5">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>250</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="jaw_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source01</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="jaw_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="jaw_lowerTeeth_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>80</y>
+                  <width>121</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>lower teeth</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="jaw_upperTeeth_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>58</y>
+                  <width>111</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">indicator:checked  {image:url(:/icon/checkbox.png); }            </string>
+                </property>
+                <property name="text">
+                 <string>upper teeth</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="jaw_tongue_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>100</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>tongue</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="jaw_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>220</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="jaw_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>160</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="jaw_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>140</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="jaw_reapplySkin_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>200</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when rebuildng rig</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QPushButton" name="lipCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="lip_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>lips</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="lipFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>520</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_7">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>500</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lips_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source02</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lips_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_2">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lips_edgeSelect_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>80</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lips_edgeSelect_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>80</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>&lt;</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_3">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>60</y>
+                  <width>71</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>edge loop</string>
+                </property>
+               </widget>
+               <widget class="QSpinBox" name="lips_spansPerDrive_spin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>110</x>
+                  <y>170</y>
+                  <width>41</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="maximum">
+                 <number>99</number>
+                </property>
+                <property name="value">
+                 <number>3</number>
+                </property>
+               </widget>
+               <widget class="QSpinBox" name="lips_drivers_spin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>110</x>
+                  <y>140</y>
+                  <width>41</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="maximum">
+                 <number>99</number>
+                </property>
+                <property name="value">
+                 <number>3</number>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_5">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>140</y>
+                  <width>71</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>drivers</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_6">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>170</y>
+                  <width>91</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>spans por driver</string>
+                </property>
+               </widget>
+               <widget class="QSpinBox" name="lips_ribbonJoints_spin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>110</x>
+                  <y>110</y>
+                  <width>41</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="maximum">
+                 <number>99</number>
+                </property>
+                <property name="value">
+                 <number>18</number>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_7">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>110</y>
+                  <width>71</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>ribbon joints</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="lips_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>210</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="lips_reapplySkin_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>280</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lips_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>300</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lips_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>230</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QSpinBox" name="lips_paralelEdges1_spin">
+                <property name="geometry">
+                 <rect>
+                  <x>130</x>
+                  <y>400</y>
+                  <width>51</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="value">
+                 <number>3</number>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_36">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>400</y>
+                  <width>91</width>
+                  <height>19</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>paralel Edges1</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="lips_autoSkin_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>470</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>autoSkin</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_38">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>350</y>
+                  <width>61</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>hold joint</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lips_holdJnt_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>370</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>hold_jxt</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyelid_holdJntlSelectPick_btn_2">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>370</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QSpinBox" name="lips_paralelEdges2_spin">
+                <property name="geometry">
+                 <rect>
+                  <x>130</x>
+                  <y>430</y>
+                  <width>51</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="value">
+                 <number>3</number>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_39">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>430</y>
+                  <width>91</width>
+                  <height>19</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>paralel Edges2</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <item>
+                <widget class="QPushButton" name="eyebrowCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="eyebrow_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>eyebrow blends</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="eyebrowFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>450</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_8">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>430</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_4">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyeBrow_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source02</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_upShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>120</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyebrow_upShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>120</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_downShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>170</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyebrow_downShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>170</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_8">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>100</y>
+                  <width>101</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>up shape</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_9">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>150</y>
+                  <width>101</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>down shape</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="eyebrow_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>320</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide from scene</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="eyebrow_reapplySkin_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>380</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>400</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>340</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyebrow_neutralShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>270</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_neutralShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>270</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_31">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>250</y>
+                  <width>111</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>neutral shape</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_40">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>200</y>
+                  <width>101</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>compress Shape</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_compressShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>220</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyebrow_compressShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>220</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_41">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>50</y>
+                  <width>121</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>targets holder meshes</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="eyebrow_targetsBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>70</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="eyebrow_targets_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>70</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QPushButton" name="mouthCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="mouth_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>mouth blends</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="mouthFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>730</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_11">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>710</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_15">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>modeled</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_16">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>150</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>up</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_upShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>170</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_upShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>170</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_downShapeBrownse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>220</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_17">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>200</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>down</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_downShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>220</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_wideShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>270</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_18">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>250</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>wide</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_wideShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>270</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_narrowShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>320</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_19">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>300</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>narrow</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_narrowShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>320</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_upWideBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>370</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_20">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>350</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>upWide</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_upWideShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>370</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_upNarrowShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>420</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_21">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>400</y>
+                  <width>51</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>upNarrow</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_upNarrowShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>420</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_downWideShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>470</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_22">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>450</y>
+                  <width>61</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>downWide</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_downWideShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>470</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_downNarrowShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>520</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_23">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>500</y>
+                  <width>71</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>downNarrow</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_downNarrowShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>520</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_autoDetectShapes_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>110</y>
+                  <width>161</width>
+                  <height>31</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>autoDetect from selection</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>630</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="mouth_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>610</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>680</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="mouth_splitShapes_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>660</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>apply targets</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_neutralShape_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>570</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_neutralShapeBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>570</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_29">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>550</y>
+                  <width>71</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>neutral</string>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="mouth_targets_txt">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>70</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="mouth_targetsBrowse_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>70</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_33">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>50</y>
+                  <width>101</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>targets holder mesh</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_19">
+               <item>
+                <widget class="QPushButton" name="squashCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="squash_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>head squash</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="squashFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>210</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_14">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>180</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="squash_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>recept</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_26">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="squash_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="squash_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>80</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGudie</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="squash_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>60</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="squash_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>140</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="squash_reapplySkin_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>120</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when rebuildng rig</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_21">
+               <item>
+                <widget class="QPushButton" name="jawSquashCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="jawSquash_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>jaw squash</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="jawSquashFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>210</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_16">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>180</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="squash_source_txt_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>recept</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_35">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="squash_sourceBrowse_btn_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="jawSquash_doGuide_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>80</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="jawSquash_getGuide_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>60</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="jawSquash_doRig_btn">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>140</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="jawSquash_reapplySkin_chk">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>120</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when rebuildng rig</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_16">
+               <item>
+                <widget class="QPushButton" name="tweaksCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="tweaks_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>tweaks</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="tweaksFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>280</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_12">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>631</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="tweaks_source_txt">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source02</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_24">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="tweaks_sourceBrowse_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="tweaks_doGuide_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>180</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGuide</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="tweaks_getGuide_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>160</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="tweaks_doRig_btn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>240</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="tweaks_reapplySkin_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>220</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when rebuildng rig</string>
+                </property>
+               </widget>
+               <widget class="QSpinBox" name="tweak_number_spin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>100</x>
+                  <y>80</y>
+                  <width>42</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_30">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>80</y>
+                  <width>81</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>tweak Number</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_20">
+               <item>
+                <widget class="QPushButton" name="headJntsCollapse_btn">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/icons/icon/right.png</normaloff>
+                   <normalon>:/icons/icon/down.png</normalon>:/icons/icon/right.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="headJnts_label_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>DejaVu Sans</family>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                   <kerning>false</kerning>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>head joints</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="headJntsFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>270</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background rgb(203, 203, 203)</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <widget class="Line" name="line_15">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>571</y>
+                  <width>284</width>
+                  <height>16</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="headJnts_source_txt_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>131</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>recept</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label_28">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>0</y>
+                  <width>46</width>
+                  <height>13</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>source</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="headJnts_sourceBrowse_btn_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>160</x>
+                  <y>20</y>
+                  <width>21</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="headJnts_doGuide_btn_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>120</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doGudie</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="headJnts_getGuide_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>100</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>get guide position from scene</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="headJnts_doRig_btn_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>180</y>
+                  <width>161</width>
+                  <height>23</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>doRig</string>
+                </property>
+               </widget>
+               <widget class="QCheckBox" name="headJnts_reapplySkin_chk">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>160</y>
+                  <width>249</width>
+                  <height>20</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>DejaVu Sans</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>reaply skin when rebuildng rig</string>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>jawCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>jawFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>263</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lipCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>lipFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>408</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>603</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eyebrowCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>eyebrowFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>301</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lookatCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>lookatFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>471</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>616</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eyelidCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>eyelidFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>321</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mouthCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>mouthFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>841</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tweaksCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>tweaksFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>187</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>342</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>socketCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>socketFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>153</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>squashCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>squashFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>453</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>603</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>headJntsCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>headJntsFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>3378</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>178</x>
+     <y>3528</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>jawSquashCollapse_btn</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>jawSquashFrame</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>3348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>159</x>
+     <y>3468</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

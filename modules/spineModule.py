@@ -1,10 +1,13 @@
 import pymel.core as pm
 import maya.api.OpenMaya as om
-import autoRig3.tools.rigFunctions as rigFunctions
-from autoRig3.modules import aimTwistDivider
-from autoRig3.modules import ribbonBezierSimple
+import autoRig3.tools.controlTools as controlTools
+import autoRig3.tools.matrixTools as matrixTools
+from autoRig3.modules import ribbonBezierSimple, aimTwistDivider
 from autoRig3.modules import twistExtractor
 import json
+import logging
+
+logger = logging.getLogger('autoRig')
 
 class Spine:
     """
@@ -22,7 +25,7 @@ class Spine:
     # no fk o hip deve ficar parado?
     # um so hip para ik e fk?
 
-    def __init__(self, name='spine', flipAxis=False, axis='X', **kwargs):
+    def __init__(self, name='spine', flipAxis=False, axis='X', ribbonJntNum=5, **kwargs):
 
         self.name = name
         self.flipAxis = flipAxis
@@ -34,81 +37,85 @@ class Spine:
         self.jxtSulfix = '_jxt'
         self.tipJxtSulfix = 'Tip_jxt'
         self.zeroJxtSulfix = 'Zero_jxt'
-        grpSulfix = '_grp'
-        self.spineDict = {'name': name, 'axis': axis, 'flipAxis': flipAxis}
+        self.grpSulfix = '_grp'
+        self.ribbonJntNum = ribbonJntNum
+        self.toExport = {'spineFkCntrlSetup', 'startFkCntrlSetup', 'endFkCntrlSetup', 'midFkCntrlSetup',
+                         'midFkOffsetCntrlSetup', 'moveallGuideSetup', 'startGuideSetup', 'midGuideSetup', 'endGuideSetup',
+                         'endTipGuideSetup', 'startTipGuideSetup', 'startJntSetup', 'axis', 'endJntSetup', 'guideDict',
+                         'flipAxis', 'hipCntrlSetup', 'moveallSetup', 'startIkCntrlSetup',
+                         'midIkCntrlSetup', 'endIkCntrlSetup', 'name', 'ribbonJntNum'}
 
-        self.setDefaults()
+        self.moveallSetup = {'nameTempl': self.name + 'MoveAll', 'icone': 'grp', 'size': 1.8,
+                             'color': (1, 1, 0)}
+        self.hipCntrlSetup = {'nameTempl': self.name + 'COG', 'icone': 'cog', 'size': 5.5,
+                              'color': (1, 0, 0)}
+        self.spineFkCntrlSetup = {'nameTempl': self.name + 'WaistFk', 'icone': 'circuloPontaY', 'size': 4,
+                                  'color': (0, 1, 0)}
+        self.startFkCntrlSetup = {'nameTempl': self.name + 'HipFk', 'icone': 'circuloPontaY', 'size': 3.0,
+                                  'color': (1, 1, 0)}
+        self.midFkOffsetCntrlSetup = {'nameTempl': self.name + 'AbdomenFkOff', 'icone': 'circuloY',
+                                      'size': 2.5, 'color': (1, 1, 0)}
+        self.midFkCntrlSetup = {'nameTempl': self.name + 'AbdomenFk', 'icone': 'circuloPontaY', 'size': 4,
+                                'color': (1, 1, 0)}
+        self.endFkCntrlSetup = {'nameTempl': self.name + 'ChestFk', 'icone': 'circuloPontaY', 'size': 4,
+                                'color': (1, 1, 0)}
+        self.startIkCntrlSetup = {'nameTempl': self.name + 'HipIk', 'icone': 'circuloPontaY', 'size': 4,
+                                  'color': (1, 1, 0)}
+        self.midIkCntrlSetup = {'nameTempl': self.name + 'AbdomenIk', 'icone': 'circuloY', 'size': 4,
+                                'color': (1, 1, 0)}
+        self.endIkCntrlSetup = {'nameTempl': self.name + 'ChestIk', 'icone': 'circuloPontaY', 'size': 4,
+                                'color': (1, 1, 0)}
+        self.moveallGuideSetup = {'nameTempl': self.name + 'Moveall', 'size': 8, 'icone': 'quadradoY',
+                                  'color': (1, 0, 0)}
+        self.startGuideSetup = {'nameTempl': self.name + 'Hip', 'size': 7, 'icone': 'circuloY',
+                                'color': (0, 1, 0)}
+        self.midGuideSetup = {'nameTempl': self.name + 'Abdomen', 'size': 7, 'icone': 'circuloY',
+                              'color': (0, 1, 0)}
+        self.endGuideSetup = {'nameTempl': self.name + 'Chest', 'size': 7, 'icone': 'circuloY',
+                              'color': (0, 1, 0)}
+        self.startTipGuideSetup = {'nameTempl': self.name + 'HipTip', 'size': 1, 'icone': 'bola',
+                                   'color': (0, 1, 0)}
+        self.endTipGuideSetup = {'nameTempl': self.name + 'ChestTip', 'size': 1, 'icone': 'bola',
+                                 'color': (0, 1, 0)}
 
-        self.spineDict.update(kwargs)
+        self.startJntSetup = {'nameTempl': self.name + 'Hip', 'icone': 'Bone', 'size': 2}
+        self.endJntSetup = {'nameTempl': self.name + 'Chest', 'icone': 'Bone', 'size': 2}
 
-
-    def setDefaults(self):
-        # dicionario q determina a aparencia dos controles
-        self.spineDict['moveallSetup'] = {'nameTempl': self.name + 'MoveAll', 'icone': 'grp', 'size': 1.8,
-                                          'color': (1, 1, 0)}
-        self.spineDict['hipCntrlSetup'] = {'nameTempl': self.name + 'COG', 'icone': 'cog', 'size': 5.5,
-                                           'color': (0, 0, 1)}
-        self.spineDict['spineFkCntrlSetup'] = {'nameTempl': self.name + 'WaistFk', 'icone': 'circuloPontaY', 'size': 4,
-                                               'color': (0, 1, 0)}
-        self.spineDict['startFkCntrlSetup'] = {'nameTempl': self.name + 'HipFk', 'icone': 'circuloPontaY', 'size': 3.0,
-                                               'color': (1, 1, 0)}
-        self.spineDict['midFkOffsetCntrlSetup'] = {'nameTempl': self.name + 'AbdomenFkOff', 'icone': 'circuloY',
-                                                   'size': 2.5, 'color': (1, 1, 0)}
-        self.spineDict['midFkCntrlSetup'] = {'nameTempl': self.name + 'AbdomenFk', 'icone': 'circuloPontaY', 'size': 4,
-                                             'color': (0, 1, 0)}
-        self.spineDict['endFkCntrlSetup'] = {'nameTempl': self.name + 'ChestFk', 'icone': 'circuloPontaY', 'size': 4,
-                                             'color': (0, 1, 0)}
-        self.spineDict['startIkCntrlSetup'] = {'nameTempl': self.name + 'HipIk', 'icone': 'circuloPontaY', 'size': 4,
-                                               'color': (1, 0, 0)}
-        self.spineDict['midIkCntrlSetup'] = {'nameTempl': self.name + 'AbdomenIk', 'icone': 'circuloY', 'size': 4,
-                                             'color': (1, 1, 0)}
-        self.spineDict['endIkCntrlSetup'] = {'nameTempl': self.name + 'ChestIk', 'icone': 'circuloPontaY', 'size': 4,
-                                             'color': (1, 0, 0)}
-
-        self.spineDict['moveallGuideSetup'] = {'nameTempl': self.name + 'Moveall', 'size': 8, 'icone': 'quadradoY',
-                                               'color': (1, 0, 0)}
-        self.spineDict['startGuideSetup'] = {'nameTempl': self.name + 'Hip', 'size': 7, 'icone': 'circuloY',
-                                             'color': (0, 1, 0)}
-        self.spineDict['midGuideSetup'] = {'nameTempl': self.name + 'Abdomen', 'size': 7, 'icone': 'circuloY',
-                                           'color': (0, 1, 0)}
-        self.spineDict['endGuideSetup'] = {'nameTempl': self.name + 'Chest', 'size': 7, 'icone': 'circuloY',
-                                           'color': (0, 1, 0)}
-        self.spineDict['startTipGuideSetup'] = {'nameTempl': self.name + 'HipTip', 'size': 1, 'icone': 'bola',
-                                                'color': (0, 1, 0)}
-        self.spineDict['endTipGuideSetup'] = {'nameTempl': self.name + 'ChestTip', 'size': 1, 'icone': 'bola',
-                                              'color': (0, 1, 0)}
-
-        self.spineDict['startJntSetup'] = {'nameTempl': self.name + 'Hip', 'icone': 'Bone', 'size': 2}
-        self.spineDict['endJntSetup'] = {'nameTempl': self.name + 'Chest', 'icone': 'Bone', 'size': 2}
-
-        self.spineDict['guideDict'] = {}
-        self.spineGuideDict = {'moveall': [(0, 0, 0), (0, 0, 0)], 'start': [(0, 0, 0), (0, 0, 0)],
-                               'mid': [(0, 0, 0), (0, 0, 0)], 'end': [(0, 8, 0), (0, 0, 0)],
-                               'startTip': [(0, -1, 0), (0, 0, 0)], 'endTip': [(0, 2, 0), (0, 0, 0)]}
-        self.spineGuideDict.update(self.spineDict['guideDict'])
-        self.spineDict['guideDict'] = self.spineGuideDict.copy()
-
+        self.guideDict = {'moveall': [(0, 0, 0), (0, 0, 0), (1, 1, 1)], 'start': [(0, 0, 0), (0, 0, 0)],
+                          'mid': [(0, 0, 0), (0, 0, 0)], 'end': [(0, 8, 0), (0, 0, 0)],
+                          'startTip': [(0, -1, 0), (0, 0, 0)], 'endTip': [(0, 2, 0), (0, 0, 0)]}
 
     def createCntrl(self, cntrlName):
-        displaySetup = self.spineDict[cntrlName+'Setup'].copy()
+        displaySetup = self.__dict__[cntrlName+'Setup'].copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-        guide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True, **displaySetup)
+        guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True, **displaySetup)
         return guide
 
     def setCntrl (self, cntrl, posRot, space='object'):
-        cntrl.setTranslation(self.spineDict['guideDict'][posRot][0], space=space)
-        cntrl.setRotation(self.spineDict['guideDict'][posRot][1], space=space)
+        cntrl.setTranslation(self.guideDict[posRot][0], space=space)
+        cntrl.setRotation(self.guideDict[posRot][1], space=space)
+        # Felipe --> condicao para setar valor de escala no moveall dos limbs
+        try:
+            cntrl.setScale(self.guideDict[posRot][2])
+        except:
+            pass
+
+    def exportDict(self):
+        expDict = {}
+        for key in self.toExport:
+                expDict[key] = self.__dict__[key]
+        return expDict
 
     def doGuide(self, **kwargs):
-        self.spineDict.update(kwargs)
+        self.__dict__.update(kwargs)
 
-        displaySetup = self.spineDict['moveallGuideSetup'].copy()
+        displaySetup = self.moveallGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
 
         if pm.objExists(cntrlName):
             pm.delete(cntrlName)
 
-        self.guideMoveall = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', **displaySetup)
+        self.guideMoveall = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', **displaySetup)
 
         # self.guideMoveall=pm.group (n=guideName, em=True)
         # self.guideMoveall=pm.circle (n=guideName , c=(0,0,0),nr=(1,0,0), sw=360,r=1 ,d=3,ut=0,ch=0)[0]
@@ -143,68 +150,55 @@ class Spine:
         self.setCntrl(self.guideMoveall, 'moveall', space='world')
 
         pm.addAttr(self.guideMoveall, ln='spineDict', dt='string')
-        self.guideMoveall.spineDict.set(json.dumps(self.spineDict))
-
-    def getGuideFromScene(self):
-        guideName = self.spineDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
-        self.guideMoveall = pm.PyNode(guideName)
-
-        guideName = self.spineDict['startGuideSetup']['nameTempl'] + self.guideSulfix
-        self.startGuide = pm.PyNode(guideName)
-
-        guideName = self.spineDict['midGuideSetup']['nameTempl'] + self.guideSulfix
-        self.midGuide = pm.PyNode(guideName)
-
-        guideName = self.spineDict['endGuideSetup']['nameTempl'] + self.guideSulfix
-        self.endGuide = pm.PyNode(guideName)
-
-        guideName = self.spineDict['endTipGuideSetup']['nameTempl'] + self.guideSulfix
-        self.endTipGuide = pm.PyNode(guideName)
-
-        guideName = self.spineDict['startTipGuideSetup']['nameTempl'] + self.guideSulfix
-        self.startTipGuide = pm.PyNode(guideName)
+        self.guideMoveall.spineDict.set(json.dumps(self.exportDict()))
 
     def getDict(self):
         try:
-            guideName = self.spineDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.moveallGuideSetup['nameTempl'] + self.guideSulfix
             self.guideMoveall = pm.PyNode(guideName)
 
             jsonDict = self.guideMoveall.spineDict.get()
             dictRestored = json.loads(jsonDict)
-            self.spineDict.update(**dictRestored)
-            self.spineDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
+            self.__dict__.update(**dictRestored)
 
-            guideName = self.spineDict['startGuideSetup']['nameTempl'] + self.guideSulfix
+            self.guideDict['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
+            self.guideDict['moveall'][1] = tuple(self.guideMoveall.getRotation(space='object'))
+            self.guideDict['moveall'][2] = tuple(pm.xform(self.guideMoveall, q=True, s=True, ws=True))
+
+            guideName = self.startGuideSetup['nameTempl'] + self.guideSulfix
             self.startGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['start'] = rigFunctions.getObjTransforms (self.startGuide, 'object')
+            self.guideDict['start'][0] = self.startGuide.getTranslation(space='object').get()
+            self.guideDict['start'][1] = tuple(self.startGuide.getRotation(space='object'))
 
-            guideName = self.spineDict['midGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.midGuideSetup['nameTempl'] + self.guideSulfix
             self.midGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['mid'] = rigFunctions.getObjTransforms (self.midGuide, 'object')
+            self.guideDict['mid'][0] = self.midGuide.getTranslation(space='object').get()
+            self.guideDict['mid'][1] = tuple(self.midGuide.getRotation(space='object'))
 
-            guideName = self.spineDict['endGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.endGuideSetup['nameTempl'] + self.guideSulfix
             self.endGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['end'] = rigFunctions.getObjTransforms (self.endGuide, 'object')
+            self.guideDict['end'][0] = self.endGuide.getTranslation(space='object').get()
+            self.guideDict['end'][1] = tuple(self.endGuide.getRotation(space='object'))
 
-            guideName = self.spineDict['endTipGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.endTipGuideSetup['nameTempl'] + self.guideSulfix
             self.endTipGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['endTip'] = rigFunctions.getObjTransforms (self.endTipGuide, 'object')
+            self.guideDict['endTip'][0] = self.endTipGuide.getTranslation(space='object').get()
+            self.guideDict['endTip'][1] = tuple(self.endTipGuide.getRotation(space='object'))
 
-            guideName = self.spineDict['startTipGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.startTipGuideSetup['nameTempl'] + self.guideSulfix
             self.startTipGuide = pm.PyNode(guideName)
-            self.spineDict['guideDict']['startTip'] = rigFunctions.getObjTransforms (self.startTipGuide, 'object')
-
+            self.guideDict['startTip'][0] = self.startTipGuide.getTranslation(space='object').get()
+            self.guideDict['startTip'][1] = tuple(self.startTipGuide.getRotation(space='object'))
         except:
-            print 'algum nao funcionou'
+            pass
 
-        return self.spineDict
 
     def doRig(self):
         # se nao tiver guide, faz
         if not self.guideMoveall:
             self.doGuide()
         # se ja existir rig, apaga
-        cntrlName = self.spineDict['moveallSetup']['nameTempl']
+        cntrlName = self.moveallSetup['nameTempl']
 
         if pm.objExists(cntrlName):
             pm.delete(cntrlName)
@@ -221,63 +215,63 @@ class Spine:
         spineRibbon = None
 
         # cria controles fk com nomes e setagem de display vindas do spineDict
-        displaySetup = self.spineDict['hipCntrlSetup'].copy()
+        displaySetup = self.hipCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.cogCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
+        self.cogCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
 
-        displaySetup = self.spineDict['spineFkCntrlSetup'].copy()
+        displaySetup = self.spineFkCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.spineFkCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
+        self.spineFkCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
         self.spineFkCntrl.getParent().setParent(self.cogCntrl)
 
-        displaySetup = self.spineDict['startFkCntrlSetup'].copy()
+        displaySetup = self.startFkCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.startFkCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
+        self.startFkCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
         self.startFkCntrl.getParent().setParent(self.cogCntrl)
 
-        displaySetup = self.spineDict['midFkCntrlSetup'].copy()
+        displaySetup = self.midFkCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.midFkCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.midGuide, **displaySetup)
+        self.midFkCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.midGuide, **displaySetup)
 
-        displaySetup = self.spineDict['midFkOffsetCntrlSetup'].copy()
+        displaySetup = self.midFkOffsetCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.midFkOffsetCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.midGuide,
+        self.midFkOffsetCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.midGuide,
                                                       **displaySetup)  # esse controle faz o offset do ribbon e permanece orientado corretamente
         self.midFkOffsetCntrl.getParent().setParent(self.midFkCntrl)
         self.midFkCntrl.getParent().setParent(self.spineFkCntrl)
 
-        displaySetup = self.spineDict['endFkCntrlSetup'].copy()
+        displaySetup = self.endFkCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.endFkCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.endGuide, **displaySetup)
+        self.endFkCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.endGuide, **displaySetup)
         self.endFkCntrl.getParent().setParent(self.midFkCntrl)
 
         # cria controles ik com nomes e setagem de display vindas do spineDict
-        displaySetup = self.spineDict['startIkCntrlSetup'].copy()
+        displaySetup = self.startIkCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.startIkCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
+        self.startIkCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.startGuide, **displaySetup)
         self.startIkCntrl.getParent().setParent(self.cogCntrl)
 
-        displaySetup = self.spineDict['midIkCntrlSetup'].copy()
+        displaySetup = self.midIkCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.midIkCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.midGuide, **displaySetup)
+        self.midIkCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.midGuide, **displaySetup)
 
-        displaySetup = self.spineDict['endIkCntrlSetup'].copy()
+        displaySetup = self.endIkCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.endIkCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.endGuide, **displaySetup)
+        self.endIkCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.endGuide, **displaySetup)
         self.endIkCntrl.getParent().setParent(self.cogCntrl)
 
         # Cria os joints orientados em X down
         start = pm.xform(self.startGuide, q=True, t=True, ws=True)
         startTip = pm.xform(self.startTipGuide, q=True, t=True, ws=True)
         pm.select(cl=True)
-        jntName = self.spineDict['startJntSetup']['nameTempl'] + self.zeroJxtSulfix
+        jntName = self.startJntSetup['nameTempl'] + self.zeroJxtSulfix
         self.startZeroJnt = pm.joint(p=(0, 0, 0), n=jntName)
         pm.select(cl=True)
-        jntName = self.spineDict['startJntSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.startJntSetup['nameTempl'] + self.jntSulfix
         self.startJnt = pm.joint(p=(0, 0, 0), n=jntName)
         self.skinJoints.append(self.startJnt)
         pm.select(cl=True)
-        jntName = self.spineDict['startJntSetup']['nameTempl'] + self.tipJxtSulfix
+        jntName = self.startJntSetup['nameTempl'] + self.tipJxtSulfix
         self.startTipJnt = pm.joint(p=(0, 0, 0), n=jntName)
 
         A = om.MVector(start)
@@ -291,7 +285,7 @@ class Spine:
             Z = om.MVector(0, 1, 0)
         n = AB ^ Z
 
-        m = rigFunctions.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
+        m = matrixTools.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
 
         pm.xform(self.startZeroJnt, m=m, ws=True)
         pm.xform(self.startJnt, m=m, ws=True)
@@ -303,14 +297,14 @@ class Spine:
         end = pm.xform(self.endGuide, q=True, t=True, ws=True)
         endTip = pm.xform(self.endTipGuide, q=True, t=True, ws=True)
         pm.select(cl=True)
-        jntName = self.spineDict['endJntSetup']['nameTempl'] + self.zeroJxtSulfix
+        jntName = self.endJntSetup['nameTempl'] + self.zeroJxtSulfix
         self.endZeroJnt = pm.joint(p=(0, 0, 0), n=jntName)
         pm.select(cl=True)
-        jntName = self.spineDict['endJntSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.endJntSetup['nameTempl'] + self.jntSulfix
         self.endJnt = pm.joint(p=(0, 0, 0), n=jntName)
         self.skinJoints.append(self.endJnt)
         pm.select(cl=True)
-        jntName = self.spineDict['endJntSetup']['nameTempl'] + self.tipJxtSulfix
+        jntName = self.endJntSetup['nameTempl'] + self.tipJxtSulfix
         self.endTipJnt = pm.joint(p=(0, 0, 0), n=jntName)
 
         A = om.MVector(end)
@@ -322,7 +316,7 @@ class Spine:
         if abs(dot) > .95:
             Z = om.MVector(0, 1, 0)
         n = AB ^ Z
-        m = rigFunctions.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
+        m = matrixTools.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
         pm.xform(self.endZeroJnt, m=m, ws=True)
         pm.xform(self.endJnt, m=m, ws=True)
         pm.xform(self.endTipJnt, m=m, ws=True)
@@ -332,8 +326,8 @@ class Spine:
 
         # cria os extratores de twist dos joints inicial e final
         # IMPLEMENTAR: twist do controle do meio
-        twistExtractor1 = twistExtractor.twistExtractor(self.startJnt)
-        twistExtractor2 = twistExtractor.twistExtractor(self.endJnt)
+        twistExtractor1 = twistExtractor.twistExtractor(self.startJnt, flipAxis=True, name=self.name + 'TwistExtractor1')
+        twistExtractor2 = twistExtractor.twistExtractor(self.endJnt, name=self.name + 'TwistExtractor2')
         twistExtractor1.extractorGrp.visibility.set(False)
         twistExtractor2.extractorGrp.visibility.set(False)
 
@@ -348,12 +342,13 @@ class Spine:
         if abs(dot) > .95:
             Z = om.MVector(0, -1, 0)
 
-        spineRibbon = ribbonBezierSimple.RibbonBezierSimple(name=self.name + 'Ribbon_', size=AB.length(), offsetStart=0.05,
-                                                      offsetEnd=0.05)
+        spineRibbon = ribbonBezierSimple.RibbonBezierSimple(name=self.name + 'Ribbon_', size=AB.length(),
+                                                            offsetStart=0.05, offsetEnd=0.05,
+                                                            numJnts=self.ribbonJntNum)
         spineRibbon.doRig()
         self.skinJoints += spineRibbon.skinJoints
         # cria o sistema que vai orientar o controle do meio por calculo vetorial
-        aimTwist = aimTwistDivider.AimTwistDivider()
+        aimTwist = aimTwistDivider.AimTwistDivider(name=self.name + 'TwistDivider')
         aimTwist.start.setParent(spineRibbon.startCntrl, r=True)
         aimTwist.end.setParent(spineRibbon.endCntrl, r=True)
         aimTwist.mid.setParent(spineRibbon.moveall, r=True)
@@ -408,9 +403,9 @@ class Spine:
 
         # cria o node tree do blend ikfk
         self.moveall.addAttr('ikfk', at='float', max=1, min=0, dv=1, k=1)
-        ikfkRev = pm.createNode('reverse')
-        ikfkCond1 = pm.createNode('condition')
-        ikfkCond2 = pm.createNode('condition')
+        ikfkRev = pm.createNode('reverse', n=self.name + 'IffkReverse')
+        ikfkCond1 = pm.createNode('condition', n=self.name + 'IffkCond1')
+        ikfkCond2 = pm.createNode('condition', n=self.name + 'IffkCond2')
         self.moveall.ikfk >> ikfkCond1.firstTerm
         self.moveall.ikfk >> ikfkCond2.firstTerm
         self.moveall.ikfk >> ikfkRev.inputX

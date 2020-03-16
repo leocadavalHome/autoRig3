@@ -15,32 +15,34 @@ class AimTwistDivider:
     ##IMPLEMENTAR:
     # todo outras orientacoes. Atualmente somente X down
 
-    def __init__(self, start=None, end=None, mid=None):
+    def __init__(self, name='AimTwistDiv', start=None, end=None, mid=None):
+
+        self.name = name
+
         if not start:
-            self.start = pm.group(em=True, n='start')
+            self.start = pm.group(em=True, n=self.name+'Start')
         else:
             self.start = start
         if not end:
-            self.end = pm.group(em=True, n='end')
+            self.end = pm.group(em=True, n=self.name+'End')
         else:
             self.end = end
         if not mid:
-            self.mid = pm.group(em=True, n='mid')
+            self.mid = pm.group(em=True, n=self.name+'Mid')
         else:
             self.mid = mid
             # cria nodes
-        vecProd1 = pm.createNode('vectorProduct')
-        vecProd2 = pm.createNode('vectorProduct')
-        vecProd3 = pm.createNode('vectorProduct')
-        vecProd4 = pm.createNode('vectorProduct')
-        add1 = pm.createNode('plusMinusAverage')
-        add2 = pm.createNode('plusMinusAverage')
-        matrix4by4 = pm.createNode('fourByFourMatrix')
-        decomposeMatrix1 = pm.createNode('decomposeMatrix')
-        decomposeMatrix2 = pm.createNode('decomposeMatrix')
-        decomposeMatrix3 = pm.createNode('decomposeMatrix')
-        decomposeMatrix3 = pm.createNode('decomposeMatrix')
-        multiMatrix = pm.createNode('multMatrix')
+        vecProd1 = pm.createNode('vectorProduct', n=self.name+'VecProd1')
+        vecProd2 = pm.createNode('vectorProduct', n=self.name+'VecProd2')
+        vecProd3 = pm.createNode('vectorProduct', n=self.name+'VecProd3')
+        vecProd4 = pm.createNode('vectorProduct', n=self.name+'VecProd4')
+        add1 = pm.createNode('plusMinusAverage', n=self.name+'Add1')
+        add2 = pm.createNode('plusMinusAverage', n=self.name+'Add2')
+        matrix4by4 = pm.createNode('fourByFourMatrix', n=self.name+'FourByFour')
+        decomposeMatrix1 = pm.createNode('decomposeMatrix', n=self.name+'Decompose1')
+        decomposeMatrix2 = pm.createNode('decomposeMatrix', n=self.name+'Decompose2')
+        decomposeMatrix3 = pm.createNode('decomposeMatrix', n=self.name+'Decompose3')
+        multiMatrix = pm.createNode('multMatrix', n=self.name+'MultiMatrix')
 
         # ver se funciona so com worldMatrix
         self.start.worldMatrix[0] >> vecProd1.matrix

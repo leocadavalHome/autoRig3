@@ -1,5 +1,8 @@
 import pymel.core as pm
-import autoRig3.tools.rigFunctions as rigFunctions
+import autoRig3.tools.controlTools as controlTools
+import logging
+
+logger = logging.getLogger('autoRig')
 
 class RibbonWire:
     """
@@ -73,9 +76,9 @@ class RibbonWire:
         wir = pm.wire(nurbsSurfBlend, gw=False, en=1.000000, ce=0.000000, li=0.000000, w=crv, dds=(0, 20))
         wireNode = pm.PyNode(wir[0])
         baseWire = [x for x in wireNode.connections() if 'BaseWire' in x.name()]
-        cntrl1 = rigFunctions.cntrlCrv(name=self.flexName + 'aux1', icone='grp')
-        cntrl2 = rigFunctions.cntrlCrv(name=self.flexName + 'aux2', icone='grp')
-        cntrl3 = rigFunctions.cntrlCrv(name=self.flexName + 'aux3', icone='grp')
+        cntrl1 = controlTools.cntrlCrv(name=self.flexName + 'aux1', icone='grp')
+        cntrl2 = controlTools.cntrlCrv(name=self.flexName + 'aux2', icone='grp')
+        cntrl3 = controlTools.cntrlCrv(name=self.flexName + 'aux3', icone='grp')
 
         pos = pm.pointOnSurface(nurbsSurfBlend, u=0.0, v=0.5)
         cntrl1.getParent().translate.set(pos)

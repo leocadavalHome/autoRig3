@@ -1,5 +1,8 @@
 import pymel.core as pm
-import autoRig3.tools.rigFunctions as rigFunctions
+import autoRig3.tools.controlTools as controlTools
+import logging
+
+logger = logging.getLogger('autoRig')
 
 class RibbonBezierSimple:
     """
@@ -8,6 +11,7 @@ class RibbonBezierSimple:
             name:
             size:
             numJoints:
+
 
     """
 
@@ -52,18 +56,24 @@ class RibbonBezierSimple:
         cntrlList = []
         locList = []
 
+        dummyCrv = self.ribbonDict['moveallSetup']['nameTempl']+'_dummy_crv'
+        pm.hide(pm.polyCube(n=dummyCrv))
+
         if pm.objExists(self.ribbonDict['noMoveSetup']['nameTempl']):
             pm.delete(self.ribbonDict['noMoveSetup']['nameTempl'])
 
         if pm.objExists(self.ribbonDict['moveallSetup']['nameTempl']):
             pm.delete(self.ribbonDict['moveallSetup']['nameTempl'])
 
+        logger
         ###Estrutura que nao deve ter transformacao
         noMoveSpace = pm.group(empty=True, n=self.ribbonDict['noMoveSetup']['nameTempl'])
         if not pm.objExists('NOMOVE'):
             pm.group(self.ribbonDict['noMoveSetup']['nameTempl'], n='NOMOVE')
         else:
             pm.parent(self.ribbonDict['noMoveSetup']['nameTempl'], 'NOMOVE')
+
+        pm.parent(self.ribbonDict['moveallSetup']['nameTempl']+'_dummy_crv', noMoveSpace)
 
         noMoveSpace.visibility.set(0)
         noMoveBend1 = pm.nurbsPlane(p=(self.size * 0.5, 0, 0), ax=(0, 0, 1), w=self.size, lr=0.1, d=3, u=5, v=1)
@@ -104,6 +114,7 @@ class RibbonBezierSimple:
         ##Cntrls
         for i in range(0, 7):
             anchor = pm.cluster(noMoveCrvJnt.name() + '.cv[' + str(i + 3) + ']')
+            pm.cluster(anchor[1], e=True, g=dummyCrv)
             clsHandle = anchor[1]
             anchorGrp = pm.group(em=True, n='clusterGrp' + str(i))
             anchorDrn = pm.group(em=True, n='clusterDrn' + str(i), p=anchorGrp)
@@ -115,17 +126,17 @@ class RibbonBezierSimple:
             if i == 0 or i == 6:
                 displaySetup = self.ribbonDict['cntrlSetup'].copy()
                 cntrlName = displaySetup['nameTempl'] + str(i)
-                cntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=anchor[1], **displaySetup)
+                cntrl = controlTools.cntrlCrv(name=cntrlName, obj=anchor[1], **displaySetup)
             elif i == 3:
 
                 displaySetup = self.ribbonDict['midCntrlSetup'].copy()
                 cntrlName = displaySetup['nameTempl'] + str(i)
-                cntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=anchor[1], **displaySetup)
+                cntrl = controlTools.cntrlCrv(name=cntrlName, obj=anchor[1], **displaySetup)
 
             else:
                 displaySetup = self.ribbonDict['cntrlTangSetup'].copy()
                 cntrlName = displaySetup['nameTempl'] + str(i)
-                cntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=anchor[1], **displaySetup)
+                cntrl = controlTools.cntrlCrv(name=cntrlName, obj=anchor[1], **displaySetup)
 
             # Nao pode fazer conexao na criacao do controle, pois tera conexao direta
             pm.xform(cntrl.getParent(), t=pos, ws=True)
@@ -150,6 +161,8 @@ class RibbonBezierSimple:
 
         startCls = pm.cluster(noMoveCrvJnt.name() + '.cv[0:2]')
         endCls = pm.cluster(noMoveCrvJnt.name() + '.cv[10:14]')
+        pm.cluster(startCls[1], e=True, g=dummyCrv)
+        pm.cluster(endCls[1], e=True, g=dummyCrv)
 
         pm.parent(startCls, anchorList[0])
         pm.parent(endCls, anchorList[6])
@@ -189,7 +202,7 @@ class RibbonBezierSimple:
         follGrp = pm.group(em=True, n=self.name + 'Foll_grp')
 
         # cria ramps para controlar o perfil de squash e stretch
-        ramp1 = pm.createNode('ramp')
+        ramp1 = pm.createNode('ramp', n=self.name + 'SquashRamp1')
         ramp1.attr('type').set(1)
 
         # ramp2 = pm.createNode ('ramp')
@@ -212,12 +225,12 @@ class RibbonBezierSimple:
             self.skinJoints.append(jnt1)
             displaySetup = self.ribbonDict['cntrlExtraSetup'].copy()
             cntrlName = displaySetup['nameTempl'] + 'A' + str(i)
-            cntrl1 = rigFunctions.cntrlCrv(name=cntrlName, obj=jnt1, connType='parentConstraint', **displaySetup)
+            cntrl1 = controlTools.cntrlCrv(name=cntrlName, obj=jnt1, connType='parentConstraint', **displaySetup)
 
             # node tree
-            blend1A = pm.createNode('blendTwoAttr')
-            blend1B = pm.createNode('blendTwoAttr')
-            gammaCorr1 = pm.createNode('gammaCorrect')
+            blend1A = pm.createNode('blendTwoAttr', n=self.name + 'VolumeBlend1A')
+            blend1B = pm.createNode('blendTwoAttr', n=self.name + 'VolumeBlend1B')
+            gammaCorr1 = pm.createNode('gammaCorrect', n=self.name + 'VolumeGamma1')
             cntrlList[0].attr('autoVolumStregth') >> gammaCorr1.gammaX
             cntrlList[0].attr('stretchDist') >> gammaCorr1.value.valueX
             blend1A.input[0].set(1)
@@ -247,6 +260,8 @@ class RibbonBezierSimple:
 
         # hideCntrls
         pm.toggle(bendSurf1[0], g=True)
+        bendSurf1[0].visibility.set(0)
+
         # skinJntsGrp.visibility.set(0)
         cntrlsSpace.extraCntrlsVis >> extraCntrlsGrp.visibility
         cntrlsSpace.cntrlsVis >> cntrlList[0].getParent().visibility
@@ -292,13 +307,13 @@ class RibbonBezierSimple:
         # Metodo para descobrir ponto mais proximo da superficie onde devem objeto deve ser colado
 
     def hookJntsOnCurve(self, jntList, upList, jntCrv, upCrv):
-        jntNPoC = pm.createNode('nearestPointOnCurve')
+        jntNPoC = pm.createNode('nearestPointOnCurve', n=self.name + 'NPCJnt')
         jntGrpA = pm.group(empty=True, n=self.name + 'jntGrpA_grp')
         jntCrv.worldSpace[0] >> jntNPoC.inputCurve
 
         jntGrpA.translate >> jntNPoC.inPosition
 
-        upNPoC = pm.createNode('nearestPointOnCurve')
+        upNPoC = pm.createNode('nearestPointOnCurve', n=self.name + 'NPCUp')
         upGrpA = pm.group(empty=True, n=self.name + 'upGrpA_grp')
         upCrv.worldSpace[0] >> upNPoC.inputCurve
         upGrpA.translate >> upNPoC.inPosition
@@ -306,7 +321,7 @@ class RibbonBezierSimple:
         for jnt, up in zip(jntList, upList):
             wp = pm.xform(jnt, t=True, ws=True, q=True)
             pm.xform(jntGrpA, t=wp, ws=True)
-            hookPoci = pm.createNode('pointOnCurveInfo')
+            hookPoci = pm.createNode('pointOnCurveInfo', n=self.name + 'CurveInfoA')
             jntCrv.worldSpace[0] >> hookPoci.inputCurve
             hookPoci.position >> jnt.translate
             hookPar = jntNPoC.parameter.get()
@@ -316,7 +331,7 @@ class RibbonBezierSimple:
 
             wp = pm.xform(up, t=True, ws=True, q=True)
             pm.xform(upGrpA, t=wp, ws=True)
-            hookPoci = pm.createNode('pointOnCurveInfo')
+            hookPoci = pm.createNode('pointOnCurveInfo', n=self.name + 'CurveInfoB')
             upCrv.worldSpace[0] >> hookPoci.inputCurve
             hookPoci.position >> up.translate
             hookPar = upNPoC.parameter.get()

@@ -1,7 +1,13 @@
 import pymel.core as pm
 import maya.api.OpenMaya as om
-import autoRig3.tools.rigFunctions as rigFunctions
+import autoRig3.tools.controlTools as controlTools
+import autoRig3.tools.matrixTools as matrixTools
+import autoRig3.tools.jointTools as jointTools
+import pymel.core as pm
 import json
+import logging
+
+logger = logging.getLogger('autoRig')
 
 class Finger:
     """
@@ -18,81 +24,106 @@ class Finger:
     # poder passar o fingerDict no momento da criacao
     # passar locators por variaveis e nao pelo dicionario
 
-    def __init__(self, name='finger', folds=2, axis='X', flipAxis=False, **kwargs):
+    def __init__(self, name='finger', folds=2, axis='X', fingerId=0, flipAxis=False, cntrlColor=(1,1, 0.15), **kwargs):
         self.name = name
         self.folds = folds
         self.axis = axis
         self.flipAxis = flipAxis
+        self.fingerId = fingerId
         self.guideMoveall = None
         self.skinJoints = []
+        self.object = None
+        self.nodes = None
+        self.spread = None
         ##IMPLEMENTAR padroes de nome
         self.guideSulfix = '_guide'
         self.jntSulfix = '_jnt'
         self.jxtSulfix = '_jxt'
         self.tipJxtSulfix = 'Tip_jxt'
+
         grpSulfix = '_grp'
 
+        self.toExport = {'name', 'axis', 'fingerId', 'flipAxis', 'guideDict', 'folds',
+                         'moveallCntrlSetup', 'palmCntrlSetup', 'baseCntrlSetup', 'fold1CntrlSetup', 'fold2CntrlSetup',
+                         'moveallGuideSetup', 'palmGuideSetup', 'baseGuideSetup', 'tipGuideSetup', 'fold1GuideSetup', 'fold2GuideSetup',
+                         'palmJntSetup', 'baseJntSetup', 'tipJntSetup', 'fold1JntSetup', 'fold2JntSetup'}
+
         ##setaqens de aparencia dos controles
-        self.fingerDict = {'name': name, 'folds': folds, 'axis': axis, 'flipAxis': flipAxis}
-
-
-        self.fingerDict['moveallCntrlSetup'] = {'nameTempl': self.name + 'MoveAll', 'icone': 'circuloX', 'size': 0.1,
+        self.moveallCntrlSetup = {'nameTempl': self.name + 'MoveAll', 'icone': 'circuloX', 'size': 0.1,
                                                 'color': (1, 1, 0)}
-        self.fingerDict['palmCntrlSetup'] = {'nameTempl': self.name + 'palm', 'icone': 'cubo', 'size': 0.2,
-                                             'color': (1, 0, 0)}
+        self.palmCntrlSetup = {'nameTempl': self.name + 'palm', 'icone': 'cubo', 'size': 0.2,
+                                             'color': cntrlColor}
         if self.flipAxis:
-            self.fingerDict['baseCntrlSetup'] = {'nameTempl': self.name + 'base', 'icone': 'dropZ', 'size': 0.1,
-                                                 'color': (1, 1, 0)}
+            self.baseCntrlSetup = {'nameTempl': self.name + 'base', 'icone': 'dropZ', 'size': 0.1, 'color': cntrlColor}
         else:
-            self.fingerDict['baseCntrlSetup'] = {'nameTempl': self.name + 'base', 'icone': 'dropMenosZ', 'size': 0.1,
-                                                 'color': (1, 1, 0)}
-            # self.fingerDict['tipCntrlSetup']={'nameTempl':self.name+'tip', 'icone':'circuloX','size':0.3,'color':(0,1,1) }
+            self.baseCntrlSetup = {'nameTempl': self.name + 'base', 'icone': 'circuloX', 'size': 0.5,
+                                                 'color': cntrlColor}
 
-        self.fingerDict['fold1CntrlSetup'] = {'nameTempl': self.name + 'fold1', 'icone': 'circuloX', 'size': 0.3,
-                                              'color': (0, 1, 1)}
-        self.fingerDict['fold2CntrlSetup'] = {'nameTempl': self.name + 'fold2', 'icone': 'circuloX', 'size': 0.3,
-                                              'color': (0, 1, 1)}
+        self.fold1CntrlSetup = {'nameTempl': self.name + 'fold1', 'icone': 'circuloX', 'size': 0.3,
+                                              'color': cntrlColor}
+        self.fold2CntrlSetup = {'nameTempl': self.name + 'fold2', 'icone': 'circuloX', 'size': 0.3,
+                                              'color': cntrlColor}
 
-        self.fingerDict['moveallGuideSetup'] = {'nameTempl': self.name + 'MoveAll', 'icone': 'quadradoX', 'size': 0.5,
+        self.moveallGuideSetup = {'nameTempl': self.name + 'MoveAll', 'icone': 'quadradoX', 'size': 0.5,
                                                 'color': (.6, 0, 0)}
-        self.fingerDict['palmGuideSetup'] = {'nameTempl': self.name + 'palm', 'icone': 'circuloX', 'size': 0.4,
+        self.palmGuideSetup = {'nameTempl': self.name + 'palm', 'icone': 'circuloX', 'size': 0.4,
                                              'color': (0, 0, 1)}
-        self.fingerDict['baseGuideSetup'] = {'nameTempl': self.name + 'base', 'icone': 'circuloX', 'size': 0.4,
+        self.baseGuideSetup = {'nameTempl': self.name + 'base', 'icone': 'circuloX', 'size': 0.2,
                                              'color': (0, 0, 1)}
-        self.fingerDict['tipGuideSetup'] = {'nameTempl': self.name + 'tip', 'icone': 'circuloX', 'size': 0.4,
+        self.tipGuideSetup = {'nameTempl': self.name + 'tip', 'icone': 'circuloX', 'size': 0.4,
                                             'color': (0, 0, 1)}
-        self.fingerDict['fold1GuideSetup'] = {'nameTempl': self.name + 'fold1', 'icone': 'circuloX', 'size': 0.4,
+        self.fold1GuideSetup = {'nameTempl': self.name + 'fold1', 'icone': 'circuloX', 'size': 0.4,
                                               'color': (0, 0, 1)}
-        self.fingerDict['fold2GuideSetup'] = {'nameTempl': self.name + 'fold2', 'icone': 'circuloX', 'size': 0.4,
+        self.fold2GuideSetup = {'nameTempl': self.name + 'fold2', 'icone': 'circuloX', 'size': 0.4,
                                               'color': (0, 0, 1)}
 
-        self.fingerDict['palmJntSetup'] = {'nameTempl': self.name + 'Palm', 'icone': 'Bone', 'size': 0.2}
-        self.fingerDict['baseJntSetup'] = {'nameTempl': self.name + 'Base', 'icone': 'Bone', 'size': 0.3}
-        self.fingerDict['tipJntSetup'] = {'nameTempl': self.name, 'icone': 'Bone', 'size': 0.3}
-        self.fingerDict['fold1JntSetup'] = {'nameTempl': self.name + 'Fold1', 'icone': 'Bone', 'size': 0.3}
-        self.fingerDict['fold2JntSetup'] = {'nameTempl': self.name + 'Fold2', 'icone': 'Bone', 'size': 0.3}
-        self.fingerDict['guideDict'] = {}
-        self.fingerGuideDict = {'moveall': [(0, 0, 0), (0, 0, 0)], 'palm': [(0, 0, 0), (0, 0, 0)],
-                                'base': [(1, 0, 0), (0, 0, 0)], 'tip': [(2, 0, 0), (0, 0, 0)],
-                                'fold1': [(0, 0.05, 0), (0, 0, 0)], 'fold2': [(0, 0, 0), (0, 0, 0)]}
+        self.palmJntSetup = {'nameTempl': self.name + 'Palm', 'icone': 'Bone', 'size': 0.2}
+        self.baseJntSetup = {'nameTempl': self.name + 'Base', 'icone': 'Bone', 'size': 0.3}
+        self.tipJntSetup = {'nameTempl': self.name, 'icone': 'Bone', 'size': 0.3}
+        self.fold1JntSetup = {'nameTempl': self.name + 'Fold1', 'icone': 'Bone', 'size': 0.3}
+        self.fold2JntSetup = {'nameTempl': self.name + 'Fold2', 'icone': 'Bone', 'size': 0.3}
 
-        self.fingerDict.update(kwargs)
-        self.fingerGuideDict.update(self.fingerDict['guideDict'])
-        self.fingerDict['guideDict'] = self.fingerGuideDict.copy()
+        self.guideDict = {'moveall': [(0, 0, 0), (0, 0, 0), (1, 1, 1)], 'palm': [(0, 0, 0), (0, 0, 0)],
+                          'base': [(1, 0, 0), (0, 0, 0)], 'tip': [(2, 0, 0), (0, 0, 0)],
+                          'fold1': [(0, 0.05, 0), (0, 0, 0)], 'fold2': [(0, 0, 0), (0, 0, 0)]}
 
-    # guide
+
+    def createCntrl(self, cntrlName):
+        displaySetup = self.__dict__[cntrlName+'Setup'].copy()
+        cntrlName = displaySetup['nameTempl'] + self.guideSulfix
+        if pm.objExists(cntrlName):
+            pm.delete(cntrlName)
+        guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True, **displaySetup)
+        return guide
+
+    def setCntrl (self, cntrl, posRot, space='object'):
+        cntrl.setTranslation(self.guideDict[posRot][0], space=space)
+        cntrl.setRotation(self.guideDict[posRot][1], space=space)
+        # Felipe --> add valores de escala
+        try:
+            cntrl.setScale(self.guideDict[posRot][2])
+
+        except:
+            pass
+
+    def exportDict(self):
+        expDict = {}
+        for key in self.toExport:
+                expDict[key] = self.__dict__[key]
+        return expDict
+
+
     def doGuide(self, **kwargs):
-        self.fingerGuideDict = self.fingerDict['guideDict'].copy()
-        self.fingerGuideDict.update(kwargs)  # atualiza com o q foi entrado
+        self.__dict__.update(kwargs)  # atualiza com o q foi entrado
 
         # se existir apaga
-        displaySetup = self.fingerDict['moveallGuideSetup'].copy()
+        displaySetup = self.moveallGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
 
         if pm.objExists(cntrlName):
             pm.delete(cntrlName)
 
-        self.guideMoveall = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+        self.guideMoveall = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                   **displaySetup)
 
         if not pm.objExists('GUIDES'):
@@ -102,42 +133,42 @@ class Finger:
 
             # guideName=self.fingerDict['palmGuideSetup']['nameTempl']+self.guideSulfix
 
-        displaySetup = self.fingerDict['palmGuideSetup'].copy()
+        displaySetup = self.palmGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-        self.palmGuide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+        self.palmGuide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                **displaySetup)
 
-        displaySetup = self.fingerDict['baseGuideSetup'].copy()
+        displaySetup = self.baseGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-        self.baseGuide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+        self.baseGuide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                **displaySetup)
 
-        displaySetup = self.fingerDict['tipGuideSetup'].copy()
+        displaySetup = self.tipGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-        self.tipGuide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+        self.tipGuide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                               **displaySetup)
 
         pm.parent(self.tipGuide, self.baseGuide, self.palmGuide, self.guideMoveall)
 
-        self.palmGuide.setTranslation(self.fingerGuideDict['palm'][0], space='object')
-        self.palmGuide.setRotation(self.fingerGuideDict['palm'][1], space='object')
+        self.palmGuide.setTranslation(self.guideDict['palm'][0], space='object')
+        self.palmGuide.setRotation(self.guideDict['palm'][1], space='object')
 
-        self.baseGuide.setTranslation(self.fingerGuideDict['base'][0], space='object')
-        self.baseGuide.setRotation(self.fingerGuideDict['base'][1], space='object')
+        self.baseGuide.setTranslation(self.guideDict['base'][0], space='object')
+        self.baseGuide.setRotation(self.guideDict['base'][1], space='object')
 
-        self.tipGuide.setTranslation(self.fingerGuideDict['tip'][0], space='object')
-        self.tipGuide.setRotation(self.fingerGuideDict['tip'][1], space='object')
+        self.tipGuide.setTranslation(self.guideDict['tip'][0], space='object')
+        self.tipGuide.setRotation(self.guideDict['tip'][1], space='object')
 
         # cria conforme o numero de dobras
         if self.folds == 2:
-            displaySetup = self.fingerDict['fold1GuideSetup'].copy()
+            displaySetup = self.fold1GuideSetup.copy()
             cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-            self.fold1Guide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+            self.fold1Guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                     **displaySetup)
 
-            displaySetup = self.fingerDict['fold2GuideSetup'].copy()
+            displaySetup = self.fold2GuideSetup.copy()
             cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-            self.fold2Guide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+            self.fold2Guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                     **displaySetup)
 
             fold1GuideGrp = pm.group(em=True)
@@ -147,11 +178,11 @@ class Finger:
             pm.parent(self.fold2Guide, fold2GuideGrp)
             pm.parent(fold1GuideGrp, fold2GuideGrp, self.guideMoveall)
 
-            self.fold2Guide.setTranslation(self.fingerGuideDict['fold2'][0], space='object')
-            self.fold2Guide.setRotation(self.fingerGuideDict['fold2'][1], space='object')
+            self.fold2Guide.setTranslation(self.guideDict['fold2'][0], space='object')
+            self.fold2Guide.setRotation(self.guideDict['fold2'][1], space='object')
 
-            self.fold1Guide.setTranslation(self.fingerGuideDict['fold1'][0], space='object')
-            self.fold1Guide.setRotation(self.fingerGuideDict['fold1'][1], space='object')
+            self.fold1Guide.setTranslation(self.guideDict['fold1'][0], space='object')
+            self.fold1Guide.setRotation(self.guideDict['fold1'][1], space='object')
 
             pm.aimConstraint(self.fold1Guide, self.baseGuide, weight=1, aimVector=(1, 0, 0), upVector=(0, 1, 0),
                              worldUpVector=(0, 1, 0), worldUpType='objectrotation', worldUpObject=self.guideMoveall)
@@ -169,17 +200,17 @@ class Finger:
             pm.pointConstraint(self.fold1Guide, self.tipGuide, fold2GuideGrp, mo=False)
 
         elif self.folds == 1:
-            displaySetup = self.fingerDict['fold1GuideSetup'].copy()
+            displaySetup = self.fold1GuideSetup.copy()
             cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-            self.fold1Guide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+            self.fold1Guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                     **displaySetup)
             fold1GuideGrp = pm.group(em=True)
 
             pm.parent(self.fold1Guide, fold1GuideGrp)
             pm.parent(fold1GuideGrp, self.guideMoveall)
 
-            self.fold1Guide.setTranslation(self.fingerGuideDict['fold1'][0], space='object')
-            self.fold1Guide.setRotation(self.fingerGuideDict['fold1'][1], space='object')
+            self.fold1Guide.setTranslation(self.guideDict['fold1'][0], space='object')
+            self.fold1Guide.setRotation(self.guideDict['fold1'][1], space='object')
 
             pm.aimConstraint(self.fold1Guide, self.baseGuide, weight=1, aimVector=(1, 0, 0), upVector=(0, 1, 0),
                              worldUpVector=(0, 1, 0), worldUpType='objectrotation', worldUpObject=self.guideMoveall)
@@ -190,17 +221,17 @@ class Finger:
             cns = pm.pointConstraint(self.baseGuide, self.tipGuide, fold1GuideGrp, mo=False)
 
         elif self.folds == 0:
-            displaySetup = self.fingerDict['fold1GuideSetup'].copy()
+            displaySetup = self.fold1GuideSetup.copy()
             cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-            self.fold1Guide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
+            self.fold1Guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True,
                                                     **displaySetup)
             fold1GuideGrp = pm.group(em=True)
 
             pm.parent(self.fold1Guide, fold1GuideGrp)
             pm.parent(fold1GuideGrp, self.guideMoveall)
 
-            self.fold1Guide.setTranslation(self.fingerGuideDict['fold1'][0], space='object')
-            self.fold1Guide.setRotation(self.fingerGuideDict['fold1'][1], space='object')
+            self.fold1Guide.setTranslation(self.guideDict['fold1'][0], space='object')
+            self.fold1Guide.setRotation(self.guideDict['fold1'][1], space='object')
 
             pm.aimConstraint(self.tipGuide, self.baseGuide, weight=1, aimVector=(1, 0, 0), upVector=(0, 1, 0),
                              worldUpVector=(0, 1, 0), worldUpType='objectrotation', worldUpObject=self.guideMoveall)
@@ -210,95 +241,106 @@ class Finger:
 
             self.fold1Guide.visibility.set(0)
 
-        arrow = rigFunctions.cntrlCrv(obj=self.baseGuide, name=self.name + 'PlaneDir', icone='seta', size=.07,
+        arrow = controlTools.cntrlCrv(obj=self.baseGuide, name=self.name + 'PlaneDir', icone='seta', size=.07,
                                       color=(0, 1, 1))
+        arrow.template.set(1)
         arrow.getParent().setParent(self.baseGuide)
         pm.aimConstraint(self.tipGuide, arrow, weight=1, aimVector=(1, 0, 0), upVector=(0, 0, -1),
                          worldUpObject=self.fold1Guide, worldUpType='object')
 
-        self.guideMoveall.setTranslation(self.fingerGuideDict['moveall'][0], space='object')
-        self.guideMoveall.setRotation(self.fingerGuideDict['moveall'][1], space='object')
+        self.guideMoveall.setTranslation(self.guideDict['moveall'][0], space='object')
+        self.guideMoveall.setRotation(self.guideDict['moveall'][1], space='object')
+        self.guideMoveall.setScale(self.guideDict['moveall'][2], space='object')
 
         pm.addAttr(self.guideMoveall, ln='fingerDict', dt='string')
-        self.guideMoveall.fingerDict.set(json.dumps(self.fingerDict))
-
-    def getGuideFromScene(self):
-        try:
-            # se existir apaga
-            guideName = self.fingerDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
-            self.guideMoveall = pm.PyNode(guideName)
-
-            guideName = self.fingerDict['palmGuideSetup']['nameTempl'] + self.guideSulfix
-            self.palmGuide = pm.PyNode(guideName)
-
-            guideName = self.fingerDict['baseGuideSetup']['nameTempl'] + self.guideSulfix
-            self.baseGuide = pm.PyNode(guideName)
-
-            guideName = self.fingerDict['tipGuideSetup']['nameTempl'] + self.guideSulfix
-            self.tipGuide = pm.PyNode(guideName)
-
-            guideName = self.fingerDict['fold1GuideSetup']['nameTempl'] + self.guideSulfix
-            self.fold1Guide = pm.PyNode(guideName)
-
-            if self.folds == 2:
-                guideName = self.fingerDict['fold2GuideSetup']['nameTempl'] + self.guideSulfix
-                self.fold2Guide = pm.PyNode(guideName)
-        except:
-            print 'algum nao funcionou'
+        # todo implantar funcao de exportacao de dict
+        self.guideMoveall.fingerDict.set(json.dumps(self.exportDict()))
 
     def getDict(self):
         try:
             # se existir apaga
-            guideName = self.fingerDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.moveallGuideSetup['nameTempl'] + self.guideSulfix
             self.guideMoveall = pm.PyNode(guideName)
 
             jsonDict = self.guideMoveall.fingerDict.get()
             dictRestored = json.loads(jsonDict)
-            self.fingerDict.update(**dictRestored)
+            self.__dict__.update(**dictRestored)
 
-            self.fingerDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'object')
+            self.guideDict['moveall'][0] = self.guideMoveall.getTranslation(space='object').get()
+            self.guideDict['moveall'][1] = tuple(self.guideMoveall.getRotation(space='object'))
+            self.guideDict['moveall'][2] = tuple(pm.xform(self.guideMoveall, q=True, s=True, r=True, os=True))
 
-            guideName = self.fingerDict['palmGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.palmGuideSetup['nameTempl'] + self.guideSulfix
             self.palmGuide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['palm'] = rigFunctions.getObjTransforms (self.palmGuide, 'object')
+            self.guideDict['palm'][0] = self.palmGuide.getTranslation(space='object').get()
+            self.guideDict['palm'][1] = tuple(self.palmGuide.getRotation(space='object'))
 
-
-            guideName = self.fingerDict['baseGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.baseGuideSetup['nameTempl'] + self.guideSulfix
             self.baseGuide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['base'] = rigFunctions.getObjTransforms(self.baseGuide, 'object')
+            self.guideDict['base'][0] = self.baseGuide.getTranslation(space='object').get()
+            self.guideDict['base'][1] = tuple(self.baseGuide.getRotation(space='object'))
 
-
-            guideName = self.fingerDict['tipGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.tipGuideSetup['nameTempl'] + self.guideSulfix
             self.tipGuide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['tip'] = rigFunctions.getObjTransforms (self.tipGuide, 'object')
+            self.guideDict['tip'][0] = self.tipGuide.getTranslation(space='object').get()
+            self.guideDict['tip'][1] = tuple(self.tipGuide.getRotation(space='object'))
 
-
-            guideName = self.fingerDict['fold1GuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.fold1GuideSetup['nameTempl'] + self.guideSulfix
             self.fold1Guide = pm.PyNode(guideName)
-            self.fingerDict['guideDict']['fold1'] = rigFunctions.getObjTransforms (self.fold1Guide, 'object')
-
+            self.guideDict['fold1'][0] = self.fold1Guide.getTranslation(space='object').get()
+            self.guideDict['fold1'][1] = tuple(self.fold1Guide.getRotation(space='object'))
 
             if self.folds == 2:
-                guideName = self.fingerDict['fold2GuideSetup']['nameTempl'] + self.guideSulfix
+                guideName = self.fold2GuideSetup['nameTempl'] + self.guideSulfix
                 self.fold2Guide = pm.PyNode(guideName)
-                self.fingerDict['guideDict']['fold2'] = rigFunctions.getObjTransforms (self.fold2Guide, 'object')
-
+                self.guideDict['fold2'][0] = self.fold2Guide.getTranslation(space='object').get()
+                self.guideDict['fold2'][1] = tuple(self.fold2Guide.getRotation(space='object'))
         except:
-            print 'algum nao funcionou'
+            pass
 
-        return self.fingerDict
+        return self.exportDict()
 
     def doRig(self):
         # se nao existir guide, cria um default
+        if 'L_hand' in self.name or 'L_foot' in self.name:
+            self.baseCntrlSetup = {'nameTempl': self.name + 'base', 'icone': 'circuloX', 'size': 0.5,
+                                                 'color': (0.010, 0.050, 0.2)}
+            self.palmCntrlSetup = {'nameTempl': self.name + 'palm', 'icone': 'cubo', 'size': 0.2,
+                                                 'color': (0.010, 0.050, 0.2)}
+            self.fold1CntrlSetup = {'nameTempl': self.name + 'fold1', 'icone': 'circuloX', 'size': 0.3,
+                                                  'color': (0.010, 0.050, 0.2)}
+            self.fold2CntrlSetup = {'nameTempl': self.name + 'fold2', 'icone': 'circuloX', 'size': 0.3,
+                                                  'color': (0.010, 0.050, 0.2)}
+
+        elif 'R_hand' in self.name or 'R_foot' in self.name:
+            self.baseCntrlSetup = {'nameTempl': self.name + 'base', 'icone': 'circuloX', 'size': 0.5,
+                                                 'color': (0.4, 0, 0)}
+            self.palmCntrlSetup = {'nameTempl': self.name + 'palm', 'icone': 'cubo', 'size': 0.2,
+                                                 'color': (0.4, 0, 0)}
+            self.fold1CntrlSetup = {'nameTempl': self.name + 'fold1', 'icone': 'circuloX', 'size': 0.3,
+                                                  'color': (0.4, 0, 0)}
+            self.fold2CntrlSetup = {'nameTempl': self.name + 'fold2', 'icone': 'circuloX', 'size': 0.3,
+                                                  'color': (0.4, 0, 0)}
+
+        else:
+            self.baseCntrlSetup = {'nameTempl': self.name + 'base', 'icone': 'circuloX', 'size': 0.5,
+                                                 'color': (1, 1, 0.15)}
+            self.palmCntrlSetup = {'nameTempl': self.name + 'palm', 'icone': 'cubo', 'size': 0.2,
+                                                 'color': (1, 1, 0.15)}
+            self.fold1CntrlSetup = {'nameTempl': self.name + 'fold1', 'icone': 'circuloX', 'size': 0.3,
+                                                  'color': (1, 1, 0.15)}
+            self.fold2CntrlSetup = {'nameTempl': self.name + 'fold2', 'icone': 'circuloX', 'size': 0.3,
+                                                  'color': (1, 1, 0.15)}
+
         if not self.guideMoveall:
             self.doGuide()
 
         # se existir um modulo igual, apaga
-        moveallName = self.fingerDict['moveallCntrlSetup']['nameTempl']
+        moveallName = self.moveallCntrlSetup['nameTempl']
         if pm.objExists(moveallName):
             pm.delete(moveallName)
 
-        cntrlName = self.fingerDict['moveallCntrlSetup']['nameTempl']
+        cntrlName = self.moveallCntrlSetup['nameTempl']
         self.moveall = pm.group(name=cntrlName, em=True)
 
         pos = pm.xform(self.guideMoveall, q=True, ws=True, t=True)
@@ -328,19 +370,19 @@ class Finger:
         if self.folds == 2:
             fold2 = pm.xform(self.fold2Guide, q=True, ws=True, t=True)
             guide = [palm, base, fold1, fold2, tip]
-            jntNames = [self.fingerDict['palmJntSetup']['nameTempl'], self.fingerDict['baseJntSetup']['nameTempl'],
-                        self.fingerDict['fold1JntSetup']['nameTempl'], self.fingerDict['fold2JntSetup']['nameTempl'],
-                        self.fingerDict['tipJntSetup']['nameTempl']]
+            jntNames = [self.palmJntSetup['nameTempl'], self.baseJntSetup['nameTempl'],
+                        self.fold1JntSetup['nameTempl'], self.fold2JntSetup['nameTempl'],
+                        self.tipJntSetup['nameTempl']]
 
         elif self.folds == 1:
             guide = [palm, base, fold1, tip]
-            jntNames = [self.fingerDict['palmJntSetup']['nameTempl'], self.fingerDict['baseJntSetup']['nameTempl'],
-                        self.fingerDict['fold1JntSetup']['nameTempl'], self.fingerDict['tipJntSetup']['nameTempl']]
+            jntNames = [self.palmJntSetup['nameTempl'], self.baseJntSetup['nameTempl'],
+                        self.fold1JntSetup['nameTempl'], self.tipJntSetup['nameTempl']]
 
         elif self.folds == 0:
             guide = [palm, base, tip]
-            jntNames = [self.fingerDict['palmJntSetup']['nameTempl'], self.fingerDict['baseJntSetup']['nameTempl'],
-                        self.fingerDict['tipJntSetup']['nameTempl']]
+            jntNames = [self.palmJntSetup['nameTempl'], self.baseJntSetup['nameTempl'],
+                        self.tipJntSetup['nameTempl']]
 
         # cria os joints conforme a orientacao
         fingerJnts = []
@@ -353,7 +395,7 @@ class Finger:
             else:
                 AB = B - A
 
-            m = rigFunctions.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
+            m = matrixTools.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
             jntName = jntNames[i] + self.jntSulfix
             j1 = pm.joint(n=jntName)
             fingerJnts.append(j1)
@@ -361,7 +403,7 @@ class Finger:
             pm.xform(j1, m=m, ws=True)
             pm.makeIdentity(j1, apply=True, r=1, t=0, s=1, n=0, pn=0)
 
-        jntName = self.fingerDict['tipJntSetup']['nameTempl'] + self.tipJxtSulfix
+        jntName = self.tipJntSetup['nameTempl'] + self.tipJxtSulfix
         j1 = pm.joint(n=jntName)
         fingerJnts.append(j1)
         pm.xform(j1, m=m, ws=True)
@@ -370,33 +412,106 @@ class Finger:
 
         # cria os controles
         last = None
-        displaySetup = self.fingerDict['palmCntrlSetup'].copy()
+        displaySetup = self.palmCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        cntrl0 = rigFunctions.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[0], **displaySetup)
+        cntrl0 = controlTools.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[0], offsets=1,**displaySetup)
 
-        displaySetup = self.fingerDict['baseCntrlSetup'].copy()
+        displaySetup = self.baseCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        cntrl1 = rigFunctions.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[1], **displaySetup)
+        self.cntrl1 = controlTools.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[1],offsets=1, **displaySetup)
 
-        pm.parent(cntrl1.getParent(), cntrl0)
-        last = cntrl1
+        pm.parent(self.cntrl1.getParent(2), cntrl0)
+        last = self.cntrl1
 
         # cria os controles conforme a o numero setado de dobras
         if self.folds > 0:
-            cntrl1.addAttr('curl1', k=1, at=float, dv=0)
-            displaySetup = self.fingerDict['fold1CntrlSetup'].copy()
+            self.cntrl1.addAttr('bend0', k=1, at=float, dv=0)
+            self.cntrl1.addAttr('bend1', k=1, at=float, dv=0)
+            displaySetup = self.fold1CntrlSetup.copy()
             cntrlName = displaySetup['nameTempl']
-            cntrl2 = rigFunctions.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[2], offsets=1,
+            self.cntrl2 = controlTools.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[2], offsets=1,
                                            **displaySetup)
-            pm.parent(cntrl2.getParent(2), cntrl1)
-            cntrl1.curl1 >> cntrl2.getParent().rotateY
+            pm.parent(self.cntrl2.getParent(2), self.cntrl1)
+            self.cntrl1.bend1 >> self.cntrl2.getParent().rotateY
         if self.folds > 1:
-            cntrl1.addAttr('curl2', k=1, at=float, dv=0)
-            displaySetup = self.fingerDict['fold2CntrlSetup'].copy()
+            self.cntrl1.addAttr('bend2', k=1, at=float, dv=0)
+            displaySetup = self.fold2CntrlSetup.copy()
             cntrlName = displaySetup['nameTempl']
-            cntrl3 = rigFunctions.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[3], offsets=1,
+            self.cntrl3 = controlTools.cntrlCrv(name=cntrlName, connType='parentConstraint', obj=fingerJnts[3], offsets=1,
                                            **displaySetup)
-            pm.parent(cntrl3.getParent(2), cntrl2)
-            cntrl1.curl2 >> cntrl3.getParent().rotateY
 
-        pm.parent(fingerJnts[0], cntrl0.getParent(), self.moveall)
+            pm.parent(self.cntrl3.getParent(2), self.cntrl2)
+            self.cntrl1.bend2 >> self.cntrl3.getParent().rotateY
+
+        pm.parent(fingerJnts[0], cntrl0.getParent(2), self.moveall)
+
+         #Henrique Ribeiro - add novos attrs
+        if self.folds > 0:
+            self.cntrl1.addAttr('curl', k=1, at=float, dv=0)
+            self.cntrl1.addAttr('lean', k=1, at=float, dv=0)
+            self.cntrl1.addAttr('scrunch', k=1, at=float, dv=0)
+            self.cntrl1.addAttr('spread', k=1, at=float, dv=0)
+            self.cntrl1.addAttr('twist', k=1, at=float, dv=0)
+
+        #Henrique Ribeiro - create connections
+            PMAbase = pm.createNode ('plusMinusAverage', n=self.name+'_curlBase_pma')
+            PMAfold1 = pm.createNode ('plusMinusAverage', n=self.name+'_curlFold_pma')
+
+
+        #curl and bend
+            self.cntrl1.bend0 >> PMAbase.input1D[2]
+            self.cntrl1.bend1 >> PMAfold1.input1D[0]
+
+            self.cntrl1.curl >> PMAbase.input1D[0]
+            self.cntrl1.curl >> PMAfold1.input1D[1]
+
+            PMAbase.output1D >> self.cntrl1.getParent().rotateY
+            PMAfold1.output1D >> self.cntrl2.getParent().rotateY
+
+
+        #twist
+            self.cntrl1.twist >> PMAbase.input2D[0].input2Dx
+            PMAbase.output2Dx >> self.cntrl1.getParent().rotateX
+
+        #spread
+            self.cntrl1.spread >> PMAbase.input2D[0].input2Dy
+            PMAbase.output2Dy >> self.cntrl1.getParent().rotateZ
+
+        #scrunch
+            MDLScrunchBase = pm.createNode ('multDoubleLinear', n=self.name+'_scrunchBase_pma')
+            MDLScrunchFold1 = pm.createNode ('multDoubleLinear',n=self.name+'_scrunchFold1_pma')
+
+            pm.setAttr(MDLScrunchBase + ".input2", -0.65)
+            pm.setAttr(MDLScrunchFold1 + ".input2", 1.3)
+
+            self.cntrl1.scrunch >> MDLScrunchBase.input1
+            MDLScrunchBase.output >> PMAbase.input1D[1]
+            self.cntrl1.scrunch >> MDLScrunchFold1.input1
+            MDLScrunchFold1.output >> PMAfold1.input1D[2]
+
+
+        #lean
+            self.cntrl1.lean >> PMAbase.input2D[1].input2Dy
+            self.cntrl1.lean >> PMAfold1.input2D[1].input2Dy
+            PMAfold1.output2D.output2Dy >> self.cntrl2.getParent().rotateZ
+            listNodes = [PMAbase, PMAfold1, MDLScrunchBase, MDLScrunchFold1]
+
+        if self.folds > 1:
+            PMAfold2 = pm.createNode ('plusMinusAverage', n=self.name+'_fold_pma')
+            MDLScrunchFold2 = pm.createNode ('multDoubleLinear', n=self.name+'_scrunchFold2_pma')
+            self.cntrl1.bend2 >> PMAfold2.input1D[0]
+            self.cntrl1.curl >> PMAfold2.input1D[1]
+            PMAfold2.output1D >> self.cntrl3.getParent().rotateY
+            pm.setAttr(MDLScrunchBase + ".input2", -1)
+            pm.setAttr(MDLScrunchFold1 + ".input2", 1)
+            pm.setAttr(MDLScrunchFold2 + ".input2", 1.1)
+            self.cntrl1.scrunch >> MDLScrunchFold2.input1
+            MDLScrunchFold2.output >> PMAfold2.input1D[2]
+            PMAfold1.output2D.output2Dy >> self.cntrl3.getParent().rotateZ
+            self.cntrl1.lean >> PMAfold2.input2D[1].input2Dy
+            listNodes.append(PMAfold2)
+            listNodes.append(MDLScrunchFold2)
+
+        #hide Outputs base fingers
+        for cadaItem in listNodes:
+            pm.setAttr(cadaItem +  ".isHistoricallyInteresting", 0)

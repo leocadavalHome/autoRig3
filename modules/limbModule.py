@@ -1,8 +1,11 @@
 import pymel.core as pm
 import maya.api.OpenMaya as om
-import autoRig3.tools.rigFunctions as rigFunctions
+import autoRig3.tools.controlTools as controlTools
+import autoRig3.tools.matrixTools as matrixTools
 import json
+import logging
 
+logger = logging.getLogger('autoRig')
 
 class Limb:
     """
@@ -26,14 +29,12 @@ class Limb:
     # todo self.twoJoints=False RETIREI CODIGO DE ARTICULACAO DE DOIS JOINTS. PRECISA FAZER IMPLEMENTACAO COMPLETA
 
     def __init__(self, name='limb', axis='X', flipAxis=False, lastJoint=True, **kwargs):
-
         self.name = name
         self.flipAxis = flipAxis
         self.axis = axis
         self.lastJoint = lastJoint
         self.guideMoveall = None
         self.skinJoints = []
-        ##IMPLEMENTAR padroes de nome
         self.guideSulfix = '_guide'
         self.jntSulfix = '_jnt'
         self.jxtSulfix = '_jxt'
@@ -41,72 +42,82 @@ class Limb:
         self.grpSulfix = '_grp'
         self.GuideColor = (1, 0, 1)
 
-        self.limbDict = {'name': name,
-                         'flipAxis': flipAxis,
-                         'lastJoint': lastJoint,
-                         'axis': axis}
+        self.toExport = {'moveallGuideSetup', 'poleVecCntrlSetup', 'name', 'axis', 'flipAxis', 'startJntSetup',
+                         'endJntSetup', 'midJntSetup', 'lastJoint', 'lastJntSetup', 'guideDict', 'startGuideSetup',
+                         'midGuideSetup', 'endGuideSetup', 'lastGuideSetup', 'moveAll1CntrlSetup', 'startCntrlSetup',
+                         'midCntrlSetup', 'endCntrlSetup', 'ikCntrlSetup'}
 
-        self.setDefaults()
+        #Felipe --> add valores de escala
+        self.guideDict = {'moveall': [(0, 0, 0), (0, 0, 0), (1, 1, 1)], 'start': [(0, 0, 0), (0, 0, 0), (1, 1, 1)],
+                          'mid': [(3, 0, -1), (0, 0, 0), (1, 1, 1)], 'end': [(6, 0, 0), (0, 0, 0), (1, 1, 1)],
+                          'last': [(2, 0, 0), (0, 0, 0), (1, 1, 1)]}
 
-        self.limbDict.update(kwargs)
-        self.limbGuideDict.update(self.limbDict['guideDict'])
-        self.limbDict['guideDict'] = self.limbGuideDict.copy()
 
-    def setDefaults(self):
-        self.limbDict['moveAll1CntrlSetup'] = {'nameTempl': self.limbDict['name'] + 'MoveAll', 'icone': 'grp',
-                                               'size': 1.8, 'color': (1, 1, 0)}
-        self.limbDict['ikCntrlSetup'] = {'nameTempl': self.limbDict['name'] + 'Ik', 'icone': 'circuloX', 'size': 1,
-                                         'color': (1, 0, 0)}
-        self.limbDict['startCntrlSetup'] = {'nameTempl': self.limbDict['name'] + 'FkStart', 'icone': 'circuloX',
-                                            'size': 1.5, 'color': (0, 1, 0)}
-        self.limbDict['midCntrlSetup'] = {'nameTempl': self.limbDict['name'] + 'FkMid', 'icone': 'circuloX',
-                                          'size': 1.5, 'color': (0, 1, 0)}
-        self.limbDict['endCntrlSetup'] = {'nameTempl': self.limbDict['name'] + 'FkEnd', 'icone': 'circuloX',
-                                          'size': 1.5, 'color': (0, 1, 0)}
-        self.limbDict['poleVecCntrlSetup'] = {'nameTempl': self.limbDict['name'] + 'PoleVec', 'icone': 'bola',
-                                              'size': 0.4, 'color': (1, 0, 0)}
+        self.moveAll1CntrlSetup = {'nameTempl': name + 'MoveAll', 'icone': 'grp',
+                                   'size': (1.8), 'color': (1, 1, 0)}
 
-        self.limbDict['startJntSetup'] = {'nameTempl': self.limbDict['name'] + 'Start', 'size': 1}
-        self.limbDict['midJntSetup'] = {'nameTempl': self.limbDict['name'] + 'Mid', 'size': 1}
-        self.limbDict['endJntSetup'] = {'nameTempl': self.limbDict['name'] + 'End', 'size': 1}
-        self.limbDict['lastJntSetup'] = {'nameTempl': self.limbDict['name'] + 'Last', 'size': 1}
+        self.ikCntrlSetup = {'nameTempl': name + 'Ik', 'icone': 'circuloX', 'size': 1,
+                             'color': (1, 0, 0)}
 
-        self.limbDict['moveallGuideSetup'] = {'nameTempl': self.limbDict['name'] + 'MoveAll', 'icone': 'quadradoX',
-                                              'size': 2.5, 'color': (1, 0, 0)}
-        self.limbDict['startGuideSetup'] = {'nameTempl': self.limbDict['name'] + 'Start', 'icone': 'circuloX',
-                                            'size': 2, 'color': (1, 1, 0)}
-        self.limbDict['midGuideSetup'] = {'nameTempl': self.limbDict['name'] + 'Mid', 'icone': 'circuloX', 'size': 2,
-                                          'color': (1, 1, 0)}
-        self.limbDict['endGuideSetup'] = {'nameTempl': self.limbDict['name'] + 'End', 'icone': 'circuloX', 'size': 2,
-                                          'color': (1, 1, 0)}
-        self.limbDict['lastGuideSetup'] = {'nameTempl': self.limbDict['name'] + 'Last', 'icone': 'bola', 'size': 0.5,
-                                           'color': (.5, 0.4, 0.35)}
-        self.limbDict['guideDict'] = {}
-        # esquema para podermos entrar somente algumas keys do GuideDict, o restante e completada com os valores default
-        self.limbGuideDict = {'moveall': [(0, 0, 0), (0, 0, 0)], 'start': [(0, 0, 0), (0, 0, 0)],
-                              'mid': [(3, 0, -1), (0, 0, 0)], 'end': [(6, 0, 0), (0, 0, 0)],
-                              'last': [(2, 0, 0), (0, 0, 0)]}
+        self.startCntrlSetup = {'nameTempl': name + 'FkStart', 'icone': 'circuloX',
+                                'size': 1.5, 'color': (0, 1, 0)}
+
+        self.midCntrlSetup = {'nameTempl': name + 'FkMid', 'icone': 'circuloX',
+                              'size': 1.5, 'color': (0, 1, 0)}
+
+        self.endCntrlSetup = {'nameTempl': name + 'FkEnd', 'icone': 'circuloX',
+                              'size': 1.5, 'color': (0, 1, 0)}
+
+        self.poleVecCntrlSetup = {'nameTempl': name + 'PoleVec', 'icone': 'bola',
+                                  'size': 0.4, 'color': (1, 0, 0)}
+
+        self.startJntSetup = {'nameTempl': name + 'Start', 'size': 1}
+        self.midJntSetup = {'nameTempl': name + 'Mid', 'size': 1}
+        self.endJntSetup = {'nameTempl': name + 'End', 'size': 1}
+        self.lastJntSetup = {'nameTempl': name + 'Last', 'size': 1}
+
+        self.moveallGuideSetup = {'nameTempl': name + 'MoveAll', 'icone': 'quadradoX',
+                                  'size': 2.5, 'color': (1, 0, 0)}
+        self.startGuideSetup = {'nameTempl': name + 'Start', 'icone': 'circuloX',
+                                'size': 2, 'color': (1, 1, 0)}
+        self.midGuideSetup = {'nameTempl': name + 'Mid', 'icone': 'circuloX', 'size': 2,
+                              'color': (1, 1, 0)}
+        self.endGuideSetup = {'nameTempl': name + 'End', 'icone': 'circuloX', 'size': 2,
+                              'color': (1, 1, 0)}
+        self.lastGuideSetup = {'nameTempl': name + 'Last', 'icone': 'bola', 'size': 0.5,
+                               'color': (.5, 0.4, 0.35)}
 
     def createCntrl(self, cntrlName):
-        displaySetup = self.limbDict[cntrlName+'Setup'].copy()
+        displaySetup = self.__dict__[cntrlName+'Setup'].copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
-        guide = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True, **displaySetup)
+        guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True, **displaySetup)
         return guide
 
     def setCntrl (self, cntrl, posRot, space='object'):
-        cntrl.setTranslation(self.limbDict['guideDict'][posRot][0], space=space)
-        cntrl.setRotation(self.limbDict['guideDict'][posRot][1], space=space)
+        cntrl.setTranslation(self.guideDict[posRot][0], space=space)
+        cntrl.setRotation(self.guideDict[posRot][1], space=space)
+        try:
+            cntrl.setScale(self.guideDict[posRot][2])
+        except:
+            pass
+
+    def exportDict(self):
+        expDict = {}
+        for key in self.toExport:
+                expDict[key] = self.__dict__[key]
+        return expDict
+
 
     def doGuide(self, **kwargs):
-        self.limbDict.update(kwargs)
+        self.__dict__.update(kwargs)
 
-        displaySetup = self.limbDict['moveallGuideSetup'].copy()
+        displaySetup = self.moveallGuideSetup.copy()
         cntrlName = displaySetup['nameTempl'] + self.guideSulfix
 
         if pm.objExists(cntrlName):
             pm.delete(cntrlName)
 
-        self.guideMoveall = rigFunctions.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', **displaySetup)
+        self.guideMoveall = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', **displaySetup)
 
         if not pm.objExists('GUIDES'):
             pm.group(self.guideMoveall, n='GUIDES')
@@ -129,8 +140,9 @@ class Limb:
         self.setCntrl(self.midGuide, 'mid', space='object')
         self.setCntrl(self.endGuide, 'end', space='object')
 
-        arrow = rigFunctions.cntrlCrv(obj=self.startGuide, name=self.name + 'PlaneDir', icone='seta', size=.35,
+        arrow = controlTools.cntrlCrv(obj=self.startGuide, name=self.name + 'PlaneDir', icone='seta', size=.35,
                                       color=(0, 1, 1))
+        arrow.template.set(1)
         arrow.getParent().setParent(self.startGuide)
         pm.aimConstraint(self.endGuide, arrow, weight=1, aimVector=(1, 0, 0), upVector=(0, 0, -1),
                          worldUpObject=self.midGuide, worldUpType='object')
@@ -138,67 +150,48 @@ class Limb:
         self.setCntrl(self.guideMoveall, 'moveall', space='world')
 
         pm.addAttr(self.guideMoveall, ln='limbDict', dt='string')
-        self.guideMoveall.limbDict.set(json.dumps(self.limbDict))
+        # todo implementar funcao de exportar o dict
+        self.guideMoveall.limbDict.set(json.dumps(self.exportDict()))
 
     def getDict(self):
         try:
-            guideName = self.limbDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.moveallGuideSetup['nameTempl'] + self.guideSulfix
             self.guideMoveall = pm.PyNode(guideName)
 
             jsonDict = self.guideMoveall.limbDict.get()
             limbDictRestored = json.loads(jsonDict)
 
-            self.limbDict.update(**limbDictRestored)
-            self.limbDict['guideDict']['moveall'] = rigFunctions.getObjTransforms (self.guideMoveall, 'world')
+            self.__dict__.update(**limbDictRestored)
 
-            print 'guideMoveall'
-            print (tuple(self.guideMoveall.getRotation(space='world')))
+            self.guideDict['moveall'][0] = self.guideMoveall.getTranslation(space='world').get()
+            self.guideDict['moveall'][1] = tuple(self.guideMoveall.getRotation(space='object'))
+            self.guideDict['moveall'][2] = tuple(pm.xform(self.guideMoveall, q=True, s=True, ws=True))
 
-            guideName = self.limbDict['startGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.startGuideSetup['nameTempl'] + self.guideSulfix
             self.startGuide = pm.PyNode(guideName)
-            self.limbDict['guideDict']['start'] = rigFunctions.getObjTransforms (self.startGuide, 'object')
+            self.guideDict['start'][0] = self.startGuide.getTranslation(space='object').get()
+            self.guideDict['start'][1] = tuple(self.startGuide.getRotation(space='object'))
 
-
-            guideName = self.limbDict['midGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.midGuideSetup['nameTempl'] + self.guideSulfix
             self.midGuide = pm.PyNode(guideName)
-            self.limbDict['guideDict']['mid'] = rigFunctions.getObjTransforms (self.midGuide, 'object')
+            self.guideDict['mid'][0] = self.midGuide.getTranslation(space='object').get()
+            self.guideDict['mid'][1] = tuple(self.midGuide.getRotation(space='object'))
 
-            guideName = self.limbDict['endGuideSetup']['nameTempl'] + self.guideSulfix
+            guideName = self.endGuideSetup['nameTempl'] + self.guideSulfix
             self.endGuide = pm.PyNode(guideName)
-            self.limbDict['guideDict']['end'] = rigFunctions.getObjTransforms (self.endGuide, 'object')
+            self.guideDict['end'][0] = self.endGuide.getTranslation(space='object').get()
+            self.guideDict['end'][1] = tuple(self.endGuide.getRotation(space='object'))
 
             if self.lastJoint:
-                guideName = self.limbDict['lastGuideSetup']['nameTempl'] + self.guideSulfix
+                guideName = self.lastGuideSetup['nameTempl'] + self.guideSulfix
                 self.lastGuide = pm.PyNode(guideName)
-                self.limbDict['guideDict']['last'] = rigFunctions.getObjTransforms (self.lastGuide, 'object')
-
-            return self.limbDict
-        except:
-            print 'algum nao funcionou'
-
-    def getGuideFromScene(self):
-        try:
-            guideName = self.limbDict['moveallGuideSetup']['nameTempl'] + self.guideSulfix
-            self.guideMoveall = pm.PyNode(guideName)
-
-            guideName = self.limbDict['startGuideSetup']['nameTempl'] + self.guideSulfix
-            self.startGuide = pm.PyNode(guideName)
-
-            guideName = self.limbDict['midGuideSetup']['nameTempl'] + self.guideSulfix
-            self.midGuide = pm.PyNode(guideName)
-
-            guideName = self.limbDict['endGuideSetup']['nameTempl'] + self.guideSulfix
-            self.endGuide = pm.PyNode(guideName)
-
-            if self.lastJoint:
-                guideName = self.limbDict['lastGuideSetup']['nameTempl'] + self.guideSulfix
-                self.lastGuide = pm.PyNode(guideName)
+                self.guideDict['last'][0] = self.lastGuide.getTranslation(space='object').get()
+                self.guideDict['last'][1] = tuple(self.lastGuide.getRotation(space='object'))
 
         except:
-            print 'algum nao funcionou'
+            pass
 
     def mirrorConnectGuide(self, limb):
-
         if pm.objExists(self.name + 'MirrorGuide_grp'):
             pm.delete(self.name + 'MirrorGuide_grp')
             self.guideMoveall = None
@@ -217,7 +210,15 @@ class Limb:
             pm.parent(self.name + 'MirrorGuide_grp', 'GUIDES')
 
         self.guideMoveall.setParent(self.mirrorGuide)
+
+        #Felipe --> seta valores globais de escala
+        scaleValue = tuple(pm.xform(self.guideMoveall, q=True, s=True, ws=True))
         self.mirrorGuide.scaleX.set(-1)
+        self.mirrorGuide.scaleY.set(1)
+        self.mirrorGuide.scaleZ.set(1)
+        self.mirrorGuide.scale.lock()
+        self.mirrorGuide.rotate.lock()
+        self.mirrorGuide.translate.lock()
         self.mirrorGuide.template.set(1)
 
         limb.guideMoveall.translate >> self.guideMoveall.translate
@@ -242,6 +243,8 @@ class Limb:
             self.flipAxis = False
         else:
             self.flipAxis = True
+
+        self.guideMoveall.limbDict.set(json.dumps(self.exportDict()))
 
     def doRig(self):
         if not self.guideMoveall:
@@ -292,10 +295,10 @@ class Limb:
 
         self.jointLength = AB.length() + BC.length()
 
-        m = rigFunctions.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
+        m = matrixTools.orientMatrix(mvector=AB, normal=n, pos=A, axis=self.axis)
         # cria joint1
         pm.select(cl=True)
-        jntName = self.limbDict['startJntSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.startJntSetup['nameTempl'] + self.jntSulfix
         self.startJnt = pm.joint(n=jntName)
         self.skinJoints.append(self.startJnt)
         pm.xform(self.startJnt, m=m, ws=True)
@@ -303,9 +306,9 @@ class Limb:
 
         # cria joint2
         # criando a matriz do joint conforme a orientacao setada
-        m = rigFunctions.orientMatrix(mvector=BC, normal=n, pos=B, axis=self.axis)
+        m = matrixTools.orientMatrix(mvector=BC, normal=n, pos=B, axis=self.axis)
         pm.select(cl=True)
-        jntName = self.limbDict['midJntSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.midJntSetup['nameTempl'] + self.jntSulfix
         self.midJnt = pm.joint(n=jntName)
         self.skinJoints.append(self.midJnt)
         pm.xform(self.midJnt, m=m, ws=True)
@@ -314,7 +317,7 @@ class Limb:
         # cria joint3
         # aqui so translada o joint, usa a mesma orientacao
         pm.select(cl=True)
-        jntName = self.limbDict['endJntSetup']['nameTempl'] + self.jntSulfix
+        jntName = self.endJntSetup['nameTempl'] + self.jntSulfix
         self.endJnt = pm.joint(n=jntName)
         self.skinJoints.append(self.endJnt)
         pm.xform(self.endJnt, m=m, ws=True)
@@ -344,16 +347,16 @@ class Limb:
                     Z = om.MVector(0, 0, 1)
             n = CD ^ Z
 
-            m = rigFunctions.orientMatrix(mvector=CD, normal=n, pos=C, axis=self.axis)
+            m = matrixTools.orientMatrix(mvector=CD, normal=n, pos=C, axis=self.axis)
             pm.select(cl=True)
-            jntName = self.limbDict['lastJntSetup']['nameTempl'] + self.jntSulfix
+            jntName = self.lastJntSetup['nameTempl'] + self.jntSulfix
             self.lastJnt = pm.joint(n=jntName)
             pm.xform(self.lastJnt, m=m, ws=True)
             pm.makeIdentity(self.lastJnt, apply=True, r=1, t=0, s=0, n=0, pn=0)
 
             # cria joint5 e so move
             pm.select(cl=True)
-            jntName = self.limbDict['lastJntSetup']['nameTempl'] + self.tipJxtSulfix
+            jntName = self.lastJntSetup['nameTempl'] + self.tipJxtSulfix
             self.lastTipJnt = pm.joint(n=jntName)
             pm.xform(self.lastTipJnt, m=m, ws=True)
             pm.xform(self.lastTipJnt, t=D, ws=True)
@@ -369,19 +372,19 @@ class Limb:
         else:
             axisName = 'X'
 
-        displaySetup = self.limbDict['moveAll1CntrlSetup'].copy()
+        displaySetup = self.moveAll1CntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.moveAll1Cntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.startJnt, **displaySetup)
+        self.moveAll1Cntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.startJnt, **displaySetup)
 
-        displaySetup = self.limbDict['endCntrlSetup'].copy()
+        displaySetup = self.endCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.endCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.startJnt, connType='parentConstraint',
+        self.endCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.startJnt, connType='parentConstraint',
                                               **displaySetup)
         self.endCntrl.addAttr('manualStretch', at='float', min=.1, dv=1, k=1)
 
-        displaySetup = self.limbDict['midCntrlSetup'].copy()
+        displaySetup = self.midCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.midCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.midJnt, connType='orientConstraint',
+        self.midCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.midJnt, connType='orientConstraint',
                                               **displaySetup)
         self.midCntrl.addAttr('manualStretch', at='float', min=.1, dv=1, k=1)
 
@@ -390,9 +393,9 @@ class Limb:
         ##Estrutura IK
         ikH = pm.ikHandle(sj=self.startJnt, ee=self.endJnt, sol="ikRPsolver")
 
-        displaySetup = self.limbDict['ikCntrlSetup'].copy()
+        displaySetup = self.ikCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.ikCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=ikH[0], **displaySetup)
+        self.ikCntrl = controlTools.cntrlCrv(name=cntrlName, obj=ikH[0], **displaySetup)
 
         # orienta o controle ik de modo a ter aproximadamente a orientacao do eixo global
         # mas aponta o eixo X para a ponta do ultimo bone
@@ -403,7 +406,7 @@ class Limb:
         normal = CD ^ Zaxis
 
         # CD eh o vetor de direcao do ultimo joint
-        ori = rigFunctions.orientMatrix(CD, normal, C, self.axis)
+        ori = matrixTools.orientMatrix(CD, normal, C, self.axis)
         pm.xform(self.ikCntrl.getParent(), m=ori, ws=True)
         ikH[0].setParent(self.ikCntrl)
         ikH[0].translate.lock()
@@ -416,9 +419,9 @@ class Limb:
         self.ikCntrl.addAttr('twist', at='float', dv=0, k=1)
 
         # pole vector
-        displaySetup = self.limbDict['poleVecCntrlSetup'].copy()
+        displaySetup = self.poleVecCntrlSetup.copy()
         cntrlName = displaySetup['nameTempl']
-        self.poleVec = rigFunctions.cntrlCrv(name=cntrlName, obj=self.midJnt, **displaySetup)
+        self.poleVec = controlTools.cntrlCrv(name=cntrlName, obj=self.midJnt, **displaySetup)
 
         # calcula a direcao q deve ficar o polevector
         BA = B - A
@@ -443,14 +446,16 @@ class Limb:
 
         # handCntrls se houver
         if self.lastJoint:
-            displaySetup = self.limbDict['startCntrlSetup']
+            displaySetup = self.startCntrlSetup
             cntrlName = displaySetup['nameTempl']
-            self.startCntrl = rigFunctions.cntrlCrv(name=cntrlName, obj=self.lastJnt, **displaySetup)
+            self.startCntrl = controlTools.cntrlCrv(name=cntrlName, obj=self.lastJnt, **displaySetup)
             buf = pm.group(em=True, n='startBuf')
             matrix = pm.xform(self.lastJnt, q=True, ws=True, m=True)
             pm.xform(buf, m=matrix, ws=True)
             pm.parent(buf, self.ikCntrl)
             handCnst = pm.orientConstraint(buf, self.startCntrl, self.lastJnt, mo=False)
+            handCnstScale = pm.scaleConstraint(buf, self.startCntrl, self.lastJnt, mo=False)
+            self.lastJnt.segmentScaleCompensate.set(False)
             pm.pointConstraint(self.endJnt, self.startCntrl.getParent(), mo=True)
             pm.parent(self.startCntrl.getParent(), self.midCntrl)
 
@@ -466,9 +471,9 @@ class Limb:
 
         ##NODE TREE#######
         # cria um blend entre uso de poleVector ou so twist
-        poleBlendColor = pm.createNode('blendColors', n='poleVecBlend')
-        poleAdd = pm.createNode('addDoubleLinear', n='PoleAdd')
-        poleCond = pm.createNode('condition', n='poleCond')
+        poleBlendColor = pm.createNode('blendColors', n=self.name+'poleVecBlend')
+        poleAdd = pm.createNode('addDoubleLinear', n=self.name+'PoleAdd')
+        poleCond = pm.createNode('condition', n=self.name+'poleCond')
         poleCnst.constraintTranslate >> poleBlendColor.color1
         poleBlendColor.color2.set(0, 0, 0)
         # poleCnst.constraintTranslateX // ikH[0].poleVectorX
@@ -498,20 +503,20 @@ class Limb:
         pinScaleJnt1 = AE.length() / AB.length()
         pinScaleJnt2 = CE.length() / BC.length()
 
-        pinDist1 = pm.createNode('distanceBetween', n='pinDist1')  # distance do pole vector a ponta do joint1
-        pinDist2 = pm.createNode('distanceBetween', n='pinDist2')  # distance do pole vector a ponta do joint2
-        pinNorm1 = pm.createNode('multiplyDivide', n='pinNorm1')  # normalizador distancia1 para escala
-        pinNorm2 = pm.createNode('multiplyDivide', n='pinNorm2')  # normalizador distancia2 para escala
+        pinDist1 = pm.createNode('distanceBetween', n=self.name+'pinDist1')  # distance do pole vector a ponta do joint1
+        pinDist2 = pm.createNode('distanceBetween', n=self.name+'pinDist2')  # distance do pole vector a ponta do joint2
+        pinNorm1 = pm.createNode('multiplyDivide', n=self.name+'pinNorm1')  # normalizador distancia1 para escala
+        pinNorm2 = pm.createNode('multiplyDivide', n=self.name+'pinNorm2')  # normalizador distancia2 para escala
         pinMultiScale1 = pm.createNode('multDoubleLinear',
-                                       n='pinMultiScale1')  # multiplicador da distancia inicial pela escala Global
+                                       n=self.name+'pinMultiScale1')  # multiplicador da distancia inicial pela escala Global
         pinMultiScale2 = pm.createNode('multDoubleLinear',
-                                       n='pinMultiScale2')  # multiplicador da distancia inicial pela escala Global
+                                       n=self.name+'pinMultiScale2')  # multiplicador da distancia inicial pela escala Global
         pinMultiOffset1 = pm.createNode('multDoubleLinear',
-                                        n='pinMultiOffset1')  # multiplicador escala para chegar ao pole vec pela escala Global
+                                        n=self.name+'pinMultiOffset1')  # multiplicador escala para chegar ao pole vec pela escala Global
         pinMultiOffset2 = pm.createNode('multDoubleLinear',
-                                        n='pinMultiOffset2')  # multiplicador escala para chegar ao pole vec pela escala Global
-        pinMulti1 = pm.createNode('multDoubleLinear', n='pinMulti1')  # multiplicador do normalizador
-        pinMulti2 = pm.createNode('multDoubleLinear', n='pinMulti2')  # multiplicador do normalizador
+                                        n=self.name+'pinMultiOffset2')  # multiplicador escala para chegar ao pole vec pela escala Global
+        pinMulti1 = pm.createNode('multDoubleLinear', n=self.name+'pinMulti1')  # multiplicador do normalizador
+        pinMulti2 = pm.createNode('multDoubleLinear', n=self.name+'pinMulti2')  # multiplicador do normalizador
 
         startGrp.worldMatrix[0] >> pinDist1.inMatrix1
         endGrp.worldMatrix[0] >> pinDist2.inMatrix1
@@ -543,24 +548,24 @@ class Limb:
         pinMultiOffset2.output >> pinMulti2.input2
 
         ##Stretch
-        stretchDist = pm.createNode('distanceBetween', n='stretchDist')  # distance
-        stretchNorm = pm.createNode('multiplyDivide', n='stretchNorm')  # normalizador
+        stretchDist = pm.createNode('distanceBetween', n=self.name+'stretchDist')  # distance
+        stretchNorm = pm.createNode('multiplyDivide', n=self.name+'stretchNorm')  # normalizador
         stretchMultiScale = pm.createNode('multDoubleLinear',
-                                          n='stretchMultiScale')  # mutiplica valor maximo pela escala do moveAll
-        stretchCond = pm.createNode('condition', n='stretchCond')  # condicao so estica se for maior q distancia maxima
+                                          n=self.name+'stretchMultiScale')  # mutiplica valor maximo pela escala do moveAll
+        stretchCond = pm.createNode('condition', n=self.name+'stretchCond')  # condicao so estica se for maior q distancia maxima
 
         ##Manual Stretch
         stretchManualStretch1 = pm.createNode('multDoubleLinear',
-                                              n='stretchManualStretch1')  # mutiplica valor maximo pela escala do moveAll
+                                              n=self.name+'stretchManualStretch1')  # mutiplica valor maximo pela escala do moveAll
         stretchManualStretch2 = pm.createNode('multDoubleLinear',
-                                              n='stretchManualStretch2')  # mutiplica valor maximo pela escala do moveAll
+                                              n=self.name+'stretchManualStretch2')  # mutiplica valor maximo pela escala do moveAll
         stretchManualStretch3 = pm.createNode('multDoubleLinear',
-                                              n='stretchManualStretch3')  # mutiplica valor maximo pela escala do moveAll
+                                              n=self.name+'stretchManualStretch3')  # mutiplica valor maximo pela escala do moveAll
 
         startGrp.worldMatrix[0] >> stretchDist.inMatrix1
         endGrp.worldMatrix[0] >> stretchDist.inMatrix2
 
-        stretchDecompMatrix = pm.createNode('decomposeMatrix')
+        stretchDecompMatrix = pm.createNode('decomposeMatrix', n=self.name+'StretchDecompose')
         self.moveall.worldMatrix[0] >> stretchDecompMatrix.inputMatrix
         stretchDecompMatrix.outputScale.outputScaleX >> stretchMultiScale.input1
 
@@ -578,15 +583,15 @@ class Limb:
         stretchCond.colorIfFalseR.set(1)
 
         ##AutoStretch switch
-        autoStretchSwitch = pm.createNode('blendTwoAttr', n='autoStretchSwitch')
+        autoStretchSwitch = pm.createNode('blendTwoAttr', n=self.name+'autoStretchSwitch')
         stretchCond.outColor.outColorR >> autoStretchSwitch.input[1]
         autoStretchSwitch.input[0].set(1)
 
         ##Bias
-        biasAdd1 = pm.createNode('plusMinusAverage', n='biasAdd1')
-        biasAdd2 = pm.createNode('plusMinusAverage', n='biasAdd2')
-        biasMulti1 = pm.createNode('multDoubleLinear', n='biasMult1')
-        biasMulti2 = pm.createNode('multDoubleLinear', n='biasMult2')
+        biasAdd1 = pm.createNode('plusMinusAverage', n=self.name+'biasAdd1')
+        biasAdd2 = pm.createNode('plusMinusAverage', n=self.name+'biasAdd2')
+        biasMulti1 = pm.createNode('multDoubleLinear', n=self.name+'biasMult1')
+        biasMulti2 = pm.createNode('multDoubleLinear', n=self.name+'biasMult2')
 
         biasAdd1.input1D[1].set(1)
         biasAdd1.operation.set(1)
@@ -600,22 +605,22 @@ class Limb:
         biasMulti2.output >> stretchManualStretch3.input2
 
         ##Twist offset
-        twistBlend1 = pm.createNode('blendTwoAttr', n='twistBlend')
+        twistBlend1 = pm.createNode('blendTwoAttr', n=self.name+'twistBlend')
         twistBlend1.input[0].set(1)
         twistBlend1.output >> ikH[0].twist
 
         ##Blend stretch e pin
-        stretchPinBlend1 = pm.createNode('blendTwoAttr', n='stretchPinBlend1')
-        stretchPinBlend2 = pm.createNode('blendTwoAttr', n='stretchPinBlend2')
+        stretchPinBlend1 = pm.createNode('blendTwoAttr', n=self.name+'stretchPinBlend1')
+        stretchPinBlend2 = pm.createNode('blendTwoAttr', n=self.name+'stretchPinBlend2')
         stretchManualStretch2.output >> stretchPinBlend1.input[0]
         stretchManualStretch3.output >> stretchPinBlend2.input[0]
         pinMulti1.output >> stretchPinBlend1.input[1]
         pinMulti2.output >> stretchPinBlend2.input[1]
 
         ##Blend ikfk
-        ikfkBlend1 = pm.createNode('blendTwoAttr', n='ikfkBlend1')
-        ikfkBlend2 = pm.createNode('blendTwoAttr', n='ikfkBlend2')
-        ikfkReverse = pm.createNode('reverse', n='ikfkReverse')
+        ikfkBlend1 = pm.createNode('blendTwoAttr', n=self.name+'ikfkBlend1')
+        ikfkBlend2 = pm.createNode('blendTwoAttr', n=self.name+'ikfkBlend2')
+        ikfkReverse = pm.createNode('reverse', n=self.name+'ikfkReverse')
         stretchPinBlend1.output >> ikfkBlend1.input[0]
         stretchPinBlend2.output >> ikfkBlend2.input[0]
 
@@ -634,16 +639,19 @@ class Limb:
 
         if self.lastJoint:
             handTargetAttrs = handCnst.target.connections(p=True, t='orientConstraint')
+            handTargetAttrsScale = handCnstScale.target.connections(p=True, t='scaleConstraint')
             ikfkReverse.outputX >> handTargetAttrs[1]
             self.moveall.ikfk >> handTargetAttrs[0]
+            ikfkReverse.outputX >> handTargetAttrsScale[1]
+            self.moveall.ikfk >> handTargetAttrsScale[0]
 
         self.moveall.ikfk >> ikH[0].ikBlend
         ikfkBlend1.output >> self.startJnt.attr('scale' + axisName)
         ikfkBlend2.output >> self.midJnt.attr('scale' + axisName)
 
         ##ikfk visibility
-        ikCntrlVisCond = pm.createNode('condition', n='ikVisCond')
-        fkCntrlVisCond = pm.createNode('condition', n='fkVisCond')
+        ikCntrlVisCond = pm.createNode('condition', n=self.name+'ikVisCond')
+        fkCntrlVisCond = pm.createNode('condition', n=self.name+'fkVisCond')
         self.moveall.ikfk >> ikCntrlVisCond.ft
         ikCntrlVisCond.secondTerm.set(0)
         ikCntrlVisCond.operation.set(1)

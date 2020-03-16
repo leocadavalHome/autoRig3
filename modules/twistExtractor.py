@@ -1,5 +1,7 @@
 import pymel.core as pm
+import logging
 
+logger = logging.getLogger('autoRig')
 
 class twistExtractor:
     """
@@ -8,8 +10,9 @@ class twistExtractor:
             twistJntIn: joint a ser calculado
     """
 
-    def __init__(self, twistJntIn, conn='parentConstraint', flipAxis=False):
+    def __init__(self, twistJntIn, conn='parentConstraint', flipAxis=False, name='Extractor'):
 
+        self.name = name
         self.extractor = None
         self.axis = 'X'  # hard coding X como eixo. Aparentemente so ele funciona
         self.extractorGrp = None
@@ -18,31 +21,31 @@ class twistExtractor:
         try:
             twistJnt = pm.PyNode(twistJntIn)
         except:
-            print "ERROR:The Node Doesn't Exist:", twistJntIn
+            logger.debug("ERROR:The Node Doesn't Exist: %s" % twistJntIn)
             return
 
         try:
             twistJnt.getParent()
         except:
-            print "ERROR:The Node Has No Parent:", twistJntIn
+            logger.debug("ERROR:The Node Has No Parent:  %s" % twistJntIn)
             return
 
         try:
             twistJnt.childAtIndex(0)
         except:
-            print "ERROR:The Node Has No Child:", twistJntIn
+            logger.debug("ERROR:The Node Has No Child:  %s" % twistJntIn)
             return
 
         if twistJnt.nodeType() != 'joint':
-            print "ERROR:The Node Is Not A Joint:", twistJntIn
+            logger.debug("ERROR:The Node Is Not A Joint:  %s " % twistJntIn)
             return
 
         if twistJnt.childAtIndex(0).nodeType() != 'joint':
-            print "ERROR:The Node Child Is Not A Joint:", twistJnt.childAtIndex(0)
+            logger.debug("ERROR:The Node Child Is Not A Joint: %s " % twistJnt.childAtIndex(0))
             return
 
             # cria grupo base e parenteia no pai do joint fonte do twist
-        extractorGrp = pm.group(empty=True, n='extractor_grp')
+        extractorGrp = pm.group(empty=True, n=twistJntIn+'_extractor_grp')
         matrix = pm.xform(twistJnt.getParent(), q=True, m=True, ws=True)
         pm.xform(extractorGrp, m=matrix, ws=True)
 
@@ -62,20 +65,20 @@ class twistExtractor:
         pm.parent(extractorStart, extractorGrp)
 
         # cria o locator que calcula o twist. Cria OrientConstraint
-        extractorLoc = pm.spaceLocator()
+        extractorLoc = pm.spaceLocator(n=twistJntIn+'_locTwist')
         pm.parent(extractorLoc, extractorStart, r=True)
         ori = pm.orientConstraint(twistJnt, extractorStart, extractorLoc, mo=False)
-        ori.interpType.set(0)
+        ori.interpType.set(2)
 
         # cria ik handle com polevector zerado e parenteia no joint fonte (noRoll)
-        extractorIkh = pm.ikHandle(sj=extractorStart, ee=extractorEnd, sol='ikRPsolver')[0]
+        extractorIkh = pm.ikHandle(sj=extractorStart, ee=extractorEnd, sol='ikRPsolver', n=twistJntIn+'_ikh' )[0]
         extractorIkh.poleVector.set(0, 0, 0)
         pm.parentConstraint(twistJnt, extractorIkh, mo=True)
         pm.parent(extractorIkh, extractorGrp)
 
         # multiplica por 2 o valor de rot do locator
         pm.addAttr(extractorLoc, ln='extractTwist', at='double', k=1)
-        multi = pm.createNode('multDoubleLinear')
+        multi = pm.createNode('multDoubleLinear', n=self.name + 'Multi' )
         if flipAxis:
             multi.input2.set(-2)
         else:
