@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="arrow">
+    <file>closedArrow.png</file>
+    <file>openArrow.png</file>
+  </qresource>
+</RCC>

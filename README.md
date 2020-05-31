@@ -1,1 +1,1 @@
-lcRig
+Autorig3

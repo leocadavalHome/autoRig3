@@ -1,71 +1,32 @@
 import pymel.core as pm
 import os.path
-import autoRig3.tools.skinTools as skinTools
-from autoRig3.modules import limbModule, footModule, spineModule, moveAllModule, handModule, chainModule, neckModule
+import autoRig3.tools.interface as interface
+from autoRig3.modules import limbModule, footModule, moveAllModule, handModule, chainModule
 from autoRig3.modules import ribbonBezier
 
-#import autoRig3.tools.rigFunctions as rigFunctions
 import autoRig3.tools.spaceSwitchTools as spaceSwitchTools
 import json
 import logging
 
 logger = logging.getLogger('autoRig')
 
-class Biped:
-    def __init__(self, rigName='character', 
-                 moduleConnection=1,  # 1 = hierarchy
-                 footFingers=[],
-                 handFingers=[(u'Thumb', 1),
-                              (u'Index', 1),
-                              (u'Middle', 1),
-                              (u'Ring', 1),
-                              (u'Pinky', 1)],
-                 armRibbonJnts=5, 
-                 armRibbonFirstOffset=1, 
-                 armRibbonLastOffset=1,
-                 legRibbonJnts=5, 
-                 legRibbonFirstOffset=1, 
-                 legRibbonLastOffset=1,
-                 spineRibbonJnts=5,
-                 progressBar = None
-                 ):
-
-        self.skinJoints = []
-        self.modelList = []
-        self.toExport = {'name',
-                         'handFingers',
-                         'footFingers',
-                         'armRibbonJnts',
-                         'armRibbonFirstOffset',
-                         'armRibbonLastOffset',
-                         'legRibbonJnts',
-                         'legRibbonFirstOffset',
-                         'legRibbonLastOffset',
-                         'spineRibbonJnts',
-                         'moduleConnection'
-                         }
-        self.progressBar = progressBar
+class BipedNoSpine:
+    def __init__(self, rigName='character',footFingers=[],
+                 handFingers=[(u'Thumb', 1), (u'Index', 1), (u'Middle', 1), (u'Ring', 1), (u'Pinky', 1)]):
 
         self.name = rigName
         self.handFingers = handFingers
         self.footFingers = footFingers
-        self.armRibbonJnts = armRibbonJnts
-        self.armRibbonFirstOffset = armRibbonFirstOffset
-        self.armRibbonLastOffset = armRibbonLastOffset
-        self.legRibbonJnts = legRibbonJnts
-        self.legRibbonFirstOffset = legRibbonFirstOffset
-        self.legRibbonLastOffset = legRibbonLastOffset
-        self.spineRibbonJnts = spineRibbonJnts
-        self.moduleConnection = moduleConnection
-
+        self.skinJoints = []
+        self.modelList = []
         self.larm = limbModule.Limb(name='L_arm')
         self.rarm = limbModule.Limb(name='R_arm')
         self.lhand = handModule.Hand(name='L_hand', fingers=self.handFingers)
         self.rhand = handModule.Hand(name='R_hand', fingers=self.handFingers)
         self.lfoot = footModule.Foot(name='L_foot', fingers=self.footFingers)
         self.rfoot = footModule.Foot(name='R_foot', fingers=self.footFingers)
-        self.neck = neckModule.Neck(name='neck')
-        self.spine = spineModule.Spine (name='spine', ribbonJntNum= spineRibbonJnts)
+        #self.neck = neckModule.Neck(name='neck')
+        self.spine = chainModule.Chain(name='spine', divNum=3)
         self.lclav = chainModule.Chain(name='L_clavicle', divNum=2)
         self.rclav = chainModule.Chain(name='R_clavicle', divNum=2)
         self.lleg = limbModule.Limb(name='L_leg')
@@ -73,37 +34,16 @@ class Biped:
         self.llegShoulder = chainModule.Chain(name='L_legShoulder')
         self.rlegShoulder = chainModule.Chain(name='R_legShoulder')
         self.master = moveAllModule.Moveall(name=rigName)
-
         self.setDefaultDicts()
 
         handFingerList = [x[0] for x in self.handFingers]
         self.lhand.fingers = {key: value for key, value in self.lhand.fingers.iteritems() if key in handFingerList}
         self.rhand.fingers = {key: value for key, value in self.rhand.fingers.iteritems() if key in handFingerList}
 
-        handFingerList = [x[0] for x in self.handFingers]
-        for i, finger in enumerate(handFingerList):
-            try:
-                self.lhand.fingers[finger]['fingerId'] = i
-                self.rhand.fingers[finger]['fingerId'] = i
-            except:
-                pass
-
         footFingerList = [x[0] for x in self.footFingers]
         self.lfoot.fingers = {key: value for key, value in self.lfoot.fingers.iteritems() if key in footFingerList}
         self.rfoot.fingers = {key: value for key, value in self.rfoot.fingers.iteritems() if key in footFingerList}
 
-        footFingerList = [x[0] for x in self.footFingers]      
-        for i, finger in enumerate(footFingerList):
-            try:
-                self.lfoot.fingers[finger]['fingerId'] = i
-                self.rfoot.fingers[finger]['fingerId'] = i
-            except:
-                pass
-            
-    #todo transformar essa setagem em um arguivo
-    def loadDefaultDict(self):
-        pass
-    
     def setDefaultDicts(self):
         larmDict = {
                     'moveallGuideSetup': {'nameTempl': 'L_armMoveAll', 'icone': 'quadradoX', 'color': (1, 1, 0), 'size': 1},
@@ -670,7 +610,7 @@ class Biped:
                                                          'size': 0.4},
                                      'baseJntSetup': {'nameTempl': u'L_footPinkyBase', 'icone': 'Bone', 'size': 0.3},
                                      'fold2JntSetup': {'nameTempl': u'L_footPinkyFold2', 'icone': 'Bone', 'size': 0.3},
-                                     'isHeelFinger': False,
+                                     'isHeelFinger': True,
                                      'baseGuideSetup': {'nameTempl': u'L_footPinkybase', 'icone': 'circuloX', 'color': (0, 0, 1),
                                                         'size': 0.4},
                                      'fold1CntrlSetup': {'nameTempl': u'L_footPinkyfold1', 'icone': 'circuloX', 'color': (0.010, 0.050, 0.2),
@@ -708,7 +648,7 @@ class Biped:
                                                          'size': 0.4},
                                      'baseJntSetup': {'nameTempl': u'L_footIndexBase', 'icone': 'Bone', 'size': 0.3},
                                      'fold2JntSetup': {'nameTempl': u'L_footIndexFold2', 'icone': 'Bone', 'size': 0.3},
-                                     'isHeelFinger': False,
+                                     'isHeelFinger': True,
                                      'baseGuideSetup': {'nameTempl': u'L_footIndexbase', 'icone': 'circuloX', 'color': (0, 0, 1),
                                                         'size': 0.4},
                                      'fold1CntrlSetup': {'nameTempl': u'L_footIndexfold1', 'icone': 'circuloX', 'color': (0.010, 0.050, 0.2),
@@ -786,7 +726,7 @@ class Biped:
                                                          'size': 0.4},
                                      'baseJntSetup': {'nameTempl': u'L_footThumbBase', 'icone': 'Bone', 'size': 0.3},
                                      'fold2JntSetup': {'nameTempl': u'L_footThumbFold2', 'icone': 'Bone', 'size': 0.3},
-                                     'isHeelFinger': False,
+                                     'isHeelFinger': True,
                                      'baseGuideSetup': {'nameTempl': u'L_footThumbbase', 'icone': 'circuloX', 'color': (0, 0, 1),
                                                         'size': 0.4},
                                      'fold1CntrlSetup': {'nameTempl': u'L_footThumbfold1', 'icone': 'circuloX', 'color': (0.010, 0.050, 0.2),
@@ -818,7 +758,7 @@ class Biped:
                      'slideGuideSetup': {'nameTempl': 'L_footSlide', 'icone': 'null', 'color': (1, 0, 1), 'size': 0.4},
                      'centerCntrlSetup': {'nameTempl': 'L_footCenter', 'icone': 'circuloX', 'color': (0.01, 0.05, 0.2),
                                           'size': 2},
-                     'baseCntrlSetup': {'nameTempl': 'L_footBase', 'icone': 'cubo', 'color': (0.01, 0.05, 0.2), 'size': 3},
+                     'baseCntrlSetup': {'nameTempl': 'L_footBase', 'icone': 'quadradoY', 'color': (0.01, 0.05, 0.2), 'size': 3},
                      'toeCntrlSetup': {'nameTempl': 'L_footToe', 'icone': 'circuloX', 'color': (0.01, 0.05, 0.2), 'size': 1.0},
                      'toeJntSetup': {'nameTempl': 'L_footToe', 'icone': 'Bone', 'size': 1.0},
                      'ankleCntrlSetup': {'nameTempl': 'L_footAnkle', 'icone': 'cubo', 'color': (0.01, 0.05, 0.2), 'size': 1},
@@ -917,7 +857,7 @@ class Biped:
                                                          'size': 0.4},
                                      'baseJntSetup': {'nameTempl': u'R_footPinkyBase', 'icone': 'Bone', 'size': 0.3},
                                      'fold2JntSetup': {'nameTempl': u'R_footPinkyFold2', 'icone': 'Bone', 'size': 0.3},
-                                     'isHeelFinger': False,
+                                     'isHeelFinger': True,
                                      'baseGuideSetup': {'nameTempl': u'R_footPinkybase', 'icone': 'circuloX', 'color': (0, 0, 1),
                                                         'size': 0.4},
                                      'fold1CntrlSetup': {'nameTempl': u'R_footPinkyfold1', 'icone': 'circuloX', 'color': (.4, 0, 0),
@@ -955,7 +895,7 @@ class Biped:
                                                          'size': 0.4},
                                      'baseJntSetup': {'nameTempl': u'R_footIndexBase', 'icone': 'Bone', 'size': 0.3},
                                      'fold2JntSetup': {'nameTempl': u'R_footIndexFold2', 'icone': 'Bone', 'size': 0.3},
-                                     'isHeelFinger': False,
+                                     'isHeelFinger': True,
                                      'baseGuideSetup': {'nameTempl': u'R_footIndexbase', 'icone': 'circuloX', 'color': (0, 0, 1),
                                                         'size': 0.4},
                                      'fold1CntrlSetup': {'nameTempl': u'R_footIndexfold1', 'icone': 'circuloX', 'color': (.4, 0, 0),
@@ -1033,7 +973,7 @@ class Biped:
                                                          'size': 0.4},
                                      'baseJntSetup': {'nameTempl': u'R_footThumbBase', 'icone': 'Bone', 'size': 0.3},
                                      'fold2JntSetup': {'nameTempl': u'R_footThumbFold2', 'icone': 'Bone', 'size': 0.3},
-                                     'isHeelFinger': False,
+                                     'isHeelFinger': True,
                                      'baseGuideSetup': {'nameTempl': u'R_footThumbbase', 'icone': 'circuloX', 'color': (0, 0, 1),
                                                         'size': 0.4},
                                      'fold1CntrlSetup': {'nameTempl': u'R_footThumbfold1', 'icone': 'circuloX', 'color': (.4, 0, 0),
@@ -1065,7 +1005,7 @@ class Biped:
                      'slideGuideSetup': {'nameTempl': 'R_footSlide', 'icone': 'null', 'color': (1, 0, 1), 'size': 0.4},
                      'centerCntrlSetup': {'nameTempl': 'R_footCenter', 'icone': 'circuloX', 'color': (.4, 0, 0),
                                           'size': 2},
-                     'baseCntrlSetup': {'nameTempl': 'R_footBase', 'icone': 'cubo', 'color': (.4, 0, 0), 'size': 3},
+                     'baseCntrlSetup': {'nameTempl': 'R_footBase', 'icone': 'quadradoY', 'color': (.4, 0, 0), 'size': 3},
                      'toeCntrlSetup': {'nameTempl': 'R_footToe', 'icone': 'circuloX', 'color': (.4, 0, 0), 'size': 1.0},
                      'toeJntSetup': {'nameTempl': 'R_footToe', 'icone': 'Bone', 'size': 1.0},
                      'ankleCntrlSetup': {'nameTempl': 'R_footAnkle', 'icone': 'cubo', 'color': (.4, 0, 0), 'size': 1},
@@ -1082,64 +1022,22 @@ class Biped:
                                    'heel': [(-1.0, 0.0, 0.0), (0.0, -0.0, 0.0),[1, 1, 1]],
                                    'out': [(-1.0, 0.0, 1.0), (0.0, -0.0, 0.0),[1, 1, 1]]}}
 
-        neckDict = {
-                    'moveAllGuideSetup': {'nameTempl': 'neckMoveall','icone': 'circuloX'},
-
-                    'name': 'neck',
-
-                    'guideDict': {'start': [(0.0, 0.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
-                                  'moveall': [(0.0, 21.09, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
-                                  'end': [(0.0, 2.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)]
-                                  },
-                    'endGuideSetup': {'nameTempl': 'head','icone': 'circuloZ', 'color': (0, 1, 0), 'size': 3},
-                    'moveAllCntrlSetup': {'nameTempl': 'neckMoveall', 'icone': 'circuloX', 'color': (0, 1, 0),
-                                          'size': 1},
-                    'midGuideSetup': {'nameTempl': 'midNeck','icone': 'circuloX', 'color': (1, 1, 0.15), 'size': 1},
-                    'startCntrlSetup': {'nameTempl': 'Neck', 'icone': 'circuloY', 'color': (1, 1, 0.15), 'size': 3},
-                    'endCntrlSetup': {'nameTempl': 'Head', 'icone': 'circuloZ', 'color': (1, 1, 0.15), 'size': 2},
-                    'flipAxis': False,
-                    'startGuideSetup': {'nameTempl': 'neck','icone': 'circuloY', 'color': (1, 1, 0.15), 'size': 1},
-                    'axis': 'X'}
-
         spineDict = {
-                     'spineFkCntrlSetup': {'nameTempl': 'spineWaistFk', 'icone': 'cubo', 'color': (1, 1, 0.15),
-                                           'size': 4}, 'name': 'spine',
-                     'startFkCntrlSetup': {'nameTempl': 'spineHipFk', 'icone': 'cubo',
-                                           'color': (1, 1, 0.15), 'size': 3.0},
-                     'endFkCntrlSetup': {'nameTempl': 'spineChestFk', 'icone': 'cubo',
-                                         'color': (1, 1, 0.15), 'size': 4},
-                     'midFkCntrlSetup': {'nameTempl': 'spineAbdomenFk', 'icone': 'cubo',
-                                         'color': (1, 1, 0.15),'size': 4},
-                     'midFkOffsetCntrlSetup': {'nameTempl': 'spineAbdomenFkOff', 'icone': 'circuloY',
-                                               'color': (0, 1, 1), 'size': 2.5},
+                     'name': 'spine',
+                     'moveAllCntrlSetup': {'nameTempl': 'spineMoveall', 'icone': 'circuloX',
+                                           'color': (1, 1, 0), 'size': 2.5},
+                     'guideDict': {
+                                    'moveall': [(0, 0, 0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0)],
+                                    'guide3': [(0, 4, 0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
+                                    'guide2': [(0, 2, 0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
+                                    'guide1': [(0.0, 0.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)]
+                                },
+                     'fkCntrlSetup': {'nameTempl': 'spineChainFk', 'icone': 'circuloX', 'color': (0.01, 0.05, 0.2 ),
+                                      'size': 0.8}, 'flipAxis': False,
+                     'jntSetup': {'nameTempl': 'spineChain', 'icone': 'Bone', 'size': 0.8},
+                     'guideSetup': {'nameTempl': 'spineChain','icone': 'circuloX',
+                                    'color': (0.010, 0.050, 0.2), 'size': 0.8}, 'axis': 'X'}
 
-                     'moveallGuideSetup': {'nameTempl': 'spineMoveall', 'icone': 'quadradoY', 'color': (1, 0, 0), 'size': 6},
-                     'startGuideSetup': {'nameTempl': 'spineHip', 'icone': 'circuloY', 'color': (0, 1, 0), 'size': 5},
-                     'midGuideSetup': {'nameTempl': 'spineAbdomen','icone': 'circuloY', 'color': (0, 1, 0), 'size': 5},
-                     'endGuideSetup': {'nameTempl': 'spineChest', 'icone': 'circuloY', 'color': (0, 1, 0), 'size': 5},
-                     'endTipGuideSetup': {'nameTempl': 'spineChestTip','icone': 'null', 'color': (0, 1, 0), 'size': 1},
-                     'startTipGuideSetup': {'nameTempl': 'spineHipTip','icone': 'null', 'color': (0, 1, 0), 'size': 1},
-                     'startJntSetup': {'nameTempl': 'spineHip', 'icone': 'Bone', 'size': 2}, 'axis': 'X',
-                     'endJntSetup': {'nameTempl': 'spineChest', 'icone': 'Bone', 'size': 2},
-
-                     'guideDict': {'start': [(0.0, 0.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
-                                   'moveall': [(0.0, 11.071150831072309, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
-                                   'end': [(0.0, 8.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
-                                   'endTip': [(0.0, 2.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
-                                   'startTip': [(0.0, -1.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)],
-                                   'mid': [(0.0, 0.0, 0.0), (0.0, -0.0, 0.0), (1.0, 1.0, 1.0)]
-                                  } ,
-
-                     'flipAxis': False,
-                     'hipCntrlSetup': {'nameTempl': 'spineCOG', 'icone': 'cog', 'color': (1, 0, 0), 'size': 5.5},
-                     'moveallSetup': {'nameTempl': 'spineMoveAll', 'icone': 'grp', 'color': (1, 1, 0), 'size': 1.8},
-
-                     'startIkCntrlSetup': {'nameTempl': 'spineHipIk', 'icone': 'circuloPontaY',
-                                          'color': (1, 1, 0.15), 'size': 4},
-                     'midIkCntrlSetup': {'nameTempl': 'spineAbdomenIk', 'icone': 'circuloPontaY', 'color': (1, 1, 0.15),
-                                        'size': 4},
-                     'endIkCntrlSetup': {'nameTempl': 'spineChestIk', 'icone': 'circuloPontaY', 'color': (1, 1, 0.15),
-                                         'size': 4}}
         lclavDict = {
                      'name': 'L_clavicle',
                      'moveAllCntrlSetup': {'nameTempl': 'L_clavicleMoveall', 'icone': 'circuloX',
@@ -1219,7 +1117,90 @@ class Biped:
         self.rlegShoulder.__dict__.update(**rlegShoulderDict)
 
         self.spine.__dict__.update(**spineDict)
-        self.neck.__dict__.update(**neckDict)
+
+    def generateGuides(self):
+
+        self.larm.doGuide()
+        self.rarm.doGuide()
+        self.rarm.mirrorConnectGuide(self.larm)
+
+        self.lhand.doGuide()
+        self.rhand.doGuide()
+        self.rhand.mirrorConnectGuide(self.lhand)
+
+        self.lfoot.doGuide()
+        self.rfoot.doGuide()
+        self.rfoot.mirrorConnectGuide(self.lfoot)
+
+        self.lclav.doGuide()
+        self.rclav.doGuide()
+        self.rclav.mirrorConnectGuide(self.lclav)
+
+        self.lleg.doGuide()
+        self.rleg.doGuide()
+        self.rleg.mirrorConnectGuide(self.lleg)
+
+        self.llegShoulder.doGuide()
+        self.rlegShoulder.doGuide()
+        self.rlegShoulder.mirrorConnectGuide(self.llegShoulder)
+
+        self.spine.doGuide()
+        #self.neck.doGuide()
+        self.master.doGuide()
+
+        pm.parent(self.larm.guideMoveall, self.rarm.mirrorGuide, self.lhand.guideMoveall,
+                  self.rhand.mirrorGuide, self.lfoot.guideMoveall, self.rfoot.mirrorGuide,
+                  self.lclav.guideMoveall, self.rclav.mirrorGuide, self.lleg.guideMoveall, self.rleg.mirrorGuide,
+                  self.llegShoulder.guideMoveall, self.rlegShoulder.mirrorGuide, self.spine.guideMoveall,
+                  self.master.guideMoveall)
+
+        pm.parentConstraint(self.larm.lastGuide, self.lhand.guideMoveall, mo=True)
+        pm.scaleConstraint(self.larm.lastGuide, self.lhand.guideMoveall, mo=True)
+        pm.parentConstraint(self.lleg.lastGuide, self.lfoot.guideMoveall, mo=True)
+        pm.scaleConstraint(self.lleg.lastGuide, self.lfoot.guideMoveall, mo=True)
+
+    def getDictsFromScene(self):
+        logger.debug('pegando guides da cena')
+        self.larm.getDict()
+        self.rarm.getDict()
+        self.lhand.getDict()
+        self.rhand.getDict()
+        self.lfoot.getDict()
+        self.rfoot.getDict()
+        self.lleg.getDict()
+        self.rleg.getDict()
+        self.llegShoulder.getDict()
+        self.rlegShoulder.getDict()
+        #self.neck.getDict()
+        self.spine.getDict()
+        self.lclav.getDict()
+        self.rclav.getDict()
+        self.master.getDict()
+
+    def getSkinJntsFromScene(self):
+        try:
+            moveall3 = self.master.moveall3
+            # = pm.PyNode(self.master.name + 'moveall3_ctrl')
+        except:
+            logger.error('Nao conseguiu achar moveall3')
+            return
+
+        skinJntsJson = moveall3.getAttr('skinJoints')
+        skinJns = json.loads(skinJntsJson)
+        self.skinJoints = skinJns
+        return skinJns
+
+    def getSkinnedModels(self):
+        modelList = []
+        for jnt in self.skinJoints:
+            skinClsList = list(set(pm.listConnections(jnt, type='skinCluster')))
+            for skinCls in skinClsList:
+                msh = list(set(pm.listConnections(skinCls, d=True, s=False, sh=True, type='surfaceShape')))
+                if msh:
+                    modelList.append(msh[0])
+
+        self.modelList = list(set(modelList))
+        return self.modelList
 
     def saveSkin(self):
         dirName = os.path.expanduser('~/maya/autoRig3')
@@ -1230,7 +1211,7 @@ class Biped:
 
         self.getSkinJntsFromScene()
         self.getSkinnedModels()
-        skinTools.saveSkinning(path, meshes=self.modelList)
+        interface.saveSkinning(path, meshes=self.modelList)
 
     def loadSkin(self):
         dirName = os.path.expanduser('~/maya/autoRig3')
@@ -1239,152 +1220,50 @@ class Biped:
         if not os.path.exists(path):
             logger.error('file not found!!')
             return
-        skinTools.loadSkinning(path)
+        interface.loadSkinning(path)
 
-    def exportDict(self):
-        expDict = {}
-        for key in self.toExport:
-                expDict[key] = self.__dict__[key]
-        return expDict
-
-    def updateProgressBar(self, value=0):
-        try:
-            self.progressBar.setValue(value)
-        except:
-            pass
-
-    def doGuides(self, **kwargs):
-        self.__dict__.update(**kwargs)
-
-        try:
-            self.progressBar.reset()
-        except:
-            pass
-
-        self.larm.doGuide()
-        self.rarm.doGuide()
-        self.rarm.mirrorConnectGuide(self.larm)
-
-        self.updateProgressBar(10)
-
-        self.lhand.doGuide()
-        self.rhand.doGuide()
-        self.rhand.mirrorConnectGuide(self.lhand)
-
-        self.updateProgressBar(30)
-
-        self.lfoot.doGuide()
-        self.rfoot.doGuide()
-        self.rfoot.mirrorConnectGuide(self.lfoot)
-
-        self.updateProgressBar(50)
-
-        self.lclav.doGuide()
-        self.rclav.doGuide()
-        self.rclav.mirrorConnectGuide(self.lclav)
-
-        self.updateProgressBar(60)
-
-        self.lleg.doGuide()
-        self.rleg.doGuide()
-        self.rleg.mirrorConnectGuide(self.lleg)
-
-        self.updateProgressBar(80)
-
-        self.llegShoulder.doGuide()
-        self.rlegShoulder.doGuide()
-        self.rlegShoulder.mirrorConnectGuide(self.llegShoulder)
-
-        self.updateProgressBar(90)
-
-        self.spine.doGuide()
-        self.neck.doGuide()
-        self.master.doGuide()
-
-        self.updateProgressBar(100)
-
-        pm.parent(self.larm.guideMoveall, self.rarm.mirrorGuide, self.lhand.guideMoveall,
-                  self.rhand.mirrorGuide, self.lfoot.guideMoveall, self.rfoot.mirrorGuide,
-                  self.lclav.guideMoveall, self.rclav.mirrorGuide, self.lleg.guideMoveall, self.rleg.mirrorGuide,
-                  self.llegShoulder.guideMoveall, self.rlegShoulder.mirrorGuide, self.spine.guideMoveall,
-                  self.neck.guideMoveall, self.master.guideMoveall)
-
-        pm.parentConstraint(self.larm.lastGuide, self.lhand.guideMoveall, mo=True)
-        pm.scaleConstraint(self.larm.lastGuide, self.lhand.guideMoveall, mo=True)
-        pm.parentConstraint(self.lleg.lastGuide, self.lfoot.guideMoveall, mo=True)
-        pm.scaleConstraint(self.lleg.lastGuide, self.lfoot.guideMoveall, mo=True)
-
-        pm.addAttr(self.master.guideMoveall, ln='bipedDict', dt='string')
-        self.master.guideMoveall.bipedDict.set(json.dumps(self.exportDict()))
-
-        try:
-            self.progressBar.reset()
-        except:
-            pass
-
-    #todo trocar aqui os parametros pelos passados na criacao do objeto
-    def doRig(self):
-
-        try:
-            self.progressBar.reset()
-        except:
-            pass
+    def generateRig(self, armRibbons=True, legRibbons=True, parentModules=True):
         self.rhand.doRig()
-        self.updateProgressBar(10)
         self.lhand.doRig()
-        self.updateProgressBar(20)
         self.larm.doRig()
-        self.updateProgressBar(30)
         self.rarm.doRig()
-        self.updateProgressBar(40)
         self.lfoot.doRig()
-        self.updateProgressBar(50)
         self.rfoot.doRig()
-        self.updateProgressBar(60)
         self.lleg.doRig()
         self.rleg.doRig()
-        self.updateProgressBar(70)
         self.llegShoulder.doRig()
         self.rlegShoulder.doRig()
-        self.updateProgressBar(80)
         self.master.doRig()
-        self.neck.doRig()
-        self.spine.ribbonJntNum = self.spineRibbonJnts
+        #self.neck.doRig()
         self.spine.doRig()
-        self.updateProgressBar(90)
         self.lclav.doRig()
         self.rclav.doRig()
+
         self.skinJoints = self.rhand.skinJoints + self.lhand.skinJoints +\
                           self.rfoot.skinJoints + self.lfoot.skinJoints + self.llegShoulder.skinJoints +\
-                          self.rlegShoulder.skinJoints + self.neck.skinJoints + self.spine.skinJoints +\
+                          self.rlegShoulder.skinJoints + self.spine.skinJoints +\
                           self.lclav.skinJoints + self.rclav.skinJoints
 
-        if self.armRibbonJnts > 0:
-            ribbonSkinJnts = self.doArmRibbons(numJnts=self.armRibbonJnts*2,
-                                               offsetStart=self.armRibbonFirstOffset*0.1,
-                                               offsetEnd=self.armRibbonLastOffset*0.1)
+        if armRibbons:
+            ribbonSkinJnts = self.generateArmRibbons()
             self.skinJoints += ribbonSkinJnts
         else:
             self.skinJoints += self.larm.skinJoints + self.rarm.skinJoints
 
-        if self.legRibbonJnts > 0:
-            ribbonSkinJnts = self.doLegRibbons(numJnts=self.legRibbonJnts*2,
-                                               offsetStart=self.legRibbonFirstOffset*0.1,
-                                               offsetEnd=self.legRibbonLastOffset*0.1)
+        if legRibbons:
+            ribbonSkinJnts = self.generateLegRibbons()
             self.skinJoints += ribbonSkinJnts
         else:
             self.skinJoints += self.lleg.skinJoints + self.rleg.skinJoints
 
-        if self.moduleConnection == 1:
+        if parentModules:
             self.parentModules()
         else:
             self.constraintModules()
 
-        self.updateProgressBar(100)
-
-        self.doHipAttrs()
-        self.doFootAttrs()
-        self.doSpaceSwitches()
+        self.hipAttrs()
+        self.footAttrs()
+        self.generateSpaceSwitches()
 
         pm.addAttr(self.master.moveall3, ln='larmDict', dt='string')
         pm.addAttr(self.master.moveall3, ln='rarmDict', dt='string')
@@ -1401,39 +1280,9 @@ class Biped:
         pm.addAttr(self.master.moveall3, ln='llegShoulderDict', dt='string')
         pm.addAttr(self.master.moveall3, ln='rlegShoulderDict', dt='string')
         pm.addAttr(self.master.moveall3, ln='skinJoints', dt='string')
+        self.exportDicts()
 
-        self.storeDictOnControl()
-        try:
-            self.progressBar.reset()
-        except:
-            pass
-
-    def getDict(self):
-        self.larm.getDict()
-        self.rarm.getDict()
-        self.lhand.getDict()
-        self.rhand.getDict()
-        self.lfoot.getDict()
-        self.rfoot.getDict()
-        self.lleg.getDict()
-        self.rleg.getDict()
-        self.llegShoulder.getDict()
-        self.rlegShoulder.getDict()
-        self.neck.getDict()
-        self.spine.getDict()
-        self.lclav.getDict()
-        self.rclav.getDict()
-        self.master.getDict()
-
-        try:
-            jsonDict = self.master.guideMoveall.bipedDict.get()
-            dictRestored = json.loads(jsonDict)
-
-            self.__dict__.update(**dictRestored)
-        except:
-            logger.debug('No previous guide found')
-
-    def storeDictOnControl(self):
+    def exportDicts(self):
         self.larm.getDict()
         self.master.moveall3.larmDict.set(json.dumps(self.larm.exportDict()))
         self.rarm.getDict()
@@ -1454,8 +1303,6 @@ class Biped:
         self.rfoot.getDict()
         self.master.moveall3.rfootDict.set(json.dumps(self.rfoot.exportDict()))
 
-        self.neck.getDict()
-        self.master.moveall3.neckDict.set(json.dumps(self.neck.exportDict()))
         self.spine.getDict()
         self.master.moveall3.spineDict.set(json.dumps(self.spine.exportDict()))
 
@@ -1472,13 +1319,14 @@ class Biped:
         jnts = [x.name() for x in self.skinJoints]
         self.master.moveall3.skinJoints.set(json.dumps(jnts))
 
-    def doArmRibbons(self, numJnts=10, offsetStart=0.08, offsetEnd=0.1):
-        self.larb = ribbonBezier.RibbonBezier(name='L_armBezier', size=self.larm.jointLength, numJnts=numJnts,
-                                              offsetStart=offsetStart, offsetEnd=offsetEnd)
+
+    def generateArmRibbons(self, numJnts=10, offsetStart=0.08, offsetEnd=0.1):
+        self.larb = ribbonBezier.RibbonBezier(name='L_armBezier', size=self.larm.jointLength, numJnts=10,
+                                              offsetStart=0.08, offsetEnd=0.1)
         self.larb.doRig()
         self.larb.connectToLimb(self.larm)
-        self.rarb = ribbonBezier.RibbonBezier(name='R_armBezier', size=self.larm.jointLength, numJnts=numJnts,
-                                              offsetStart=offsetStart, offsetEnd=offsetEnd)
+        self.rarb = ribbonBezier.RibbonBezier(name='R_armBezier', size=self.rarm.jointLength, numJnts=10,
+                                              offsetStart=0.1, offsetEnd=0.08)
         self.rarb.doRig()
         self.rarb.connectToLimb(self.rarm)
 
@@ -1498,13 +1346,13 @@ class Biped:
 
         return self.larb.skinJoints + self.rarb.skinJoints
 
-    def doLegRibbons(self, numJnts=10, offsetStart=0.08, offsetEnd=0.1):
-        self.llrb = ribbonBezier.RibbonBezier(name='L_legBezier', size=self.lleg.jointLength, offsetStart=offsetStart,
-                                              offsetEnd=offsetEnd, numJnts=numJnts)
+    def generateLegRibbons(self, numJnts=10, offsetStart=0.08, offsetEnd=0.1):
+        self.llrb = ribbonBezier.RibbonBezier(name='L_legBezier', size=self.lleg.jointLength, offsetStart=0.1,
+                                              offsetEnd=0.1)
         self.llrb.doRig()
         self.llrb.connectToLimb(self.lleg)
-        self.rlrb = ribbonBezier.RibbonBezier(name='R_legBezier', size=self.lleg.jointLength, offsetStart=offsetStart,
-                                              offsetEnd=offsetEnd, numJnts=numJnts)
+        self.rlrb = ribbonBezier.RibbonBezier(name='R_legBezier', size=self.lleg.jointLength, offsetStart=0.1,
+                                              offsetEnd=0.1)
         self.rlrb.doRig()
         self.rlrb.connectToLimb(self.rleg)
 
@@ -1525,15 +1373,14 @@ class Biped:
         return self.rlrb.skinJoints + self.llrb.skinJoints
 
     def constraintModules(self):
-        pm.parentConstraint(self.spine.endTipJnt, self.lclav.moveall, mo=True)
-        pm.parentConstraint(self.spine.endTipJnt, self.rclav.moveall, mo=True)
-        pm.parentConstraint(self.spine.endTipJnt, self.neck.moveall, mo=True)
+        pm.parentConstraint(self.spine.jntList[-1], self.lclav.moveall, mo=True)
+        pm.parentConstraint(self.spine.jntList[-1], self.rclav.moveall, mo=True)
         pm.parentConstraint(self.rclav.jntList[-1], self.rarm.moveall, mo=True)
         pm.parentConstraint(self.lclav.jntList[-1], self.larm.moveall, mo=True)
         pm.parentConstraint(self.larm.lastTipJnt, self.lhand.moveall, mo=True)
         pm.parentConstraint(self.rarm.lastTipJnt, self.rhand.moveall, mo=True)
-        pm.parentConstraint(self.spine.startTipJnt, self.llegShoulder.moveall, mo=True)
-        pm.parentConstraint(self.spine.startTipJnt, self.rlegShoulder.moveall, mo=True)
+        pm.parentConstraint(self.spine.jntList[0], self.llegShoulder.moveall, mo=True)
+        pm.parentConstraint(self.spine.jntList[0], self.rlegShoulder.moveall, mo=True)
         pm.parentConstraint(self.rlegShoulder.jntList[-1], self.rleg.moveall, mo=True)
         pm.parentConstraint(self.llegShoulder.jntList[-1], self.lleg.moveall, mo=True)
         pm.parentConstraint(self.lfoot.ballCntrl, self.lleg.ikCntrl, mo=True)  # checar...
@@ -1551,44 +1398,42 @@ class Biped:
 
         pm.parentConstraint(self.lleg.startCntrl, self.lfoot.ankleFkCntrl, mo=True)
         pm.parentConstraint(self.rleg.startCntrl, self.rfoot.ankleFkCntrl, mo=True)
-        pm.parent(self.lclav.moveall, self.spine.endTipJnt)
-        pm.parent(self.rclav.moveall, self.spine.endTipJnt)
-        pm.parent(self.neck.moveall, self.spine.endTipJnt)
+        pm.parent(self.lclav.moveall, self.spine.jntList[-1])
+        pm.parent(self.rclav.moveall, self.spine.jntList[-1])
         pm.parent(self.rarm.moveall, self.rclav.jntList[-1])
         pm.parent(self.larm.moveall, self.lclav.jntList[-1])
-        pm.parent(self.llegShoulder.moveall, self.spine.startTipJnt)
-        pm.parent(self.rlegShoulder.moveall, self.spine.startTipJnt)
+        pm.parent(self.llegShoulder.moveall, self.spine.jntList[0])
+        pm.parent(self.rlegShoulder.moveall, self.spine.jntList[0])
         pm.parent(self.rleg.moveall, self.rlegShoulder.jntList[-1])
         pm.parent(self.lleg.moveall, self.llegShoulder.jntList[-1])
         pm.parent(self.lfoot.limbConnectionCntrl.getParent(), self.lleg.lastJnt)
         pm.parent(self.rfoot.limbConnectionCntrl.getParent(), self.rleg.lastJnt)
 
-    def doHipAttrs(self):
-        self.spine.cogCntrl.addAttr('L_arm_FkIk', at='float', dv=1, max=1, min=0, k=1)
-        self.spine.cogCntrl.addAttr('R_arm_FkIk', at='float', dv=1, max=1, min=0, k=1)
-        self.spine.cogCntrl.addAttr('L_leg_FkIk', at='float', dv=1, max=1, min=0, k=1)
-        self.spine.cogCntrl.addAttr('R_leg_FkIk', at='float', dv=1, max=1, min=0, k=1)
-        self.spine.cogCntrl.addAttr('Spine_FkIk', at='float', dv=1, max=1, min=0, k=1)
+    def hipAttrs(self):
+        self.spine.cntrlList[0].addAttr('L_arm_FkIk', at='float', dv=1, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('R_arm_FkIk', at='float', dv=1, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('L_leg_FkIk', at='float', dv=1, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('R_leg_FkIk', at='float', dv=1, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('Spine_FkIk', at='float', dv=1, max=1, min=0, k=1)
 
-        self.spine.cogCntrl.addAttr('L_arm_poleVec', at='float', dv=0, max=1, min=0, k=1)
-        self.spine.cogCntrl.addAttr('R_arm_poleVec', at='float', dv=0, max=1, min=0, k=1)
-        self.spine.cogCntrl.addAttr('L_leg_poleVec', at='float', dv=0, max=1, min=0, k=1)
-        self.spine.cogCntrl.addAttr('R_leg_poleVec', at='float', dv=0, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('L_arm_poleVec', at='float', dv=0, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('R_arm_poleVec', at='float', dv=0, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('L_leg_poleVec', at='float', dv=0, max=1, min=0, k=1)
+        self.spine.cntrlList[0].addAttr('R_leg_poleVec', at='float', dv=0, max=1, min=0, k=1)
 
-        self.spine.cogCntrl.Spine_FkIk >> self.spine.moveall.ikfk
-        self.spine.cogCntrl.R_leg_FkIk >> self.rleg.moveall.ikfk
-        self.spine.cogCntrl.L_leg_FkIk >> self.lleg.moveall.ikfk
-        self.spine.cogCntrl.R_leg_FkIk >> self.rfoot.moveall.ikfk
-        self.spine.cogCntrl.L_leg_FkIk >> self.lfoot.moveall.ikfk
-        self.spine.cogCntrl.R_arm_FkIk >> self.rarm.moveall.ikfk
-        self.spine.cogCntrl.L_arm_FkIk >> self.larm.moveall.ikfk
+        self.spine.cntrlList[0].R_leg_FkIk >> self.rleg.moveall.ikfk
+        self.spine.cntrlList[0].L_leg_FkIk >> self.lleg.moveall.ikfk
+        self.spine.cntrlList[0].R_leg_FkIk >> self.rfoot.moveall.ikfk
+        self.spine.cntrlList[0].L_leg_FkIk >> self.lfoot.moveall.ikfk
+        self.spine.cntrlList[0].R_arm_FkIk >> self.rarm.moveall.ikfk
+        self.spine.cntrlList[0].L_arm_FkIk >> self.larm.moveall.ikfk
 
-        self.spine.cogCntrl.R_arm_poleVec >> self.rarm.moveall.poleVec
-        self.spine.cogCntrl.L_arm_poleVec >> self.larm.moveall.poleVec
-        self.spine.cogCntrl.R_leg_poleVec >> self.rleg.moveall.poleVec
-        self.spine.cogCntrl.L_leg_poleVec >> self.lleg.moveall.poleVec
+        self.spine.cntrlList[0].R_arm_poleVec >> self.rarm.moveall.poleVec
+        self.spine.cntrlList[0].L_arm_poleVec >> self.larm.moveall.poleVec
+        self.spine.cntrlList[0].R_leg_poleVec >> self.rleg.moveall.poleVec
+        self.spine.cntrlList[0].L_leg_poleVec >> self.lleg.moveall.poleVec
 
-    def doFootAttrs(self):
+    def footAttrs(self):
         self.lfoot.baseCntrl.addAttr('pin', at='float', min=0, max=1, dv=0, k=1)
         self.lfoot.baseCntrl.addAttr('bias', at='float', min=-0.9, max=0.9, k=1)
         self.lfoot.baseCntrl.addAttr('autoStretch', at='float', min=0, max=1, dv=1, k=1)
@@ -1611,68 +1456,35 @@ class Biped:
         self.rfoot.baseCntrl.manualStretch >> self.rleg.ikCntrl.manualStretch
         self.rfoot.baseCntrl.twist >> self.rleg.ikCntrl.twist
 
-    def doSpaceSwitches(self):
+
+
+    def generateSpaceSwitches(self):
         if pm.objExists('spaces'):
             pm.delete('spaces')
 
         spaceSwitchTools.createSpc(None, 'global')
         spaceSwitchTools.createSpc(self.larm.lastJnt, 'lhand')
         spaceSwitchTools.createSpc(self.rarm.lastJnt, 'rhand')
-        spaceSwitchTools.createSpc(self.spine.cogCntrl, 'cog')
-        spaceSwitchTools.createSpc(self.spine.endJnt, 'chest')
-        spaceSwitchTools.createSpc(self.spine.startJnt, 'hip')
+        spaceSwitchTools.createSpc(self.spine.cntrlList[0], 'cog')
         spaceSwitchTools.createSpc(self.lleg.lastJnt, 'lfoot')
         spaceSwitchTools.createSpc(self.rleg.lastJnt, 'rfoot')
         spaceSwitchTools.createSpc(self.lclav.jntList[-1], 'lclav')
         spaceSwitchTools.createSpc(self.rclav.jntList[-1], 'rclav')
-        spaceSwitchTools.createSpc(self.neck.startJnt, 'neck')
-        spaceSwitchTools.createSpc(self.neck.endJnt, 'head')
 
-        spaceSwitchTools.addSpc(target=self.larm.ikCntrl, spaceList=['global', 'chest', 'cog', 'lclav'],
+        spaceSwitchTools.addSpc(target=self.larm.ikCntrl, spaceList=['global', 'cog', 'lclav'],
                             switcher=self.larm.ikCntrl.getParent(), type='parent')
-        spaceSwitchTools.addSpc(target=self.rarm.ikCntrl, spaceList=['global', 'chest', 'cog', 'rclav'],
+        spaceSwitchTools.addSpc(target=self.rarm.ikCntrl, spaceList=['global', 'cog', 'rclav'],
                             switcher=self.rarm.ikCntrl.getParent(), type='parent')
-        spaceSwitchTools.addSpc(target=self.larm.poleVec, spaceList=['hip', 'global', 'chest', 'cog', 'lclav'],
+        spaceSwitchTools.addSpc(target=self.larm.poleVec, spaceList=['global', 'cog', 'lclav'],
                             switcher=self.larm.poleVec.getParent(), type='parent')
-        spaceSwitchTools.addSpc(target=self.rarm.poleVec, spaceList=['hip', 'global', 'chest', 'cog', 'rclav'],
+        spaceSwitchTools.addSpc(target=self.rarm.poleVec, spaceList=[ 'global', 'cog', 'rclav'],
                             switcher=self.rarm.poleVec.getParent(), type='parent')
-        spaceSwitchTools.addSpc(target=self.lleg.poleVec, spaceList=['hip', 'global', 'chest', 'cog'],
+        spaceSwitchTools.addSpc(target=self.lleg.poleVec, spaceList=['global', 'cog'],
                             switcher=self.lleg.poleVec.getParent(), type='parent')
-        spaceSwitchTools.addSpc(target=self.rleg.poleVec, spaceList=['hip', 'global', 'chest', 'cog'],
+        spaceSwitchTools.addSpc(target=self.rleg.poleVec, spaceList=['global',  'cog'],
                             switcher=self.rleg.poleVec.getParent(), type='parent')
-        spaceSwitchTools.addSpc(target=self.spine.endIkCntrl, spaceList=['hip', 'global', 'cog'],
-                            switcher=self.spine.endIkCntrl.getParent(), type='parent')
-        spaceSwitchTools.addSpc(target=self.neck.endCntrl, spaceList=['global', 'hip', 'chest', 'cog', 'neck'],
-                            switcher=self.neck.endCntrl.getParent(), type='orient', posSpc=self.neck.startJnt)
-        spaceSwitchTools.addSpc(target=self.larm.endCntrl, spaceList=['global', 'hip', 'chest', 'cog', 'lclav'],
+        spaceSwitchTools.addSpc(target=self.larm.endCntrl, spaceList=['global', 'cog', 'lclav'],
                             switcher=self.larm.endCntrl.getParent(), type='orient', posSpc=self.lclav.jntList[-1])
 
-        spaceSwitchTools.addSpc(target=self.rarm.endCntrl, spaceList=['global', 'hip', 'chest', 'cog', 'rclav'],
+        spaceSwitchTools.addSpc(target=self.rarm.endCntrl, spaceList=['global', 'cog', 'rclav'],
                             switcher=self.rarm.endCntrl.getParent(), type='orient', posSpc=self.rclav.jntList[-1])
-        
-    def getSkinJntsFromScene(self):
-        try:
-            if self.master.moveall3:
-                moveall3 = self.master.moveall3
-            else:
-                moveall3 = pm.PyNode(self.master.name + '_moveall3_ctrl')
-        except:
-            logger.error('Nao conseguiu achar moveall3')
-            return
-
-        skinJntsJson = moveall3.getAttr('skinJoints')
-        skinJns = json.loads(skinJntsJson)
-        self.skinJoints = skinJns
-        return skinJns
-
-    def getSkinnedModels(self):
-        modelList = []
-        for jnt in self.skinJoints:
-            skinClsList = list(set(pm.listConnections(jnt, type='skinCluster')))
-            for skinCls in skinClsList:
-                msh = list(set(pm.listConnections(skinCls, d=True, s=False, sh=True, type='surfaceShape')))
-                if msh:
-                    modelList.append(msh[0])
-
-        self.modelList = list(set(modelList))
-        return self.modelList
