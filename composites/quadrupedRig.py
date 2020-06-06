@@ -1703,8 +1703,9 @@ class Quadruped:
 
         self.spine.cogCntrl.R_arm_FkIk >> self.rfrLeg.moveall.ikfk
         self.spine.cogCntrl.L_arm_FkIk >> self.lfrLeg.moveall.ikfk
-        self.spine.cogCntrl.R_leg_FkIk >> self.rfrFoot.moveall.ikfk
-        self.spine.cogCntrl.L_leg_FkIk >> self.lfrFoot.moveall.ikfk
+
+        self.spine.cogCntrl.R_arm_FkIk >> self.rfrFoot.moveall.ikfk
+        self.spine.cogCntrl.L_arm_FkIk >> self.lfrFoot.moveall.ikfk
 
         self.spine.cogCntrl.R_arm_poleVec >> self.rfrLeg.moveall.poleVec
         self.spine.cogCntrl.L_arm_poleVec >> self.lfrLeg.moveall.poleVec

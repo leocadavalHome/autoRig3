@@ -1,8 +1,5 @@
 import pymel.core as pm
 import maya.OpenMayaUI as omui
-from shiboken2 import wrapInstance
-from PySide2 import QtWidgets, QtCore, QtGui
-
 import os.path
 import autoRig3.ui.quadrupedWidget as quadrupedWidget
 import autoRig3.composites.quadrupedRig as quadruped
@@ -12,12 +9,24 @@ import logging
 
 logger = logging.getLogger('autoRig')
 
+try:
+    from shiboken import wrapInstance
+except:
+    from shiboken2 import wrapInstance
+try:
+    from PySide import QtGui as widgets
+except:
+    from PySide2 import QtWidgets as widgets
+try:
+    from PySide import QtCore, QtGui
+except:
+    from PySide2 import QtCore, QtGui
 
 def getMayaWindow():
     ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(ptr), QtWidgets.QMainWindow)
+    return wrapInstance(long(ptr), widgets.QMainWindow)
 
-class QuadrupedUI(QtWidgets.QScrollArea):
+class QuadrupedUI(widgets.QScrollArea):
     def __init__(self, parent=None, mainUI=None):
         if not parent:
             parent = getMayaWindow()

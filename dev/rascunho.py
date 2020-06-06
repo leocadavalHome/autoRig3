@@ -1,34 +1,19 @@
-from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
+import autoRig3.dev.stickyLips as stickyLips
+import pymel.core as pm
+import autoRig3.tools.skinTools as skinTools
+import autoRig3.tools.vertexWalkTools as vtxWalk
 
-def deleteControl(control):
-    if pm.workspaceControl(control, q=True, exists=True):
-        pm.workspaceControl(control, e=True, close=True)
-        pm.deleteUI(control, control=True)
+edges = pm.ls(sl=True, fl=True)
+x = stickyLips.StickyLips()
 
+x.doGuide(edgeLoop=edges)
 
-class DockableWidget(MayaQWidgetDockableMixin, widgets.QDialog):
-    def __init__(self, parent=None, coreWidgetCls=None ):
-        super(DockableWidget, self).__init__(parent=parent)
-        # set the name and title of the widget
-        self.setObjectName('testeWidget')
-        self.setWindowTitle('Database Asset Search')
-        self.setLayout(self.createLayout())
+x.doRig(iniOffset=True)
 
-    # create a widget and lay it out vertically
-    def createLayout(self):
-        self.main_layout = widgets.QVBoxLayout()
-        self.central_widget = testeUI.autoRig3UI(parent=self)
-        self.main_layout.addWidget(self.central_widget)
-        return self.main_layout
+edges2 = pm.ls(sl=True, fl=True)
+skinTools.edgeSkin(edgeLoopOriginal=edges2, paralelLoopNum=4)
 
-
-def makeCoreWidgetMain():
-    # delete any pre-existing widget before making a new one
-    deleteControl("testeWidgetWorkspaceControl")
-    Core = DockableWidget()
-
-    # configure and show the new widget
-    Core.show(dockable=True, uiScript='from autoRig3.dev.rascunho import *; Core.createLayout()')
-    # bring to the front
-    Core.raise_()
-
+skinJoints = pm.ls('L_stick*_Offset')
+print skinJoints
+sk = [y for y in [x.getChildren() for x in skinJoints]]
+print sk

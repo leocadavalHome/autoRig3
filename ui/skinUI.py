@@ -1,8 +1,7 @@
 import pymel.core as pm
 import maya.OpenMayaUI as omui
+from PySide2 import QtCore, QtGui, QtWidgets
 from shiboken2 import wrapInstance
-from PySide2 import QtWidgets, QtCore, QtGui
-from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 
 import autoRig3.ui.skinWidget as skinWidget
 import autoRig3.tools.skinTools as skinTools
@@ -11,41 +10,6 @@ import logging
 
 logger = logging.getLogger('autoRig')
 
-def maya_main_window():
-    main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(main_window_ptr), QtWidgets.QWidget)
-
-def deleteControl(control):
-    if pm.workspaceControl(control, q=True, exists=True):
-        pm.workspaceControl(control, e=True, close=True)
-        pm.deleteUI(control, control=True)
-
-
-class DockableWidget(MayaQWidgetDockableMixin, QtWidgets.QDialog):
-    def __init__(self, parent=None, coreWidgetCls=None ):
-        super(DockableWidget, self).__init__(parent=parent)
-        # set the name and title of the widget
-        self.setObjectName('skinWidget')
-        self.setWindowTitle('SKIN')
-        self.setLayout(self.createLayout())
-
-    # create a widget and lay it out vertically
-    def createLayout(self):
-        self.main_layout = QtWidgets.QVBoxLayout()
-        self.central_widget = SkinUI(parent=self)
-        self.main_layout.addWidget(self.central_widget)
-        return self.main_layout
-
-
-def makeCoreWidgetMain():
-    # delete any pre-existing widget before making a new one
-    deleteControl("skinWidgetWorkspaceControl")
-    Core = DockableWidget(parent=maya_main_window())
-
-    # configure and show the new widget
-    Core.show(dockable=True, uiScript='Core.createLayout()')
-    # bring to the front
-    Core.raise_()
 
 class SkinUI(QtWidgets.QWidget):
     def __init__(self, parent=None):
