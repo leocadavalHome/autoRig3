@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac436fbc-b638-4b91-9d6e-9755a5c142ef" name="Default" comment="eyebrow 3 planos">
-      <change beforePath="$PROJECT_DIR$/.idea/autoRig3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/autoRig3.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ac436fbc-b638-4b91-9d6e-9755a5c142ef" name="Default" comment="master funcionando">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composites/facialModules.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/facialModules.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev/facialModules.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,13 +14,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/eyeBrowBlend.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="880">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
+            <state relative-caret-position="902">
+              <caret line="41" column="55" lean-forward="true" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
               <folding>
                 <element signature="e#0#50#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dev/facialModules.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -134,11 +145,6 @@
               <item name="autoRig3" type="462c0819:PsiDirectoryNode" />
               <item name="composites" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="autoRig3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="autoRig3" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -206,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591462193480</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="master funcionando">
+      <created>1591462564059</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1591462564059</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -240,10 +253,10 @@
     </ignored-roots>
     <MESSAGE value="getDict funcionando" />
     <MESSAGE value="eyebrow 3 planos" />
-    <option name="LAST_COMMIT_MESSAGE" value="eyebrow 3 planos" />
+    <MESSAGE value="master funcionando" />
+    <option name="LAST_COMMIT_MESSAGE" value="master funcionando" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/moveAllModule.py" />
     <entry file="file://$PROJECT_DIR$/lcRig2interface.py" />
     <entry file="file://$PROJECT_DIR$/ribwire.py" />
     <entry file="file://$PROJECT_DIR$/rigstandard.py" />
@@ -315,10 +328,19 @@
     <entry file="file://$PROJECT_DIR$/composites/facial.py" />
     <entry file="file://$PROJECT_DIR$/modules/eyeBrowBlend.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="880">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        <state relative-caret-position="902">
+          <caret line="41" column="55" lean-forward="true" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/facialModules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
