@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ac436fbc-b638-4b91-9d6e-9755a5c142ef" name="Default" comment="getDict funcionando" />
+    <list default="true" id="ac436fbc-b638-4b91-9d6e-9755a5c142ef" name="Default" comment="eyebrow 3 planos">
+      <change beforePath="$PROJECT_DIR$/.idea/autoRig3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/autoRig3.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modules/eyeBrowBlend.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="880">
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
+              <folding>
+                <element signature="e#0#50#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -30,6 +50,7 @@
     </replaceStrings>
   </component>
   <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
@@ -101,8 +122,28 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="autoRig3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoRig3" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoRig3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoRig3" type="462c0819:PsiDirectoryNode" />
+              <item name="composites" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoRig3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoRig3" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -110,7 +151,7 @@
     <property name="ToolWindowInspection Results.ShowToolbar" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -158,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1536790604098</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="eyebrow 3 planos">
+      <created>1591462193480</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1591462193480</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -180,17 +228,21 @@
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.32908705" />
       <window_info anchor="bottom" id="Inspection Results" order="12" weight="0.5699659" />
+      <window_info anchor="bottom" id="MayaLog" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
     <MESSAGE value="getDict funcionando" />
-    <option name="LAST_COMMIT_MESSAGE" value="getDict funcionando" />
+    <MESSAGE value="eyebrow 3 planos" />
+    <option name="LAST_COMMIT_MESSAGE" value="eyebrow 3 planos" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/limbModule.py" />
     <entry file="file://$PROJECT_DIR$/moveAllModule.py" />
     <entry file="file://$PROJECT_DIR$/lcRig2interface.py" />
     <entry file="file://$PROJECT_DIR$/ribwire.py" />
@@ -261,5 +313,15 @@
     <entry file="file://$PROJECT_DIR$/modules/jaw.py" />
     <entry file="file://$PROJECT_DIR$/modules/mouthCorners.py" />
     <entry file="file://$PROJECT_DIR$/composites/facial.py" />
+    <entry file="file://$PROJECT_DIR$/modules/eyeBrowBlend.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="880">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
