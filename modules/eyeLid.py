@@ -22,7 +22,7 @@ class EyeLid:
                           }
         self.name = name
         self.flipAxis = flipAxis
-        self.toExport = ['guideDict', 'name', 'eyeCenterGuideSetup', 'cornersGuideSetup']
+        self.toExport = ['guideDict', 'name', 'eyeCenterGuideSetup', 'cornersGuideSetup', 'meshName']
         self.moveallGuideSetup = {'nameTempl': self.name + 'Moveall', 'icone': 'quadradoZ', 'size': 1, 'color': (1, 0, 0)}
         self.eyeCenterGuideSetup = {'nameTempl': self.name + 'EyeCenter', 'icone': 'circuloX', 'size': .8, 'color': (1, 0, 0)}
         self.cornersGuideSetup = {'nameTempl': self.name, 'icone': 'null', 'size': .05, 'color': (1, 0, 0)}

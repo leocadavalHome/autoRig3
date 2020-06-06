@@ -26,7 +26,7 @@ class EyeBrowBlend:
         self.guideSulfix = '_guide'
         self.jntSulfix = '_jxt'
         self.tweakCtrlSetup = {'nameTempl': self.name + 'Tweak', 'icone': 'bola', 'size': .2, 'color': (32, .7, .17)}
-        self.jntSetup={'nameTempl': self.name, 'size': .1}
+        self.jntSetup = {'nameTempl': self.name, 'size': .1}
 
     def createCntrl(self, setupName='ctrl', nameTempl=None):
         displaySetup = self.__dict__[setupName+'Setup'].copy()
