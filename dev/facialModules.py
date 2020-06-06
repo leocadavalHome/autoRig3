@@ -61,8 +61,6 @@ pm.addAttr (obj, ln='tweaksCtrlVis', at='float', min=0, max=1, dv=0, k=1)
 
 pm.addAttr (obj, ln='IKFK', at='enum', en='------', k=1)
 pm.addAttr (obj, ln='lookatIKFK', at='float', min=0, max=1, dv=0, k=1)
-
-
 rarm = pm.PyNode ('R_armBezierMoveall')
 lleg = pm.PyNode ('L_legBezierMoveall')
 rleg = pm.PyNode ('R_legBezierMoveall')

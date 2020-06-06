@@ -132,7 +132,7 @@ def addTargets(sourceObj=None, splittedTargets=list()):
     else:
         firstIndex = 0
         pm.blendShape(splittedTargets, sourceObj)
-        #pm.delete(splittedTargets)
+        pm.delete(splittedTargets)
 
     return firstIndex
 

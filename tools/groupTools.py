@@ -45,7 +45,7 @@ def zeroOut(objList=None, suffix=None):
                     pm.delete (eachChild)
             except:
                 pass
-            pm.parent(obj, dup[0])
+            pm.parent (obj, dup[0])
         else:
             parent = obj.getParent()
 
@@ -59,9 +59,7 @@ def zeroOut(objList=None, suffix=None):
                 zero = pm.group(em=True, n=obj+suffix)
 
             pm.delete(pm.parentConstraint(obj, zero, mo=False))
-
             pm.parent(obj, zero)
-
             if parent:
                 parent = parent[0]
                 pm.parent(zero, parent)
