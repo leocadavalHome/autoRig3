@@ -19,9 +19,12 @@ class BaseModule(object):
     def saveDict(self):
         pass
 
-    def createCntrl(self, cntrlName):
-        displaySetup = self.__dict__[cntrlName+'Setup'].copy()
-        cntrlName = displaySetup['nameTempl'] + self.guideSulfix
+    def createCntrl(self, setupName='ctrl', nameTempl=None):
+        displaySetup = self.__dict__[setupName+'Setup'].copy()
+        if nameTempl:
+            cntrlName = nameTempl
+        else:
+            cntrlName = displaySetup['nameTempl'] + self.guideSulfix
         if pm.objExists(cntrlName):
             pm.delete(cntrlName)
         guide = controlTools.cntrlCrv(name=cntrlName, hasZeroGrp=False, cntrlSulfix='', hasHandle=True, **displaySetup)

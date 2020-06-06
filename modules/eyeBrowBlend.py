@@ -13,6 +13,7 @@ class EyeBrowBlend:
     def __init__(self, name='eyeBrow'):
         self.guideDict = {'moveall': [(0, 0, 0), (0, 0, 0), (1, 1, 1)], 'sliceMax': [(12, 0, 0,), (0, 0, 0)],
                           'sliceMid': [(7, 0, 0), (0, 0, 0)], 'sliceMin': [(2, 0, 0), (0, 0, 0)],
+                          'sliceInBtw1': [(4.5, 0, 0), (0, 0, 0)], 'sliceInBtw2': [(9.5, 0, 0), (0, 0, 0)],
                           'tweak1': [(2.5, 0, 0), (0, 0, 0)], 'tweak2': [(5.5, 0, 0), (0, 0, 0)], 'tweak3': [(8.5, 0, 0), (0, 0, 0)],
                           'tweak4': [(11.5, 0, 0), (0, 0, 0)]}
         self.name = name
@@ -26,7 +27,7 @@ class EyeBrowBlend:
         self.guideSulfix = '_guide'
         self.jntSulfix = '_jxt'
         self.tweakCtrlSetup = {'nameTempl': self.name + 'Tweak', 'icone': 'bola', 'size': .2, 'color': (32, .7, .17)}
-        self.jntSetup={'nameTempl': self.name, 'size': .1}
+        self.jntSetup = {'nameTempl': self.name, 'size': .1}
 
     def createCntrl(self, setupName='ctrl', nameTempl=None):
         displaySetup = self.__dict__[setupName+'Setup'].copy()
@@ -59,17 +60,22 @@ class EyeBrowBlend:
         self.sliceMax = self.createCntrl(setupName='sliceGuide', nameTempl=self.name+'SliceMax'+self.guideSulfix)
         self.sliceMin = self.createCntrl(setupName='sliceGuide', nameTempl=self.name+'SliceMin'+self.guideSulfix)
         self.sliceMid = self.createCntrl(setupName='sliceGuide', nameTempl=self.name+'SliceMid'+self.guideSulfix)
+        self.sliceInBtw1 = self.createCntrl(setupName='sliceGuide', nameTempl=self.name + 'SliceInBtw1' + self.guideSulfix)
+        self.sliceInBtw2 = self.createCntrl(setupName='sliceGuide', nameTempl=self.name + 'SliceInBtw2' + self.guideSulfix)
         self.tweak1 = self.createCntrl(setupName='tweakGuide', nameTempl=self.name+'Tweak1'+self.guideSulfix)
         self.tweak2 = self.createCntrl(setupName='tweakGuide', nameTempl=self.name+'Tweak2'+self.guideSulfix)
         self.tweak3 = self.createCntrl(setupName='tweakGuide', nameTempl=self.name+'Tweak3'+self.guideSulfix)
         self.tweak4 = self.createCntrl(setupName='tweakGuide', nameTempl=self.name+'Tweak4'+self.guideSulfix)
         pm.parent (self.sliceMin, self.sliceMax, self.sliceMid,self.tweak1, self.tweak2, self.tweak3, self.tweak4,
+                   self.sliceInBtw1, self.sliceInBtw2,
                    self.guideMoveall)
 
         self.setCntrl(self.guideMoveall, 'moveall')
         self.setCntrl(self.sliceMax, 'sliceMax')
         self.setCntrl(self.sliceMid, 'sliceMid')
         self.setCntrl(self.sliceMin, 'sliceMin')
+        self.setCntrl(self.sliceInBtw1, 'sliceInBtw1')
+        self.setCntrl(self.sliceInBtw2, 'sliceInBtw2')
         self.setCntrl(self.tweak1, 'tweak1')
         self.setCntrl(self.tweak2, 'tweak2')
         self.setCntrl(self.tweak3, 'tweak3')
@@ -106,6 +112,16 @@ class EyeBrowBlend:
             self.sliceMid = pm.PyNode(guideName)
             self.guideDict['sliceMid'][0] = self.sliceMid.getTranslation(space='object').get()
             self.guideDict['sliceMid'][1] = tuple(self.sliceMid.getRotation(space='object'))
+
+            guideName = self.name+'SliceInBtw1'+self.guideSulfix
+            self.sliceInBtw1 = pm.PyNode(guideName)
+            self.guideDict['sliceInBtw1'][0] = self.sliceInBtw1.getTranslation(space='object').get()
+            self.guideDict['sliceInBtw1'][1] = tuple(self.sliceInBtw1.getRotation(space='object'))
+
+            guideName = self.name+'SliceInBtw2'+self.guideSulfix
+            self.sliceInBtw2 = pm.PyNode(guideName)
+            self.guideDict['sliceInBtw2'][0] = self.sliceInBtw2.getTranslation(space='object').get()
+            self.guideDict['sliceInBtw2'][1] = tuple(self.sliceInBtw2.getRotation(space='object'))
 
             guideName = self.name+'Tweak1'+self.guideSulfix
             self.tweak1 = pm.PyNode(guideName)
@@ -172,6 +188,13 @@ class EyeBrowBlend:
         eyeBrow.sliceMin.rotate >> self.sliceMin.rotate
         eyeBrow.sliceMin.scale >> self.sliceMin.scale
 
+        eyeBrow.sliceInBtw1.translate >> self.sliceInBtw1.translate
+        eyeBrow.sliceInBtw1.rotate >> self.sliceInBtw1.rotate
+        eyeBrow.sliceInBtw1.scale >> self.sliceInBtw1.scale
+        eyeBrow.sliceInBtw2.translate >> self.sliceInBtw2.translate
+        eyeBrow.sliceInBtw2.rotate >> self.sliceInBtw2.rotate
+        eyeBrow.sliceInBtw2.scale >> self.sliceInBtw2.scale
+
         eyeBrow.tweak1.translate >> self.tweak1.translate
         eyeBrow.tweak1.rotate >> self.tweak1.rotate
         eyeBrow.tweak1.scale >> self.tweak1.scale
@@ -222,16 +245,19 @@ class EyeBrowBlend:
 
         displaySetup = self.tweakCtrlSetup.copy()
         tweakGuides = [self.tweak1, self.tweak2, self.tweak3, self.tweak4]
-        slidersNames = ['In', 'MidIn', 'MidOut', 'Out']
+        slidersNames = ['InA', 'InB', 'MidIn', 'MidOutA', 'MidOutB', 'Out']
+
+        guide1Xpos = pm.xform(self.tweak1, q=True, ws=True, t=True)[0]
+        guide2Xpos = pm.xform(self.tweak2, q=True, ws=True, t=True)[0]
+        offset = guide2Xpos - guide1Xpos
 
         sliderList = []
         sideMove = True
-        for i in range(4):
-            guide = tweakGuides[i]
-            guideXpos=pm.xform(guide, q=True, ws=True, t=True)[0]
+
+        for i in range(6):
             slider = createSlider(self.name+slidersNames[i], size=0.1, sideMove=sideMove)
             sliderList.append(slider)
-            pm.xform(slider.getParent(), t=(guideXpos, basePos[1]+1, basePos[2]+1), ws=True)
+            pm.xform(slider.getParent(), t=(guide1Xpos+offset*i, basePos[1]+1, basePos[2]+1), ws=True)
             pm.parent(slider.getParent(), allSliderGrp)
 
             addNode = pm.createNode('addDoubleLinear')
@@ -242,6 +268,10 @@ class EyeBrowBlend:
             slider.translateY >> addNode.input2
 
             pm.parent(slider.getParent(), masterSliderCtrl)
+            sideMove = False
+
+        for i in range(4):
+            guide = tweakGuides[i]
 
             cntrlName = displaySetup['nameTempl']+str(i)
             jntName = self.jntSetup['nameTempl']+str(i)
@@ -249,8 +279,6 @@ class EyeBrowBlend:
             ctrl = controlTools.cntrlCrv(name=cntrlName, obj=jnt, connType='connection', offsets=1, **displaySetup)
             pm.parent(jnt.getParent(), tweakJntGrp)
             pm.parent(ctrl.getParent(2), tweakCtrlGrp)
-
-            sideMove = False
 
         self.guideMoveall.visibility.set(0)
 
@@ -312,29 +340,47 @@ def shapeDivide (name='div', targetNeutral=None, targetObj=None, L_eyeBrowGuide=
     Xmax = pm.xform(L_eyeBrow.sliceMax, ws=True, t=True, q=True)[0]
     Xmin = pm.xform(L_eyeBrow.sliceMin, ws=True, t=True, q=True)[0]
     Xmid = pm.xform(L_eyeBrow.sliceMid, ws=True, t=True, q=True)[0]
+    XinBtw1 = pm.xform(L_eyeBrow.sliceInBtw1, ws=True, t=True, q=True)[0]
+    XinBtw2 = pm.xform(L_eyeBrow.sliceInBtw2, ws=True, t=True, q=True)[0]
     L_target1 = taperSideAPI(targetNeutral, L_target, Xmin, Xmin, Xmax, 'L_B')
     L_target2 = taperSideAPI(targetNeutral, L_target, Xmin, Xmax, Xmax, 'L_C')
 
     L_outTarget1 = taperSideAPI(targetNeutral, L_target1, Xmin, Xmin, Xmid, 'L_' + name + 'In')
+
+    L_outTarget1a = taperSideAPI(targetNeutral, L_outTarget1, Xmin, Xmin, XinBtw1, 'L_' + name + 'InA')
+    L_outTarget1b = taperSideAPI(targetNeutral, L_outTarget1, Xmin, XinBtw1, XinBtw1, 'L_' + name + 'InB')
+
     L_outTarget2 = taperSideAPI(targetNeutral, L_target1, Xmin, Xmid, Xmid, 'L_' + name + 'MidIn')
     L_outTarget3 = taperSideAPI(targetNeutral, L_target2, Xmid, Xmid, Xmax, 'L_' + name + 'MidOut')
+
+    L_outTarget3a = taperSideAPI(targetNeutral, L_outTarget3, Xmid, Xmid, XinBtw2, 'L_' + name + 'MidOutA')
+    L_outTarget3b = taperSideAPI(targetNeutral, L_outTarget3, Xmid, XinBtw2, XinBtw2, 'L_' + name + 'MidOutB')
+
     L_outTarget4 = taperSideAPI(targetNeutral, L_target2, Xmid, Xmax, Xmax, 'L_' + name + 'Out')
 
     Xmin = pm.xform(R_eyeBrow.sliceMax, ws=True, t=True, q=True)[0]
     Xmax = pm.xform(R_eyeBrow.sliceMin, ws=True, t=True, q=True)[0]
     Xmid = pm.xform(R_eyeBrow.sliceMid, ws=True, t=True, q=True)[0]
+    XinBtw1 = pm.xform(R_eyeBrow.sliceInBtw1, ws=True, t=True, q=True)[0]
+    XinBtw2 = pm.xform(R_eyeBrow.sliceInBtw2, ws=True, t=True, q=True)[0]
     R_target1 = taperSideAPI(targetNeutral, R_target, Xmin, Xmin, Xmax, 'R_B')
     R_target2 = taperSideAPI(targetNeutral, R_target, Xmin, Xmax, Xmax, 'R_C')
 
     R_outTarget1 = taperSideAPI(targetNeutral, R_target2, Xmid, Xmax, Xmax, 'R_' + name + 'In')
+
+    R_outTarget1a = taperSideAPI(targetNeutral, R_outTarget1, Xmin, Xmin, XinBtw1, 'R_' + name + 'InA')
+    R_outTarget1b = taperSideAPI(targetNeutral, R_outTarget1, Xmin, XinBtw1, XinBtw1, 'R_' + name + 'InB')
+
     R_outTarget2 = taperSideAPI(targetNeutral, R_target2, Xmid, Xmid, Xmax, 'R_' + name + 'MidIn')
     R_outTarget3 = taperSideAPI(targetNeutral, R_target1, Xmin, Xmid, Xmid, 'R_' + name + 'MidOut')
+
+    R_outTarget3a = taperSideAPI(targetNeutral, R_outTarget3, Xmid, Xmid, XinBtw2, 'R_' + name + 'MidOutA')
+    R_outTarget3b = taperSideAPI(targetNeutral, R_outTarget3, Xmid, XinBtw2, XinBtw2, 'R_' + name + 'MidOutB')
+
     R_outTarget4 = taperSideAPI(targetNeutral, R_target1, Xmin, Xmin, Xmid, 'R_' + name + 'Out')
 
-    pm.delete (R_target, L_target, R_target1, L_target1, R_target2, L_target2)
-
-    return [L_outTarget1, L_outTarget2, L_outTarget3, L_outTarget4,
-            R_outTarget1, R_outTarget2, R_outTarget3, R_outTarget4]
+    return [L_outTarget1a, L_outTarget1b, L_outTarget2, L_outTarget3a, L_outTarget3b, L_outTarget4,
+            R_outTarget1a, R_outTarget1b, R_outTarget2, R_outTarget3a, R_outTarget3b, R_outTarget4]
 
 
 def taperSideAPI(sourceObj, targetObj, sliceMin, sliceMid, sliceMax, outName='splited'):

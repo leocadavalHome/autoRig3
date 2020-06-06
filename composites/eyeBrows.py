@@ -31,24 +31,26 @@ class EyeBrows:
         bsNode = sourceObj.getShape().listConnections(type='blendShape', s=True, d=False)
 
         for side in ['L_', 'R_']:
-            for ctrl in ['In', 'MidIn', 'MidOut', 'Out']:
+            for ctrl in ['InA', 'InB', 'MidIn', 'MidOutA', 'MidOutB', 'Out']:
                 slider = pm.PyNode(side + self.name + ctrl + '_ctrl')
                 for shape in ['Up', 'Down']:
                     slider.getParent().attr(shape.lower() + 'Value') >> bsNode[0].attr(side + baseName + shape + ctrl)
 
-            slider = pm.PyNode(side + self.name + 'In_ctrl')
+            slider = pm.PyNode(side + self.name + 'InA_ctrl')
             slider.getParent().attr('compressValue') >> bsNode[0].attr(side + baseName + 'Compress')
 
     def doRig(self):
         self.L_eyebrow.doRig()
         self.R_eyebrow.doRig()
+        print (self.sourceObj, self.targetNeutral, self.targetUp, self.targetDown,self.targetCompress)
+
         for sourceObj, targetNeutral, targetUp, targetDown, targetCompress in zip(self.sourceObj, self.targetNeutral,
                                                                                   self.targetUp, self.targetDown,
                                                                                   self.targetCompress):
             targetList = self.doBlendSplit(name=self.name, sourceObj=sourceObj, targetNeutral=targetNeutral,
                                            targetUp=targetUp, targetDown=targetDown, targetCompress=targetCompress,
                                            L_eyebrow=self.L_eyebrow, R_eyebrow=self.R_eyebrow)
-
+            print targetList
             firstIndex = blendShapeTools.addTargets(sourceObj=sourceObj, splittedTargets=targetList)
             self.doConnectToCtrls(sourceObj=sourceObj, firstIndex=firstIndex)
 
